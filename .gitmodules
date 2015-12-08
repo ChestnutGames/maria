@@ -1,0 +1,5 @@
+[submodule "sprotodump"]
+	path = tools
+	     url = https://github.com/lvzixun/sprotodump.git
+
+[submodule "sproto_Csharp"]     path = sproto_Csharp url = https://github.com/lvzixun/sproto-Csharp.git
