@@ -6,27 +6,12 @@ using System.Collections.Generic;
 public class S2cProtocol : ProtocolBase {
 	public static  S2cProtocol Instance = new S2cProtocol();
 	private S2cProtocol() {
-		Protocol.SetProtocol<get> (get.Tag);
-		Protocol.SetRequest<S2cSprotoType.get.request> (get.Tag);
-
-		Protocol.SetProtocol<handshake> (handshake.Tag);
-		Protocol.SetResponse<S2cSprotoType.handshake.response> (handshake.Tag);
-
-		Protocol.SetProtocol<set> (set.Tag);
-		Protocol.SetRequest<S2cSprotoType.set.request> (set.Tag);
+		Protocol.SetProtocol<heartbeat> (heartbeat.Tag);
 
 	}
 
-	public class get {
-		public const int Tag = 2;
-	}
-
-	public class handshake {
+	public class heartbeat {
 		public const int Tag = 1;
-	}
-
-	public class set {
-		public const int Tag = 3;
 	}
 
 }

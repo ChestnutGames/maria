@@ -5,7 +5,7 @@ using System;
 using Sproto;
 using System.Collections.Generic;
 
-namespace S2cSprotoType { 
+namespace C2sSprotoType { 
 	public class get {
 	
 		public class request : SprotoTypeBase {
