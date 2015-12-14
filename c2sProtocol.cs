@@ -8,9 +8,12 @@ public class C2sProtocol : ProtocolBase {
 	private C2sProtocol() {
 		Protocol.SetProtocol<get> (get.Tag);
 		Protocol.SetRequest<C2sSprotoType.get.request> (get.Tag);
+		Protocol.SetResponse<C2sSprotoType.get.response> (get.Tag);
 
 		Protocol.SetProtocol<handshake> (handshake.Tag);
 		Protocol.SetResponse<C2sSprotoType.handshake.response> (handshake.Tag);
+
+		Protocol.SetProtocol<quit> (quit.Tag);
 
 		Protocol.SetProtocol<set> (set.Tag);
 		Protocol.SetRequest<C2sSprotoType.set.request> (set.Tag);
@@ -23,6 +26,10 @@ public class C2sProtocol : ProtocolBase {
 
 	public class handshake {
 		public const int Tag = 1;
+	}
+
+	public class quit {
+		public const int Tag = 4;
 	}
 
 	public class set {
