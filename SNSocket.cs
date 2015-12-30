@@ -12,8 +12,8 @@ using C2sSprotoType;
 
 public class SNSocket
 {
-    
-    private enum STATE
+
+    private enum State
     {
         NO_STATE,
         CONNECTING,
@@ -23,14 +23,10 @@ public class SNSocket
         CLOSE,
     }
 
-    private STATE mState;
+    private ISNDelegate mDelegate = null;
+    private State mState = State.NO_STATE;
     private Socket mSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-    /// <summary>
-    /// 这两个变量都是用来作为消息传递的，为了更好的应用Sproto，所以才加了这个handler。
-    /// </summary>
-    private ISNDelegate mDelegate = null;
-    
     private const int mRecvBufferCapacity = 1024;
     private byte[] mRecvBuffer = new byte[mRecvBufferCapacity];
     private int mRecvOffset = 0;
@@ -62,7 +58,7 @@ public class SNSocket
     /// </summary>
     public void Stop()
     {
-        if (mState == STATE.CONNECTED)
+        if (mState == State.CONNECTED)
         {
             mSocket.Shutdown(SocketShutdown.Send);
         }
@@ -104,7 +100,7 @@ public class SNSocket
     private void ConnectAC(IAsyncResult ar)
     {
         mSocket.EndConnect(ar);
-        mState = STATE.CONNECTED;
+        mState = State.CONNECTED;
         if (mDelegate != null)
         {
             mDelegate.OnConnected(this);
@@ -122,9 +118,9 @@ public class SNSocket
     /// <param name="o"></param>
     public void SendRun(object o)
     {
-        while (mState != STATE.CLOSE)
+        while (mState != State.CLOSE)
         {
-            if (mState == STATE.CONNECTED)
+            if (mState == State.CONNECTED)
             {
                 //Debug.Log("SendRun ...");
                 byte[] buf = null;
@@ -149,9 +145,9 @@ public class SNSocket
     /// <param name="o"></param>
     public void RecvRun(object o)
     {
-        while (mState != STATE.CLOSE)
+        while (mState != State.CLOSE)
         {
-            if (mState == STATE.CONNECTED)
+            if (mState == State.CONNECTED)
             {
                 IList checkRead = new List<Socket>();
                 IList checkError = new List<Socket>();
@@ -174,7 +170,7 @@ public class SNSocket
                     }
                     else if (errorCode == SocketError.Disconnecting)
                     {
-                        mState = STATE.CONNECTING;
+                        mState = State.CONNECTING;
                         if (mDelegate != null)
                         {
                             mDelegate.OnError(this, SocketError.Disconnecting, "disconnecting.");
@@ -184,7 +180,7 @@ public class SNSocket
                     }
                     else
                     {
-                        mState = STATE.CLOSE;
+                        mState = State.CLOSE;
                         Close();
                         break;
                     }
@@ -214,7 +210,7 @@ public class SNSocket
                 mRecvOffset = 0;
                 mRecvSize = mRecvSize - mRecvOffset;
             }
-            else if (mState == STATE.SHUTDOWN_WRITE)
+            else if (mState == State.SHUTDOWN_WRITE)
             {
                 IList checkRead = new List<Socket>();
                 checkRead.Add(mSocket);
@@ -234,7 +230,7 @@ public class SNSocket
                             break;
                         case SocketError.Disconnecting:
                             {
-                                mState = STATE.CONNECTING;
+                                mState = State.CONNECTING;
                                 Connect();
                             }
                             break;
@@ -273,13 +269,13 @@ public class SNSocket
     {
         switch (mState)
         {
-            case STATE.CLOSE:
+            case State.CLOSE:
                 {
                     mSentT.Join();
                     mRecvT.Join();
                 }
                 break;
-            case STATE.CONNECTED:
+            case State.CONNECTED:
                 {
                     lock (mRecvQ)
                     {
@@ -300,10 +296,7 @@ public class SNSocket
 
     public void Send(byte[] buffer)
     {
-        lock (mSendQ)
-        {
-            mSendQ.Enqueue(buffer);
-        }
+        mSendQ.Enqueue(buffer);
     }
 
     private void SendAsync(byte[] buffer)
@@ -321,14 +314,14 @@ public class SNSocket
             case SocketError.Shutdown:
                 {
                     // 关闭发送，那么状态会在Recv后关闭
-                    mState = STATE.SHUTDOWN_WRITE;
+                    mState = State.SHUTDOWN_WRITE;
                     mSocket.EndSend(ar);
                     // 是否销毁mSendQ;
                 }
                 break;
             case SocketError.Disconnecting:
                 {
-                    mState = STATE.CONNECTING;
+                    mState = State.CONNECTING;
                     Connect();
                 }
                 break;
@@ -351,7 +344,7 @@ public class SNSocket
 
     public void Close()
     {
-        mState = STATE.CLOSE;
+        mState = State.CLOSE;
         mSocket.Close();
     }
 }

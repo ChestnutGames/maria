@@ -35,7 +35,10 @@ public class ClientLogin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Sock.Poll(0, SelectMode.SelectWrite))
+        {
+            
+        }
         if (step == 1)
         {
             Sock.BeginReceive(recvBuffer, 0, 1024, SocketFlags.None, RecvChanlenge, this);

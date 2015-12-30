@@ -9,23 +9,22 @@ using SprotoType;
 using S2cSprotoType;
 using C2sSprotoType;
 
-public class ClientSockt : MonoBehaviour, ISNDelegate
+public class ClientSockt : MonoBehaviour
 {
-    public delegate void RpcAction(SprotoRpc.RpcInfo rinfo);
+    public delegate void RespAction(SprotoRpc.RpcInfo sinfo);
 
-    private SNSocket SS = null;
-    private float delta = 0;
     private long Session = 0;
-    private List<ISNDelegate> Delegates = new List<ISNDelegate>();
+
     private SprotoRpc Host = null;
     private SprotoRpc.RpcRequest Request = null;
     private SprotoStream mSendStream = new SprotoStream();
-    private Dictionary<long, RpcAction> mHandler = new Dictionary<long, RpcAction>();
+
+    private PackageSocket PSocket = new PackageSocket();
+    private Dictionary<long, RespAction> Handler = new Dictionary<long, RespAction>();
 
     // Use this for initialization
     void Start()
     {
-        
 
         Host = new SprotoRpc(S2cProtocol.Instance);
         Request = Host.Attach(C2sProtocol.Instance);
@@ -52,36 +51,57 @@ public class ClientSockt : MonoBehaviour, ISNDelegate
         byte[] unpack_data = spack.unpack(pack_data);
         AddressBook obj = new AddressBook(unpack_data);
 
-        var t = GameObject.Find("Text");
-        var text = t.GetComponent<Text>();
-        text.text = address.person[0].name;
+        //var t = GameObject.Find("Text");
+        //var text = t.GetComponent<Text>();
+        //text.text = address.person[0].name;
 
-        Dictionary<string, string> conf = new Dictionary<string, string>();
-        conf["IP"] = "192.168.1.239";
-        conf["PORT"] = "8888";
-        SS = new SNSocket(conf);
-        SS.setDelegate(this);
-        //SS.Start();
+        PSocket.Connect("192.168.1.116", 8888);
+        PSocket.OnConnect = OnConnect;
+        PSocket.OnRecvive = OnRecvive;
+        PSocket.OnDisconnect = OnDisconnect;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //delta += Time.deltaTime;
-        //if (delta > 5)
-        //{
-        //    delta = 0;
-        //    SS.update();
-        //}
+        PSocket.Update();
     }
 
-    public void Handshake()
+    void OnConnect(bool connected)
     {
-        Dictionary<string, string> token = new Dictionary<string, string>();
-        token["server"] = "sample";
-        token["user"] = "hello";
-        token["password"] = "password";
-        //string hk = String.Format("{0}@{1}#{2}:{3}", Crypt.base64encode(token["user"]), Crypt.base64encode(token["server"]), Crypt.base64encode(s))
+        if (!connected)
+        {
+            PSocket.Connect("192.168.1.239", 8888);
+        }
+    }
+
+    void OnRecvive(byte[] data, int start, int length)
+    {
+        byte[] buffer = new byte[length];
+        Array.Copy(data, start, buffer, 0, length);
+        SprotoRpc.RpcInfo sinfo = Host.Dispatch(buffer);
+        if (sinfo.type == SprotoRpc.RpcType.REQUEST)
+        {
+            Debug.Assert(sinfo.requestObj == null);
+            Debug.Assert(sinfo.tag == S2cProtocol.heartbeat.Tag);
+            Debug.Assert(sinfo.Response == null);
+            Debug.Log("heartbeat");
+        }
+        else
+        {
+            Debug.Assert(sinfo.type == SprotoRpc.RpcType.RESPONSE);
+            if (sinfo.session != null)
+            {
+                Handler[(long)sinfo.session](sinfo);
+                Unregister((long)sinfo.session);
+            }
+        }
+    }
+
+    void OnDisconnect(SocketError socketError, PackageSocketError packageSocketError)
+    {
+
     }
 
     /// <summary>
@@ -89,23 +109,23 @@ public class ClientSockt : MonoBehaviour, ISNDelegate
     /// </summary>
     /// <param name="session"></param>
     /// <param name="action"></param>
-    public void Register(long session, RpcAction action)
+    public void Register(long session, RespAction action)
     {
-        mHandler.Add(session, action);
+        Handler.Add(session, action);
     }
 
     public void Unregister(long session)
     {
-        mHandler.Remove(session);
+        Handler.Remove(session);
     }
 
-    public void GetCallback(SprotoRpc.RpcInfo rinfo)
+    void GetCallback(SprotoRpc.RpcInfo rinfo)
     {
         var resp = (C2sSprotoType.get.response)rinfo.responseObj;
         Debug.Log(resp.result);
     }
 
-    public void SendGet(List<String> keys)
+    void SendGet(List<String> keys)
     {
         foreach (var item in keys)
         {
@@ -113,16 +133,16 @@ public class ClientSockt : MonoBehaviour, ISNDelegate
             C2sSprotoType.get.request obj = new get.request();
             obj.what = item;
             byte[] req = this.Request.Invoke<C2sProtocol.get>(obj, Session);
-            Send(req);
+            PSocket.Send(req, 0, req.Length);
             Register(Session, GetCallback);
         }
     }
 
-    public void SetCallback(SprotoRpc.RpcInfo rinfo)
+    void SetCallback(SprotoRpc.RpcInfo rinfo)
     {
     }
 
-    public void SendSet(Dictionary<string, string> dict)
+    void SendSet(Dictionary<string, string> dict)
     {
         Debug.Assert(dict != null);
         foreach (var item in dict)
@@ -133,40 +153,38 @@ public class ClientSockt : MonoBehaviour, ISNDelegate
             obj.value = item.Value;
             byte[] req = this.Request.Invoke<C2sProtocol.set>(obj, Session);
             Debug.Assert(req != null);
-            Send(req);
+            PSocket.Send(req, 0, req.Length);
             Register(Session, SetCallback);
         }
     }
 
-    public void HandshakeCallback(SprotoRpc.RpcInfo rinfo)
+    void HandshakeCallback(SprotoRpc.RpcInfo rinfo)
     {
         var resp = (C2sSprotoType.handshake.response)rinfo.responseObj;
         Debug.Log(resp.msg);
     }
 
-    public void SendHandshake()
+    void SendHandshake()
     {
         Session++;
         var req = Request.Invoke<C2sProtocol.handshake>(null, Session);
         Debug.Assert(req != null);
-        Send(req);
+        PSocket.Send(req, 0, req.Length);
         Register(Session, HandshakeCallback);
     }
 
-    public void Send(byte[] buffer)
+    public void OnClickHandshake()
     {
-        SS.Send(buffer);
+        SendHandshake();
     }
 
     public void OnClickSet()
     {
-        SendHandshake();
         Dictionary<string, string> dict = new Dictionary<string, string>();
         string key = "hello";
         string value = "world";
         dict.Add(key, value);
         SendSet(dict);
-        Debug.Log("onclickset");
     }
 
     public void OnClickGet()
@@ -174,63 +192,6 @@ public class ClientSockt : MonoBehaviour, ISNDelegate
         List<string> l = new List<string>();
         l.Add("hu");
         SendGet(l);
-        Debug.Log("onclickget");
     }
 
-    public void AddDelegate(ISNDelegate d)
-    {
-        Delegates.Add(d);
-    }
-
-    public void RemoveDelegate(ISNDelegate d)
-    {
-        Delegates.Remove(d);
-    }
-
-    public void OnConnected(SNSocket s)
-    {
-        foreach (var item in Delegates)
-        {
-            item.OnConnected(s);
-        }
-    }
-
-    public void OnMessage(SNSocket s, byte[] buffer)
-    {
-        SprotoRpc.RpcInfo sinfo = Host.Dispatch(buffer);
-        if (sinfo.type == SprotoRpc.RpcType.REQUEST)
-        {
-            Debug.Log("handshake");
-            if (sinfo.session != null)
-            {
-                mHandler[(long)sinfo.session](sinfo);
-                //mHandler.Remove((long)sinfo.session);
-            }
-        }
-        else
-        {
-            Debug.Assert(sinfo.type == SprotoRpc.RpcType.RESPONSE);
-            if (sinfo.session != null)
-            {
-                mHandler[(long)sinfo.session](sinfo);
-                Unregister((long)sinfo.session);
-            }
-        }
-    }
-
-    public void OnError(SNSocket s, SocketError errorCode, string msg)
-    {
-        foreach (var item in Delegates)
-        {
-            item.OnError(s, errorCode, msg);
-        }
-    }
-
-    public void OnClose(SNSocket s)
-    {
-        foreach (var item in Delegates)
-        {
-            item.OnClose(s);
-        }
-    }
 }
