@@ -1,0 +1,24 @@
+# 忽略掉某种类型的文件
+*.pyc
+*.sdf
+*.suo
+*.tmp
+*.meta
+
+# 忽略指定文件
+/proj.win32/Dizhu.opensdf
+/proj.win32/Dizhu.sdf
+
+
+# 忽略指定文件夹
+/proj.win32/Debug.win32/
+/cocos2d/
+/proj.win32
+
+!/proj.win32/res/
+!/proj.win32/Dizhuu.sln
+!/proj.win32/Dizhuu.vcxproj
+!/proj.win32/Dizhuu.vcxproj.filters
+!/proj.win32/Dizhuu.vcxproj.user
+
+
