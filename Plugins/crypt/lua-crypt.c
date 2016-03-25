@@ -2,20 +2,14 @@
 //#include <lauxlib.h>
 
 
+#include "stdafx.h"
 #include <time.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include "stdafx.h"
 
 #define SMALL_CHUNK 256
-
-typedef struct PACKAGE
-{
-	char   *src;
-	int32_t len;
-} PACKAGE;
 
 /* the eight DES S-boxes */
 

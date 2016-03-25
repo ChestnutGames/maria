@@ -4,16 +4,16 @@
 *.suo
 *.tmp
 *.meta
+*.exp
+*.ilk
+*.pdb
+*.user
 
 # 忽略指定文件
-/proj.win32/Dizhu.opensdf
-/proj.win32/Dizhu.sdf
-
+/Plugins/crypt/crypt.sdf
 
 # 忽略指定文件夹
-/proj.win32/Debug.win32/
-/cocos2d/
-/proj.win32
+/Plugins/crypt/Debug
 
 !/proj.win32/res/
 !/proj.win32/Dizhuu.sln

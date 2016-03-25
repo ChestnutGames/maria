@@ -82,6 +82,7 @@ A million repetitions of "a"
   34AA973C D4C4DAA4	F61EEB2B DBAD2731 6534016F
 */
 
+#include "stdafx.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -240,16 +241,6 @@ static void sat_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
 	memset(context->count, 0, 8);
 	memset(finalcount, 0, 8);	/* SWR */
 }
-
-typedef struct PACKAGE
-{
-	char   *src;
-	int32_t len;
-} PACKAGE;
-
-//#include <lua.h>
-//#include <lauxlib.h>
-#include "stdafx.h"
 
 CRYPT_API PACKAGE __stdcall
 sha1(PACKAGE data) {

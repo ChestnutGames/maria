@@ -1,17 +1,15 @@
-
 CC = gcc
 
-objects = lsha1.o lua-crypt.o
+SRC := lsha1.c lua-crypt.c
 
-SHARD_SO := crypt.so
+CFLAGS := -Shared
 
-CFlag := -Shared
-
-SHARD_SO : $(objects)
-	$(CC) -Shared -o $@
+../crypt.so: $(SRC)
+	$(CC) $(CFLAGS) -o $@
 	
-lsha1.o : lsha1.c
-	$(CC) -c -o $@
+clean:
+	rm -rf ../crypt.so
+	
 
-lua-crypt.o : lua-crypt.c
-	$(CC)) -c -o $@
+	
+	
