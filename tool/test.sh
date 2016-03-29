@@ -1,7 +1,7 @@
 #!/bin/bash
 
-lua="lua"
-lpeg="lpeg.so"
+lua="./../sprotodump/lua"
+lpeg="./../sprotodump/lpeg.so"
 
 if [[ ! -d "./../../skynet" ]]; then
 	#statements
@@ -26,4 +26,4 @@ if [[ ! -f "$lepg" ]]; then
 	cp ./../../skynet/3rd/lpeg/lpeg.so $lpeg
 fi
 # $0 == test.sh
-./lua $1 $2
+$lua $1 $2

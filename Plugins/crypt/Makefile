@@ -1,11 +1,11 @@
-CC = gcc
+CC ?= gcc
 
 SRC := lsha1.c lua-crypt.c
 
-CFLAGS := -Shared
+CFLAGS := -g -o2 -Wall
 
 ../crypt.so: $(SRC)
-	$(CC) $(CFLAGS) -o $@
+	$(CC) $(CFLAGS) --shared -o $@ $^
 	
 clean:
 	rm -rf ../crypt.so

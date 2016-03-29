@@ -4,18 +4,18 @@ local buffer = fd:read("a")
 fd:close()
 local c = {}
 local x = 1
-local c2s = string.gsub(buffer, ".+%[%[([%w%.%*%s%_]+)%]%]?.+%[%[([%w%.%*%s%_]+)%]%].+", function ( seg )
-	-- body
-	print(seg)
-	if x == 1 then
-		fd = io.open("c2s.sproto", "w")
-		fd.write(seg)
-		fd:close()
-	elseif x == 2 then
-		fd = io.open("s2c.sproto", "w")
-		fd.write(seg)
-		fd:close()
-	end
-	x = x + 1
-end)
 
+local b = string.find(buffer, "%[%[")
+local e = string.find(buffer, "%]%]")
+local c2s = string.sub(buffer, b+3, e-2)
+fd = io.open("c2s.sproto", "w")
+fd:write(c2s)
+fd:close()
+
+b = string.find(buffer, "%[%[", e)
+e = string.find(buffer, "%]%]", b)
+
+local s2c = string.sub(buffer, b+3, e-2)
+fd = io.open("s2c.sproto", "w")
+fd:write(s2c)
+fd:close()
