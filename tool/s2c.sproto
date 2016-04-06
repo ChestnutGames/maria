@@ -1,0 +1,55 @@
+.package {
+	type 0 : integer
+	session 1 : integer
+}
+
+.achi {
+    csv_id 0 : integer
+    finished 1 : integer
+}
+
+heartbeat 1 {}
+
+mail 2 {
+    request {
+        from 0 : integer
+        to 1 : integer
+        head 2 : string
+        msg 3 : string   
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+finish_achi 3 {
+    request {
+        which 0 : achi
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+lilian_phy_power 4 {
+    request {
+        phy_power 0 : integer
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+lilian_result 5 {
+    request {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
