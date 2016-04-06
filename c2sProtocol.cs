@@ -13,6 +13,12 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.achievement_reward_collect.request> (achievement_reward_collect.Tag);
 		Protocol.SetResponse<C2sSprotoType.achievement_reward_collect.response> (achievement_reward_collect.Tag);
 
+		Protocol.SetProtocol<app_backgroud> (app_backgroud.Tag);
+		Protocol.SetResponse<C2sSprotoType.app_backgroud.response> (app_backgroud.Tag);
+
+		Protocol.SetProtocol<app_resume> (app_resume.Tag);
+		Protocol.SetResponse<C2sSprotoType.app_resume.response> (app_resume.Tag);
+
 		Protocol.SetProtocol<applied_list> (applied_list.Tag);
 		Protocol.SetResponse<C2sSprotoType.applied_list.response> (applied_list.Tag);
 
@@ -40,12 +46,19 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.checkin_reward.request> (checkin_reward.Tag);
 		Protocol.SetResponse<C2sSprotoType.checkin_reward.response> (checkin_reward.Tag);
 
-		Protocol.SetProtocol<checkpoint_battle> (checkpoint_battle.Tag);
-		Protocol.SetRequest<C2sSprotoType.checkpoint_battle.request> (checkpoint_battle.Tag);
-		Protocol.SetResponse<C2sSprotoType.checkpoint_battle.response> (checkpoint_battle.Tag);
+		Protocol.SetProtocol<checkpoint_battle_enter> (checkpoint_battle_enter.Tag);
+		Protocol.SetRequest<C2sSprotoType.checkpoint_battle_enter.request> (checkpoint_battle_enter.Tag);
+		Protocol.SetResponse<C2sSprotoType.checkpoint_battle_enter.response> (checkpoint_battle_enter.Tag);
 
-		Protocol.SetProtocol<checkpoint_c_chapter> (checkpoint_c_chapter.Tag);
-		Protocol.SetResponse<C2sSprotoType.checkpoint_c_chapter.response> (checkpoint_c_chapter.Tag);
+		Protocol.SetProtocol<checkpoint_battle_exit> (checkpoint_battle_exit.Tag);
+		Protocol.SetRequest<C2sSprotoType.checkpoint_battle_exit.request> (checkpoint_battle_exit.Tag);
+		Protocol.SetResponse<C2sSprotoType.checkpoint_battle_exit.response> (checkpoint_battle_exit.Tag);
+
+		Protocol.SetProtocol<checkpoint_chapter> (checkpoint_chapter.Tag);
+		Protocol.SetResponse<C2sSprotoType.checkpoint_chapter.response> (checkpoint_chapter.Tag);
+
+		Protocol.SetProtocol<checkpoint_exit> (checkpoint_exit.Tag);
+		Protocol.SetResponse<C2sSprotoType.checkpoint_exit.response> (checkpoint_exit.Tag);
 
 		Protocol.SetProtocol<checkpoint_hanging> (checkpoint_hanging.Tag);
 		Protocol.SetResponse<C2sSprotoType.checkpoint_hanging.response> (checkpoint_hanging.Tag);
@@ -86,6 +99,9 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<friend_list> (friend_list.Tag);
 		Protocol.SetResponse<C2sSprotoType.friend_list.response> (friend_list.Tag);
 
+		Protocol.SetProtocol<get_lilian_info> (get_lilian_info.Tag);
+		Protocol.SetResponse<C2sSprotoType.get_lilian_info.response> (get_lilian_info.Tag);
+
 		Protocol.SetProtocol<handshake> (handshake.Tag);
 		Protocol.SetRequest<C2sSprotoType.handshake.request> (handshake.Tag);
 		Protocol.SetResponse<C2sSprotoType.handshake.response> (handshake.Tag);
@@ -100,6 +116,16 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<kungfu_levelup> (kungfu_levelup.Tag);
 		Protocol.SetRequest<C2sSprotoType.kungfu_levelup.request> (kungfu_levelup.Tag);
 		Protocol.SetResponse<C2sSprotoType.kungfu_levelup.response> (kungfu_levelup.Tag);
+
+		Protocol.SetProtocol<lilian_get_phy_power> (lilian_get_phy_power.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_get_phy_power.response> (lilian_get_phy_power.Tag);
+
+		Protocol.SetProtocol<lilian_get_reward_list> (lilian_get_reward_list.Tag);
+		Protocol.SetRequest<C2sSprotoType.lilian_get_reward_list.request> (lilian_get_reward_list.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_get_reward_list.response> (lilian_get_reward_list.Tag);
+
+		Protocol.SetProtocol<lilian_purch_phy_power> (lilian_purch_phy_power.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_purch_phy_power.response> (lilian_purch_phy_power.Tag);
 
 		Protocol.SetProtocol<login> (login.Tag);
 		Protocol.SetRequest<C2sSprotoType.login.request> (login.Tag);
@@ -203,6 +229,10 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.signup.request> (signup.Tag);
 		Protocol.SetResponse<C2sSprotoType.signup.response> (signup.Tag);
 
+		Protocol.SetProtocol<start_lilian> (start_lilian.Tag);
+		Protocol.SetRequest<C2sSprotoType.start_lilian.request> (start_lilian.Tag);
+		Protocol.SetResponse<C2sSprotoType.start_lilian.response> (start_lilian.Tag);
+
 		Protocol.SetProtocol<use_prop> (use_prop.Tag);
 		Protocol.SetRequest<C2sSprotoType.use_prop.request> (use_prop.Tag);
 		Protocol.SetResponse<C2sSprotoType.use_prop.response> (use_prop.Tag);
@@ -249,6 +279,14 @@ public class C2sProtocol : ProtocolBase {
 		public const int Tag = 40;
 	}
 
+	public class app_backgroud {
+		public const int Tag = 75;
+	}
+
+	public class app_resume {
+		public const int Tag = 74;
+	}
+
 	public class applied_list {
 		public const int Tag = 16;
 	}
@@ -281,12 +319,20 @@ public class C2sProtocol : ProtocolBase {
 		public const int Tag = 45;
 	}
 
-	public class checkpoint_battle {
+	public class checkpoint_battle_enter {
+		public const int Tag = 67;
+	}
+
+	public class checkpoint_battle_exit {
 		public const int Tag = 65;
 	}
 
-	public class checkpoint_c_chapter {
+	public class checkpoint_chapter {
 		public const int Tag = 63;
+	}
+
+	public class checkpoint_exit {
+		public const int Tag = 72;
 	}
 
 	public class checkpoint_hanging {
@@ -333,6 +379,10 @@ public class C2sProtocol : ProtocolBase {
 		public const int Tag = 15;
 	}
 
+	public class get_lilian_info {
+		public const int Tag = 68;
+	}
+
 	public class handshake {
 		public const int Tag = 1;
 	}
@@ -347,6 +397,18 @@ public class C2sProtocol : ProtocolBase {
 
 	public class kungfu_levelup {
 		public const int Tag = 56;
+	}
+
+	public class lilian_get_phy_power {
+		public const int Tag = 70;
+	}
+
+	public class lilian_get_reward_list {
+		public const int Tag = 71;
+	}
+
+	public class lilian_purch_phy_power {
+		public const int Tag = 73;
 	}
 
 	public class login {
@@ -463,6 +525,10 @@ public class C2sProtocol : ProtocolBase {
 
 	public class signup {
 		public const int Tag = 4;
+	}
+
+	public class start_lilian {
+		public const int Tag = 69;
 	}
 
 	public class use_prop {
