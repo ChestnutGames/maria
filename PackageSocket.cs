@@ -51,7 +51,9 @@ public class PackageSocket
 
 	private byte[] PingBuffer;
 	private DateTime NextSendPingTime;
-	
+
+    private bool IsEnabledPing;
+
 	const int MaxSizePerSend = 1024 * 4;		
 	
 	public PackageSocket()
@@ -130,8 +132,21 @@ public class PackageSocket
 		ProcessSend();
 	}
 
+    public void SendLine(byte[] buffer, int start, int length)
+    {
+        byte[] data = new byte[length + 1];
+        Array.Copy(buffer, start, data, 0, length);
+        data[length] = 10;
+        SendQueue.Enqueue(data);
+        ProcessSend();
+    }
+
 	public void SendPing()
 	{
+        if (!IsEnabledPing)
+        {
+            return;
+        }
 		if (PingBuffer == null) 
 		{
 			var headerLen = GetHeaderLength();
@@ -141,6 +156,11 @@ public class PackageSocket
 		SendQueue.Enqueue(PingBuffer);
 		ProcessSend();
 	}
+
+    public void SetEnabledPing(bool b)
+    {
+        IsEnabledPing = b;
+    }
 
 	void ProcessConnect()
 	{
@@ -229,7 +249,7 @@ public class PackageSocket
 			}
 
 			RecvBufferEndIndex += receive;
-			ProcessPackage();
+            //ProcessPackage();
 			
 			if (receive == 0)
 			{
@@ -242,7 +262,7 @@ public class PackageSocket
 		}
 	}
 
-	void ProcessPackage()
+	public void ProcessPackage()
 	{
 		while (CurState == State.Connected)
 		{
@@ -279,6 +299,30 @@ public class PackageSocket
 		}
 	}
 
+    public void ProcessLine()
+    {
+        while (CurState == State.Connected)
+        {
+            if (RecvBufferEndIndex == RecvBuffer.Length)
+                MemmoveRecvBuffer();
+            int idx = RecvBufferBeginIndex;
+            while (idx != RecvBufferEndIndex)
+            {
+                if (RecvBuffer[idx] == 10)
+                {
+                    break;
+                }
+            }
+            if (idx != RecvBufferEndIndex)
+            {
+                int dataLen = idx - RecvBufferEndIndex + 1;
+                if (dataLen > 0)
+                    OnRecvive(RecvBuffer, RecvBufferBeginIndex, dataLen);
+                RecvBufferBeginIndex += dataLen;
+            }
+        }
+    }
+
 	public void MemmoveRecvBuffer()
 	{
 		var bufferLen = RecvBufferEndIndex - RecvBufferBeginIndex;
@@ -313,6 +357,7 @@ public class PackageSocket
 		RecvBufferEndIndex = 0;
 		SendQueue.Clear();
 		SendQueueStartIndex = 0;
+        //IsEnabledPing = true;
 	}
 
 	protected virtual int DecodeHeader(byte[] buffer, int start, int length, ref int dataLength)
@@ -339,6 +384,5 @@ public class PackageSocket
 	{
 		return string.Format("State:{0} SendQueue:{1}", CurState, SendQueue.Count);
     }
-
 
 }
