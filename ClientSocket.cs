@@ -11,24 +11,27 @@ using System.Net.Sockets;
 
 public class ClientSocket
 {
-
     public delegate void RespAction(object ud, SprotoTypeBase responseObj);
     public delegate SprotoTypeBase ReqAction(object ud, SprotoTypeBase requestObj);
 
-    private struct RespCB
+    private class ReqPg
     {
-        public object ud;
-        public RespAction action;
-        public uint version;
-        public uint index;
+        public uint Session { get; set; }
+        public object Ud { get; set; }
+        public ReqAction Action { get; set; }
+        public byte[] Buffer { get; set; }
+        public int Version { get; set; }
+        public int Index { get; set; }
     }
 
-    private struct ReqCB
+    private class RespPg
     {
-        public object ud;
-        public ReqAction action;
-        public uint version;
-        public uint index;
+        public uint Session { get; set;}
+        public object Ud { get; set; }
+        public ReqAction Action { get; set; }
+        public byte[] Buffer { get; set; }
+        public int Version { get; set; }
+        public int Index { get; set; }
     }
 
     private string ip = "192.168.1.239";
@@ -38,9 +41,13 @@ public class ClientSocket
     private SprotoRpc.RpcRequest send_request = null;
     private SprotoStream stream = new SprotoStream();
     private PackageSocket sock = new PackageSocket();
-    private Dictionary<string, ReqCB> request = new Dictionary<string, ReqCB>();
-    private Dictionary<string, RespCB> response = new Dictionary<string, RespCB>();
+    private Dictionary<string, ReqPg> request = new Dictionary<string, ReqPg>();
+    private Dictionary<string, RespPg> response = new Dictionary<string, RespPg>();
     private bool handshake = true;
+    private const int c2s_req_tag = (0 & (1 << 2) & (1 << 4));
+    private const int c2s_resp_tag = (0 & (1 << 2) & (0 << 4));
+    private const int s2c_req_tag = (0 & (0 << 2) & (1 << 4));
+    private const int s2c_resp_tag = (0 & (0 << 2) & (0 << 4));
 
     //public User user;
 
@@ -70,6 +77,7 @@ public class ClientSocket
         if (sock != null)
         {
             sock.Update();
+            sock.ProcessPackage();
         }
     }
 
@@ -91,7 +99,7 @@ public class ClientSocket
             //Debug.Assert(sinfo.tag != null);
             //Debug.Assert(sinfo.tag != null);
             long id = (long)sinfo.tag;
-            string key = id_to_hex(id);
+            string key = id_to_hex((uint)id);
             //Debug.Assert(request[key]);
             var rpc = request[key];
             var resp =  rpc.action(rpc.ud, sinfo.requestObj);
@@ -103,7 +111,7 @@ public class ClientSocket
         {
             Debug.Assert(sinfo.type == SprotoRpc.RpcType.RESPONSE);
             Debug.Assert(sinfo.session != null);
-            string key = id_to_hex((long)sinfo.session);
+            string key = id_to_hex((uint)(long)sinfo.session);
             var rpc = response[key];
             rpc.action(rpc.ud, sinfo.responseObj);
             Debug.Assert(response.Remove(key));
@@ -124,13 +132,25 @@ public class ClientSocket
         request[key] = rpc;
     }
 
-    private void send_request(byte[] v, uint session)
-    {
-
+    private uint B2L(byte[] buffer, int start, int length) {
+        uint r = 0;
+        for (int i = 0; i < length; i++)
+		{
+            int idx = start + i;
+            int b = buffer[idx];
+        }
+        return r;
     }
 
-    protected void Send(object ud, uint id, byte[] buf, RespAction cb)
+    private void send_request_session(object byte[] v, uint session)
     {
+     
+      
+    }
+
+    private void Send(object ud, uint id, byte[] buf, RespPg cb)
+    {
+          RespPg pg = new RespPg();
         string key = id_to_hex(id);
         var rpc = new RespCB();
         rpc.ud = ud;
@@ -165,10 +185,15 @@ public class ClientSocket
 
     public void Handshake(object ud, SprotoTypeBase requestObj, RespAction cb)
     {
+        Debug.Assert(cb != null);
         long id = genSession();
-        var req = send_request.Invoke<C2sProtocol.handshake>(requestObj, id);
-        Debug.Assert(req != null);
-        Send(ud, id, req, HandshakeResp);
+        byte[] req = null;
+        if (requestObj != null)
+        {
+            req = send_request.Invoke<C2sProtocol.handshake>(requestObj, id);
+            Debug.Assert(req != null);
+        }
+        Send(ud, id, req, cb);
     }
 
     public void HandshakeResp(object ud, SprotoTypeBase responseObj)
