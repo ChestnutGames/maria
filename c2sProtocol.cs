@@ -29,6 +29,19 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<applyfriend> (applyfriend.Tag);
 		Protocol.SetRequest<C2sSprotoType.applyfriend.request> (applyfriend.Tag);
 
+		Protocol.SetProtocol<ara_bat_clg> (ara_bat_clg.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_bat_clg.request> (ara_bat_clg.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_bat_clg.response> (ara_bat_clg.Tag);
+
+		Protocol.SetProtocol<ara_bat_ovr> (ara_bat_ovr.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_bat_ovr.response> (ara_bat_ovr.Tag);
+
+		Protocol.SetProtocol<ara_clg_tms_purchase> (ara_clg_tms_purchase.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_clg_tms_purchase.response> (ara_clg_tms_purchase.Tag);
+
+		Protocol.SetProtocol<ara_rfh> (ara_rfh.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_rfh.response> (ara_rfh.Tag);
+
 		Protocol.SetProtocol<c_gold> (c_gold.Tag);
 		Protocol.SetResponse<C2sSprotoType.c_gold.response> (c_gold.Tag);
 
@@ -309,6 +322,22 @@ public class C2sProtocol : ProtocolBase {
 
 	public class applyfriend {
 		public const int Tag = 19;
+	}
+
+	public class ara_bat_clg {
+		public const int Tag = 80;
+	}
+
+	public class ara_bat_ovr {
+		public const int Tag = 79;
+	}
+
+	public class ara_clg_tms_purchase {
+		public const int Tag = 82;
+	}
+
+	public class ara_rfh {
+		public const int Tag = 81;
 	}
 
 	public class c_gold {
