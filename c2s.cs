@@ -3758,7 +3758,7 @@ namespace C2sSprotoType {
 	public class get_lilian_info {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 10;
+			private static int max_field_count = 11;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -3851,6 +3851,15 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (9); }
 			}
 
+			private Int64 _eventid; // tag 10
+			public Int64 eventid {
+				get { return _eventid; }
+				set { base.has_field.set_field (10, true); _eventid = value; }
+			}
+			public bool HasEventid {
+				get { return base.has_field.has_field (10); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -3890,6 +3899,9 @@ namespace C2sSprotoType {
 						break;
 					case 9:
 						this.phy_power_left_cd_time = base.deserialize.read_integer ();
+						break;
+					case 10:
+						this.eventid = base.deserialize.read_integer ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -3939,6 +3951,10 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (9)) {
 					base.serialize.write_integer (this.phy_power_left_cd_time, 9);
+				}
+
+				if (base.has_field.has_field (10)) {
+					base.serialize.write_integer (this.eventid, 10);
 				}
 
 				return base.serialize.close ();
@@ -5145,7 +5161,7 @@ namespace C2sSprotoType {
 
 
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 10;
+			private static int max_field_count = 12;
 			
 			
 			private Int64 _iffinished; // tag 0
@@ -5184,12 +5200,12 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (3); }
 			}
 
-			private Int64 _iflevel_up; // tag 4
-			public Int64 iflevel_up {
-				get { return _iflevel_up; }
-				set { base.has_field.set_field (4, true); _iflevel_up = value; }
+			private Int64 _lilian_level; // tag 4
+			public Int64 lilian_level {
+				get { return _lilian_level; }
+				set { base.has_field.set_field (4, true); _lilian_level = value; }
 			}
-			public bool HasIflevel_up {
+			public bool HasLilian_level {
 				get { return base.has_field.has_field (4); }
 			}
 
@@ -5238,6 +5254,24 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (9); }
 			}
 
+			private Int64 _lilian_exp; // tag 10
+			public Int64 lilian_exp {
+				get { return _lilian_exp; }
+				set { base.has_field.set_field (10, true); _lilian_exp = value; }
+			}
+			public bool HasLilian_exp {
+				get { return base.has_field.has_field (10); }
+			}
+
+			private Int64 _eventid; // tag 11
+			public Int64 eventid {
+				get { return _eventid; }
+				set { base.has_field.set_field (11, true); _eventid = value; }
+			}
+			public bool HasEventid {
+				get { return base.has_field.has_field (11); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -5261,7 +5295,7 @@ namespace C2sSprotoType {
 						this.invitation_id = base.deserialize.read_integer ();
 						break;
 					case 4:
-						this.iflevel_up = base.deserialize.read_integer ();
+						this.lilian_level = base.deserialize.read_integer ();
 						break;
 					case 5:
 						this.errorcode = base.deserialize.read_integer ();
@@ -5277,6 +5311,12 @@ namespace C2sSprotoType {
 						break;
 					case 9:
 						this.reward = base.deserialize.read_obj_list<lilian_reward_info> ();
+						break;
+					case 10:
+						this.lilian_exp = base.deserialize.read_integer ();
+						break;
+					case 11:
+						this.eventid = base.deserialize.read_integer ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -5305,7 +5345,7 @@ namespace C2sSprotoType {
 				}
 
 				if (base.has_field.has_field (4)) {
-					base.serialize.write_integer (this.iflevel_up, 4);
+					base.serialize.write_integer (this.lilian_level, 4);
 				}
 
 				if (base.has_field.has_field (5)) {
@@ -5326,6 +5366,14 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (9)) {
 					base.serialize.write_obj (this.reward, 9);
+				}
+
+				if (base.has_field.has_field (10)) {
+					base.serialize.write_integer (this.lilian_exp, 10);
+				}
+
+				if (base.has_field.has_field (11)) {
+					base.serialize.write_integer (this.eventid, 11);
 				}
 
 				return base.serialize.close ();
