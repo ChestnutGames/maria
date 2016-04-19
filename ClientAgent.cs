@@ -9,11 +9,14 @@ using SprotoType;
 using S2cSprotoType;
 using C2sSprotoType;
 
-public class ClientAgent : MonoBehaviour
+public class ClientAgent 
 {
+    
+
+    private ClientSocket sock = new ClientSocket(;
     private string ip = "192.168.1.239";
     private int port = 8888;
-    private ClientSocket sock;
+    
     private byte[] secret = null;
     private byte[] subid = null;
 
@@ -30,6 +33,7 @@ public class ClientAgent : MonoBehaviour
     void Update()
     {
         sock.Update();
+        sock.Pro
     }
 
     private void Handshake()
@@ -51,4 +55,5 @@ public class ClientAgent : MonoBehaviour
         step = 1;
     }
 
+    
 }
