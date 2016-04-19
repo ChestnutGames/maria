@@ -13,8 +13,20 @@ public class ClientSocket : MonoBehaviour
 {
     public delegate void CB(bool ok, object ud, byte[] subid, byte[] secret);
 
-    public delegate void RespAction(uint session, SprotoTypeBase responseObj);
-    public delegate void ReqAction(uint session, SprotoTypeBase requestObj, SprotoRpc.ResponseFunction Response);
+    public delegate void RespCb(uint session, SprotoTypeBase responseObj, object ud);
+    public delegate void ReqCb(uint session, SprotoTypeBase requestObj, SprotoRpc.ResponseFunction Response, object ud);
+
+    private class ReqAction
+    {
+        public object Ud;
+        public ReqCb Action;
+    }
+
+    private class RespAction
+    {
+        public object Ud;
+        public RespCb Action;
+    }
 
     private class ReqPg
     {
@@ -22,7 +34,7 @@ public class ClientSocket : MonoBehaviour
         public string Protocol { get; set; }
         public byte[] Buffer { get; set; }
         public int Version { get; set; }
-        public int Index { get; set; }
+        public uint Index { get; set; }
     }
 
     private class RespPg
@@ -31,7 +43,7 @@ public class ClientSocket : MonoBehaviour
         public string Protocol { get; set; }
         public byte[] Buffer { get; set; }
         public int Version { get; set; }
-        public int Index { get; set; }
+        public uint Index { get; set; }
     }
 
     private PackageSocket sock = new PackageSocket();
@@ -70,7 +82,7 @@ public class ClientSocket : MonoBehaviour
         sock.OnRecvive = OnRecvive;
         sock.OnDisconnect = OnDisconnect;
         sock.SetEnabledPing(true);
-
+        RegisterProtocol();
     }
 
     // Update is called once per frame
@@ -131,8 +143,9 @@ public class ClientSocket : MonoBehaviour
                 Debug.Assert(sinfo.session != null);
                 Debug.Assert(sinfo.session == session);
                 string key = id_to_hex(session);
-                var rpc = response[key];
-                rpc.Action(rpc.Ud, session, sinfo.responseObj);
+                RespPg pg = response_pg[key];
+                var rpc = response[pg.Protocol];
+                rpc.Action(session, sinfo.responseObj, rpc.Ud);
             }
             else if (tag == s2c_req_tag)
             {
@@ -141,13 +154,20 @@ public class ClientSocket : MonoBehaviour
                 Debug.Assert(sinfo.session != null);
                 Debug.Assert(sinfo.session == session);
                 Debug.Assert(sinfo.tag != null);
-                string key = id_to_hex((uint)sinfo.tag);
-                var rpc = request[key];
-                Debug.Assert(rpc != null);
-                rpc.Session = session;
-                byte[] resp = rpc.Action(rpc.Ud, session, sinfo.requestObj);
-                byte[] tmp = new byte[resp.Length + 5];
-                sock.Send(tmp, 0, tmp.Length);
+
+                /**********************************/
+                string key = id_to_hex(session);
+                ReqPg pg = new ReqPg();
+                pg.Session = session;
+                pg.Protocol = sinfo.ToString();
+                pg.Index = index;
+                pg.Buffer = buffer;
+                pg.Version = 0;
+                request_pg[key] = pg;
+
+                /************************************/
+                var rpc = request[pg.Protocol];
+                rpc.Action(session, sinfo.requestObj, sinfo.Response, rpc.Ud);
             }
         }
     }
@@ -191,15 +211,17 @@ public class ClientSocket : MonoBehaviour
         sock.Send(tmp, 0, l);
     }
 
-    private void Send(object ud, uint id, byte[] buffer, RespAction cb)
+    private void Send(object ud, uint id, byte[] buffer, string protocol)
     {
         RespPg pg = new RespPg();
-        pg.Action = cb;
-        pg.Buffer = buffer;
         pg.Session = id;
+        pg.Buffer = buffer;
+        pg.Index = index;
+        pg.Protocol = protocol;
+        pg.Version = 0;
         string key = id_to_hex(id);
-        response[key] = pg;
-        sock.Send(pg.Buffer, 0, pg.Buffer.Length);
+        response_pg[key] = pg;
+        Wirte(buffer, id, c2s_req_tag);
     }
 
     private uint genSession()
@@ -249,44 +271,34 @@ public class ClientSocket : MonoBehaviour
 
     private void RegisterProtocol()
     {
-        request["handshake"] = HandshakeReq;
+        /*********************************/
+        response["role_info"] = new RespAction { Action = role_info, Ud = null };
+
+        /*********************************/
+        request["finish_achi"] = new ReqAction { Action = finish_achi, Ud = null };
     }
 
-    public void Handshake()
+    public void send_role_info(Dictionary<string, object> args)
     {
-        SprotoTypeBase requestObj = null;
-        byte[] req = null;
+        C2sSprotoType.role_info.request requestObj = new C2sSprotoType.role_info.request();
+        requestObj.role_id = (Int32)args["role_id"];
         uint id = genSession();
-        if (requestObj != null)
-        {
-            req = send_request.Invoke<C2sProtocol.handshake>(requestObj, id);
-            Debug.Assert(req != null);
-        }
-        Send(ud, id, req, );
+        byte[] req = send_request.Invoke<C2sProtocol.role_info>(requestObj, id);
+        Debug.Assert(req != null);
+
+        Send(null, id, req, "role_info");
     }
 
-    public void HandshakeResp(object ud, SprotoTypeBase responseObj)
+    public void role_info(uint session, SprotoTypeBase o, object ud)
     {
-        var resp = (C2sSprotoType.handshake.response)responseObj;
-        Debug.Log(resp.msg);
+        C2sSprotoType.role_info.response responseObj = (C2sSprotoType.role_info.response)o;
     }
 
-    public void HandshakeDispatch(object ud, ReqAction cb)
+    public void finish_achi(uint session, SprotoTypeBase requestObj, SprotoRpc.ResponseFunction Response, object ud)
     {
-        long id = (long)S2cProtocol.heartbeat.Tag;
-        ReqPg pg = new ReqPg();
-        pg.Ud = ud;
-        pg.Session = 0;
-        pg.Action = cb;
-        string key = id_to_hex((uint)id);
-        request[key] = pg;
-    }
-
-    public void HandshakeReq(uint session, SprotoTypeBase requestObj, SprotoRpc.ResponseFunction Response)
-    {
-
-        //send_request.Invoke<S2cProtocol.heartbeat>()
-
-        //return null;
+        Debug.Assert(Response != null);
+        S2cSprotoType.finish_achi.response responseObj = new finish_achi.response();
+        byte[] resp = Response(responseObj);
+        Wirte(resp, session, s2c_resp_tag);
     }
 }

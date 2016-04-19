@@ -12,8 +12,10 @@
 # 忽略指定文件
 /Plugins/crypt/crypt.sdf
 
+
 # 忽略指定文件夹
 /Plugins/crypt/Debug
+/Plugins/crypt/x64
 
 !/proj.win32/res/
 !/proj.win32/Dizhuu.sln
