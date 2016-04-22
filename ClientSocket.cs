@@ -81,7 +81,7 @@ public class ClientSocket : MonoBehaviour
         sock.OnRecvive = OnRecvive;
         sock.OnDisconnect = OnDisconnect;
         sock.SetEnabledPing(true);
-        sock.SetPackageType(PackageType.Header);
+        sock.SetPackageType(PackageSocketType.Header);
         RegisterProtocol();
     }
 
@@ -294,17 +294,19 @@ public class ClientSocket : MonoBehaviour
         uint id = genSession();
         byte[] req = send_request.Invoke<C2sProtocol.role_info>(requestObj, id);
         Debug.Assert(req != null);
-
         Send(null, id, req, "role_info");
     }
 
     public void role_info(uint session, SprotoTypeBase o, object ud)
     {
         C2sSprotoType.role_info.response responseObj = (C2sSprotoType.role_info.response)o;
+        // TODO:
     }
 
     public void finish_achi(uint session, SprotoTypeBase requestObj, SprotoRpc.ResponseFunction Response, object ud)
     {
+        // TODO:
+
         Debug.Assert(Response != null);
         S2cSprotoType.finish_achi.response responseObj = new finish_achi.response();
         byte[] resp = Response(responseObj);

@@ -13,7 +13,7 @@ public enum PackageSocketError
 	RecviveTimeout,
 }
 
-public enum PackageType
+public enum PackageSocketType
 {
     Line,
     Header,
@@ -59,10 +59,12 @@ public class PackageSocket
 	private DateTime NextSendPingTime;
 
     private bool IsEnabledPing;
-    private PackageType PgType = PackageType.Header;
+    private PackageSocketType PgType = PackageSocketType.Header;
+    private int id;
 
 	const int MaxSizePerSend = 1024 * 4;		
 	
+
 	public PackageSocket()
 	{
 		SendQueue = new Queue<byte[]>();
@@ -129,14 +131,25 @@ public class PackageSocket
 
 	public void Send(Byte[] buffer, int start, int length)
 	{
-		var headerLen = GetHeaderLength();
-		var data = new byte[headerLen + length];
+        if (PgType == PackageSocketType.Header)
+        {
+            var headerLen = GetHeaderLength();
+            var data = new byte[headerLen + length];
 
-		EncodeHeader(length, data, 0);
-		Array.Copy(buffer, start, data, headerLen, length);
-		SendQueue.Enqueue(data);
+            EncodeHeader(length, data, 0);
+            Array.Copy(buffer, start, data, headerLen, length);
+            SendQueue.Enqueue(data);
 
-		ProcessSend();
+            ProcessSend();
+        }
+        else if (PgType == PackageSocketType.Line)
+        {
+            byte[] data = new byte[length + 1];
+            Array.Copy(buffer, start, data, 0, length);
+            data[length] = 10;
+            SendQueue.Enqueue(data);
+            ProcessSend();
+        }
 	}
 
     public void SendLine(byte[] buffer, int start, int length)
@@ -257,7 +270,7 @@ public class PackageSocket
 
 			RecvBufferEndIndex += receive;
 
-            if (PgType == PackageType.Header)
+            if (PgType == PackageSocketType.Header)
             {
                 ProcessPackage();
             }
@@ -403,7 +416,7 @@ public class PackageSocket
 		return string.Format("State:{0} SendQueue:{1}", CurState, SendQueue.Count);
     }
 
-    public void SetPackageType(PackageType type)
+    public void SetPackageSocketType(PackageSocketType type)
     {
         this.PgType = type;
     }

@@ -32,7 +32,7 @@ public class ClientLogin : MonoBehaviour
         sock.OnDisconnect = OnDisconnect;
         sock.OnRecvive = OnRecvive;
         sock.SetEnabledPing(false);
-        sock.SetPackageType(PackageType.Line);
+        sock.SetPackageType(PackageSocketType.Line);
     }
 
     // Update is called once per frame
