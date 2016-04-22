@@ -32,18 +32,21 @@ public class ClientLogin : MonoBehaviour
         sock.OnDisconnect = OnDisconnect;
         sock.OnRecvive = OnRecvive;
         sock.SetEnabledPing(false);
+        sock.SetPackageType(PackageType.Line);
     }
 
     // Update is called once per frame
     void Update()
     {
         sock.Update();
-        sock.ProcessLine();
     }
 
     void OnConnect(bool connected)
     {
-        step++;
+        if (begain)
+        {
+            step++;
+        }
     }
 
     void OnRecvive(byte[] data, int start, int length)
@@ -73,6 +76,7 @@ public class ClientLogin : MonoBehaviour
         {
             string str = Encoding.ASCII.GetString(buffer);
             int code = Int32.Parse(str.Substring(0, 3));
+            string msg = str.Substring(4);
             if (code == 200)
             {
                 string en = str.Substring(4, 4);
@@ -84,6 +88,7 @@ public class ClientLogin : MonoBehaviour
             }
             else
             {
+                Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
                 callback(false, ud, subid, secret);
                 begain = false;
                 sock.Close();
@@ -103,10 +108,9 @@ public class ClientLogin : MonoBehaviour
 
     protected void WriteToke(string server, string user, string password)
     {
-        string str = String.Format("{0}@{1}:{2}", Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes("hello"))),
-            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes("sample"))),
-            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes("password"))));
-        Debug.Log(str);
+        string str = String.Format("{0}@{1}:{2}", Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(user))),
+            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(server))),
+            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(password))));
         byte[] etoken = Crypt.desencode(secret, Encoding.ASCII.GetBytes(str));
         byte[] b = Crypt.base64encode(etoken);
         sock.SendLine(b, 0, b.Length);

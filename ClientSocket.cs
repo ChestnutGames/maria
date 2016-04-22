@@ -51,7 +51,7 @@ public class ClientSocket : MonoBehaviour
     private int port = 8888;
     private User user = null;
     private int step = 0;
-    private bool begain = false;
+    private bool handshake = false;
     private object ud = null;
     private CB callback = null;
 
@@ -59,8 +59,7 @@ public class ClientSocket : MonoBehaviour
     private uint session = 0;
     private SprotoRpc host = null;
     private SprotoRpc.RpcRequest send_request = null;
-    //private SprotoStream stream = new SprotoStream();
-    private bool handshake = false;
+    
     private const int c2s_req_tag = (7 & (1 << 2) & (1 << 4));
     private const int c2s_resp_tag = (7 & (1 << 2) & (0 << 4));
     private const int s2c_req_tag = (7 & (0 << 2) & (1 << 4));
@@ -82,6 +81,7 @@ public class ClientSocket : MonoBehaviour
         sock.OnRecvive = OnRecvive;
         sock.OnDisconnect = OnDisconnect;
         sock.SetEnabledPing(true);
+        sock.SetPackageType(PackageType.Header);
         RegisterProtocol();
     }
 
@@ -89,17 +89,26 @@ public class ClientSocket : MonoBehaviour
     public void Update()
     {
         sock.Update();
-        sock.ProcessPackage();
+    }
+
+    private void DoAuth()
+    {
+        byte[] token = WriteToken();
+        byte[] hmac = Crypt.hmac64(Crypt.hashkey(token), user.Secret);
+        byte[] tmp = new byte[token.Length + hmac.Length + 1];
+        Array.Copy(token, 0, tmp, 0, token.Length);
+        tmp[token.Length] = Encoding.ASCII.GetBytes(":")[0];
+        Array.Copy(hmac, 0, tmp, token.Length + 1, hmac.Length);
+        sock.Send(tmp, 0, tmp.Length);
+        step++;
     }
 
     public void OnConnect(bool connected)
     {
         if (connected)
         {
-            if (begain)
-            {
-                step++;
-            }
+            if (handshake)
+                DoAuth();
         }
         else
         {
@@ -109,33 +118,35 @@ public class ClientSocket : MonoBehaviour
 
     void OnRecvive(byte[] data, int start, int length)
     {
-        uint session = 0;
-        byte tag = 1;
-        byte[] buffer = new byte[length - 5];
-        Array.Copy(data, start, buffer, 0, length - 5);
-        if (auth_tag == tag)
+        if (handshake)
         {
-            Debug.Assert(begain);
+            byte[] buffer = new byte[length];
+            Array.Copy(data, start, buffer, 0, length);
             if (step == 1)
             {
-                byte[] handshake = WriteToke();
-                byte[] hmac = Crypt.hmac64(Crypt.hashkey(handshake), user.Secret);
-                byte[] tmp = new byte[handshake.Length + hmac.Length + 1];
-                Array.Copy(handshake, 0, tmp, 0, handshake.Length);
-                tmp[handshake.Length] = Encoding.ASCII.GetBytes(":")[0];
-                Array.Copy(hmac, 0, tmp, handshake.Length+1, hmac.Length);
-                sock.Send(tmp, 0, tmp.Length);
-                //Wirte(, session, auth_tag);
-                step++;
-            }
-            else if (step == 2)
-            {
-                begain = false;
-                handshake = true;
+                step = 0;
+                handshake = false;
+                string str = Encoding.ASCII.GetString(buffer);
+                int code = Int32.Parse(str.Substring(0, 3));
+                string msg = str.Substring(4);
+                if (code == 200)
+                {
+                    Debug.Log(string.Format("{0},{1}", code, msg));
+                    callback(true, ud, user.Subid, user.Secret);
+                }
+                else
+                {
+                    Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
+                    callback(false, ud, user.Subid, user.Secret);
+                }
             }
         }
         else
         {
+            uint session = 0;
+            byte tag = 1;
+            byte[] buffer = new byte[length - 5];
+            Array.Copy(data, start, buffer, 0, length - 5);
             if (tag == c2s_resp_tag)
             {
                 SprotoRpc.RpcInfo sinfo = host.Dispatch(buffer);
@@ -176,13 +187,13 @@ public class ClientSocket : MonoBehaviour
     {
     }
 
-    private byte[] WriteToke()
+    private byte[] WriteToken()
     {
         string u = Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(user.Account)));
         string s = Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(user.Server)));
         string sid = Encoding.ASCII.GetString(Crypt.base64encode(user.Subid));
-        string handshake = string.Format("%s@%s#%s:%d", u, s, sid, index);
-        return Encoding.ASCII.GetBytes(handshake);
+        string token = string.Format("%s@%s#%s:%d", u, s, sid, index);
+        return Encoding.ASCII.GetBytes(token);
     }
 
     private uint B2L(byte[] buffer, int start, int length)
@@ -254,17 +265,15 @@ public class ClientSocket : MonoBehaviour
         user = u;
         ud = u;
         callback = cb;
-        begain = true;
+        handshake = true;
         sock.Connect(ip, port);
     }
 
     public void Reset()
     {
-        ip = null;
-        port = 0;
         User user = null;
         step = 0;
-        begain = false;
+        handshake = false;
         ud = null;
         callback = null;
     }

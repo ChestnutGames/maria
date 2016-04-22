@@ -13,6 +13,12 @@ public enum PackageSocketError
 	RecviveTimeout,
 }
 
+public enum PackageType
+{
+    Line,
+    Header,
+}
+
 public class PackageSocket 
 {
 	enum State
@@ -53,6 +59,7 @@ public class PackageSocket
 	private DateTime NextSendPingTime;
 
     private bool IsEnabledPing;
+    private PackageType PgType = PackageType.Header;
 
 	const int MaxSizePerSend = 1024 * 4;		
 	
@@ -249,6 +256,15 @@ public class PackageSocket
 			}
 
 			RecvBufferEndIndex += receive;
+
+            if (PgType == PackageType.Header)
+            {
+                ProcessPackage();
+            }
+            else
+            {
+                ProcessLine();
+            }
             //ProcessPackage();
 			
 			if (receive == 0)
@@ -305,21 +321,23 @@ public class PackageSocket
         {
             if (RecvBufferEndIndex == RecvBuffer.Length)
                 MemmoveRecvBuffer();
+            if (RecvBufferEndIndex + 128 < RecvBuffer.Length)
+                MemmoveRecvBuffer();
             int idx = RecvBufferBeginIndex;
-            while (idx != RecvBufferEndIndex)
+            for (; idx < RecvBufferEndIndex; idx++)
             {
                 if (RecvBuffer[idx] == 10)
-                {
                     break;
-                }
             }
             if (idx != RecvBufferEndIndex)
             {
-                int dataLen = idx - RecvBufferEndIndex + 1;
+                /* don't count \n*/
+                int dataLen = idx - RecvBufferBeginIndex;
                 if (dataLen > 0)
                     OnRecvive(RecvBuffer, RecvBufferBeginIndex, dataLen);
-                RecvBufferBeginIndex += dataLen;
+                RecvBufferBeginIndex += dataLen + 1;
             }
+            break;
         }
     }
 
@@ -385,4 +403,8 @@ public class PackageSocket
 		return string.Format("State:{0} SendQueue:{1}", CurState, SendQueue.Count);
     }
 
+    public void SetPackageType(PackageType type)
+    {
+        this.PgType = type;
+    }
 }
