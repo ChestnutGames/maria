@@ -18,14 +18,14 @@ public class ClientSocket : MonoBehaviour
 
     private class ReqAction
     {
-        public object Ud;
-        public ReqCb Action;
+        public object Ud { get; set; }
+        public ReqCb Action { get; set; }
     }
 
     private class RespAction
     {
-        public object Ud;
-        public RespCb Action;
+        public object Ud { get; set; }
+        public RespCb Action { get; set; }
     }
 
     private class ReqPg
@@ -33,8 +33,8 @@ public class ClientSocket : MonoBehaviour
         public uint Session { get; set; }
         public string Protocol { get; set; }
         public byte[] Buffer { get; set; }
-        public int Version { get; set; }
-        public uint Index { get; set; }
+        public int Version { get; set; }  // nonsence
+        public uint Index { get; set; }   // 
     }
 
     private class RespPg
@@ -64,8 +64,7 @@ public class ClientSocket : MonoBehaviour
     private const int c2s_resp_tag = (7 & (1 << 2) & (0 << 4));
     private const int s2c_req_tag = (7 & (0 << 2) & (1 << 4));
     private const int s2c_resp_tag = (7 & (0 << 2) & (0 << 4));
-    private const int auth_tag = 1;
-
+   
     private Dictionary<string, RespAction> response = new Dictionary<string, RespAction>();
     private Dictionary<string, ReqAction> request = new Dictionary<string, ReqAction>();
     private Dictionary<string, ReqPg> request_pg = new Dictionary<string, ReqPg>();      /*protocal -> pg */
@@ -81,7 +80,7 @@ public class ClientSocket : MonoBehaviour
         sock.OnRecvive = OnRecvive;
         sock.OnDisconnect = OnDisconnect;
         sock.SetEnabledPing(true);
-        sock.SetPackageType(PackageSocketType.Header);
+        sock.SetPackageSocketType(PackageSocketType.Header);
         RegisterProtocol();
     }
 
@@ -271,11 +270,11 @@ public class ClientSocket : MonoBehaviour
 
     public void Reset()
     {
-        User user = null;
+        user = null;
         step = 0;
-        handshake = false;
         ud = null;
         callback = null;
+        handshake = false;
     }
 
     private void RegisterProtocol()

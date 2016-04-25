@@ -6,9 +6,9 @@ using System.Net.Sockets;
 
 public interface IProxy
 {
-	public void OnConnect(int id, bool connected);
-    public void OnRecvive(int id, byte[] buffer);
-    public void OnDisconnect(int id, SocketError socketError, PackageSocketError packageSocketError);
+	void OnConnect(int id, bool connected);
+    void OnRecvive(int id, byte[] buffer);
+    void OnDisconnect(int id, SocketError socketError, PackageSocketError packageSocketError);
 }
 
 // singlen
@@ -171,7 +171,7 @@ public class Gate
             }
             foreach (var item in socks)
             {
-                item.Update();
+                //item.Update();
             }
         }
     }

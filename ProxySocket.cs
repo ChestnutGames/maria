@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 
 public enum ProxySocketError
 {
@@ -36,7 +37,6 @@ public class ProxySocket
 
     void OnRecvive(byte[] data, int start, int length)
     {
-        new
     }
 
     void OnDisconnect(SocketError socketError, PackageSocketError packageSocketError)
@@ -53,8 +53,9 @@ public class ProxySocket
             case ProxySocketType.Line:
                 sock.SetPackageSocketType(PackageSocketType.Line);
                 break;
-            case ProxySocketType.Header;
-
+            case ProxySocketType.Header:
+                sock.SetPackageSocketType(PackageSocketType.Header);
+                break;
         }
     }
 }

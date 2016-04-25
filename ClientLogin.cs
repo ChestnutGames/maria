@@ -21,7 +21,7 @@ public class ClientLogin : MonoBehaviour
     private byte[] secret = null;
     private byte[] subid = null;
     private int step = 0;
-    private bool begain = false;
+    private bool handshake = false;
     private object ud = null;
     private CB callback = null;
 
@@ -32,7 +32,7 @@ public class ClientLogin : MonoBehaviour
         sock.OnDisconnect = OnDisconnect;
         sock.OnRecvive = OnRecvive;
         sock.SetEnabledPing(false);
-        sock.SetPackageType(PackageSocketType.Line);
+        sock.SetPackageSocketType(PackageSocketType.Line);
     }
 
     // Update is called once per frame
@@ -43,10 +43,8 @@ public class ClientLogin : MonoBehaviour
 
     void OnConnect(bool connected)
     {
-        if (begain)
-        {
+        if (handshake)
             step++;
-        }
     }
 
     void OnRecvive(byte[] data, int start, int length)
@@ -82,7 +80,7 @@ public class ClientLogin : MonoBehaviour
                 string en = str.Substring(4, 4);
                 subid = Crypt.base64decode(Encoding.ASCII.GetBytes(en));
                 callback(true, ud, subid, secret);
-                begain = false;
+                handshake = false;
                 sock.Close();
                 Reset();
             }
@@ -90,7 +88,7 @@ public class ClientLogin : MonoBehaviour
             {
                 Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
                 callback(false, ud, subid, secret);
-                begain = false;
+                handshake = false;
                 sock.Close();
                 Reset();
             }
@@ -99,7 +97,7 @@ public class ClientLogin : MonoBehaviour
 
     void OnDisconnect(SocketError socketError, PackageSocketError packageSocketError)
     {
-        if (begain)
+        if (handshake)
         {
             callback(false, ud, subid, secret);
             Reset();
@@ -128,7 +126,7 @@ public class ClientLogin : MonoBehaviour
         secret = null;
         subid = null;
         step = 0;
-        begain = false;
+        handshake = false;
         ud = null;
         callback = null;
     }
@@ -142,7 +140,7 @@ public class ClientLogin : MonoBehaviour
         password = pwd;
         ud = d;
         callback = cb;
-        begain = true;
+        handshake = true;
         sock.Connect(ip, port);
     }
 }
