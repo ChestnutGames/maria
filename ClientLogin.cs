@@ -8,7 +8,7 @@ using System.Net;
 
 public class ClientLogin : MonoBehaviour
 {
-    public delegate void CB(bool ok, object ud, byte[] subid, byte[] secret);
+    public delegate void CB(bool ok, object ud, byte[] uid, byte[] subid, byte[] secret);
 
     private PackageSocket sock = new PackageSocket();
     private string ip = "192.168.1.239";
@@ -19,6 +19,7 @@ public class ClientLogin : MonoBehaviour
     private byte[] challenge = null;
     private byte[] clientkey = null;
     private byte[] secret = null;
+    private byte[] uid = null;
     private byte[] subid = null;
     private int step = 0;
     private bool handshake = false;
@@ -77,9 +78,15 @@ public class ClientLogin : MonoBehaviour
             string msg = str.Substring(4);
             if (code == 200)
             {
-                string en = str.Substring(4, 4);
-                subid = Crypt.base64decode(Encoding.ASCII.GetBytes(en));
-                callback(true, ud, subid, secret);
+                int _1 = str.IndexOf(':');
+                int _2 = str.IndexOf('@', _1);
+                string uen = str.Substring(_1 + 1, _2 - _1 - 1);
+                uid = Crypt.base64decode(Encoding.ASCII.GetBytes(uen));
+                Debug.Log(int.Parse(Encoding.ASCII.GetString(uid)));
+                string sen = str.Substring(_2+1);
+                subid = Crypt.base64decode(Encoding.ASCII.GetBytes(sen));
+                Debug.Log(int.Parse(Encoding.ASCII.GetString(subid)));
+                callback(true, ud, uid, subid, secret);
                 handshake = false;
                 sock.Close();
                 Reset();
@@ -87,7 +94,7 @@ public class ClientLogin : MonoBehaviour
             else
             {
                 Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
-                callback(false, ud, subid, secret);
+                callback(false, ud, uid, subid, secret);
                 handshake = false;
                 sock.Close();
                 Reset();
@@ -99,7 +106,7 @@ public class ClientLogin : MonoBehaviour
     {
         if (handshake)
         {
-            callback(false, ud, subid, secret);
+            callback(false, ud, uid, subid, secret);
             Reset();
         }
     }

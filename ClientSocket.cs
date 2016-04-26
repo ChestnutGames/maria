@@ -55,7 +55,7 @@ public class ClientSocket : MonoBehaviour
     private object ud = null;
     private CB callback = null;
 
-    private uint index = 1;
+    private uint index = 0;
     private uint session = 0;
     private SprotoRpc host = null;
     private SprotoRpc.RpcRequest send_request = null;
@@ -93,7 +93,7 @@ public class ClientSocket : MonoBehaviour
     private void DoAuth()
     {
         byte[] token = WriteToken();
-        byte[] hmac = Crypt.hmac64(Crypt.hashkey(token), user.Secret);
+        byte[] hmac = Crypt.base64encode(Crypt.hmac64(Crypt.hashkey(token), user.Secret));
         byte[] tmp = new byte[token.Length + hmac.Length + 1];
         Array.Copy(token, 0, tmp, 0, token.Length);
         tmp[token.Length] = Encoding.ASCII.GetBytes(":")[0];
@@ -117,6 +117,8 @@ public class ClientSocket : MonoBehaviour
 
     void OnRecvive(byte[] data, int start, int length)
     {
+        if (length <= 0)
+            return;
         if (handshake)
         {
             byte[] buffer = new byte[length];
@@ -142,8 +144,13 @@ public class ClientSocket : MonoBehaviour
         }
         else
         {
+            byte tag = data[start + length - 1];
             uint session = 0;
-            byte tag = 1;
+            for (int i = 0; i < 4; i++)
+            {
+                session |= (uint)(data[start + length - (5-i)] & 0xff) << (3-i)*8;
+            }
+            
             byte[] buffer = new byte[length - 5];
             Array.Copy(data, start, buffer, 0, length - 5);
             if (tag == c2s_resp_tag)
@@ -175,7 +182,7 @@ public class ClientSocket : MonoBehaviour
                 pg.Version = 0;
                 request_pg[key] = pg;
 
-                /************************************/
+                /************************************/       
                 var rpc = request[pg.Protocol];
                 rpc.Action(session, sinfo.requestObj, sinfo.Response, rpc.Ud);
             }
@@ -188,10 +195,11 @@ public class ClientSocket : MonoBehaviour
 
     private byte[] WriteToken()
     {
-        string u = Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(user.Account)));
+        string u = Encoding.ASCII.GetString(Crypt.base64encode(user.Uid));
         string s = Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(user.Server)));
         string sid = Encoding.ASCII.GetString(Crypt.base64encode(user.Subid));
-        string token = string.Format("%s@%s#%s:%d", u, s, sid, index);
+        string token = string.Format("{0}@{1}#{2}:{3}", u, s, sid, index);
+        Debug.Log(token);
         return Encoding.ASCII.GetBytes(token);
     }
 
@@ -238,10 +246,7 @@ public class ClientSocket : MonoBehaviour
     {
         ++session;
         if (session == 0)
-        {
-            session = 1;
-            return session;
-        }
+            session++;
         return session;
     }
 
@@ -259,6 +264,7 @@ public class ClientSocket : MonoBehaviour
 
     public void Auth(string ipstr, int pt, User u, object d, CB cb)
     {
+        index++;   // index increment.
         ip = ipstr;
         port = pt;
         user = u;
