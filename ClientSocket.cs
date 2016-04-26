@@ -255,7 +255,7 @@ public class ClientSocket : MonoBehaviour
         byte[] tmp = new byte[9];
         byte[] hex = new byte[16] { 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70 };
         tmp[0] = 58;
-        for (int i = 0; i < 16; i++)
+        for (int i = 1; i < 8; i++)
         {
             tmp[i + 1] = hex[(id >> ((7 - i) * 4)) & 0xf];
         }

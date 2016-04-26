@@ -8,7 +8,7 @@ using System.Net;
 
 public class ClientLogin : MonoBehaviour
 {
-    public delegate void CB(bool ok, object ud, byte[] uid, byte[] subid, byte[] secret);
+    public delegate void CB(bool ok, object ud, byte[] secret, string dummy);
 
     private PackageSocket sock = new PackageSocket();
     private string ip = "192.168.1.239";
@@ -78,15 +78,7 @@ public class ClientLogin : MonoBehaviour
             string msg = str.Substring(4);
             if (code == 200)
             {
-                int _1 = str.IndexOf(':');
-                int _2 = str.IndexOf('@', _1);
-                string uen = str.Substring(_1 + 1, _2 - _1 - 1);
-                uid = Crypt.base64decode(Encoding.ASCII.GetBytes(uen));
-                Debug.Log(int.Parse(Encoding.ASCII.GetString(uid)));
-                string sen = str.Substring(_2+1);
-                subid = Crypt.base64decode(Encoding.ASCII.GetBytes(sen));
-                Debug.Log(int.Parse(Encoding.ASCII.GetString(subid)));
-                callback(true, ud, uid, subid, secret);
+                callback(true, ud, secret, msg);
                 handshake = false;
                 sock.Close();
                 Reset();
@@ -94,7 +86,7 @@ public class ClientLogin : MonoBehaviour
             else
             {
                 Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
-                callback(false, ud, uid, subid, secret);
+                callback(false, ud, secret, msg);
                 handshake = false;
                 sock.Close();
                 Reset();
@@ -106,7 +98,7 @@ public class ClientLogin : MonoBehaviour
     {
         if (handshake)
         {
-            callback(false, ud, uid, subid, secret);
+            callback(false, ud, secret, string.Empty);
             Reset();
         }
     }
