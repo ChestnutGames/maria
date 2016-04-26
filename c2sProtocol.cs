@@ -124,8 +124,20 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.lilian_get_reward_list.request> (lilian_get_reward_list.Tag);
 		Protocol.SetResponse<C2sSprotoType.lilian_get_reward_list.response> (lilian_get_reward_list.Tag);
 
+		Protocol.SetProtocol<lilian_inc> (lilian_inc.Tag);
+		Protocol.SetRequest<C2sSprotoType.lilian_inc.request> (lilian_inc.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_inc.response> (lilian_inc.Tag);
+
 		Protocol.SetProtocol<lilian_purch_phy_power> (lilian_purch_phy_power.Tag);
 		Protocol.SetResponse<C2sSprotoType.lilian_purch_phy_power.response> (lilian_purch_phy_power.Tag);
+
+		Protocol.SetProtocol<lilian_reset_quanguan> (lilian_reset_quanguan.Tag);
+		Protocol.SetRequest<C2sSprotoType.lilian_reset_quanguan.request> (lilian_reset_quanguan.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_reset_quanguan.response> (lilian_reset_quanguan.Tag);
+
+		Protocol.SetProtocol<lilian_rewared_list> (lilian_rewared_list.Tag);
+		Protocol.SetRequest<C2sSprotoType.lilian_rewared_list.request> (lilian_rewared_list.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_rewared_list.response> (lilian_rewared_list.Tag);
 
 		Protocol.SetProtocol<login> (login.Tag);
 		Protocol.SetRequest<C2sSprotoType.login.request> (login.Tag);
@@ -407,8 +419,20 @@ public class C2sProtocol : ProtocolBase {
 		public const int Tag = 71;
 	}
 
+	public class lilian_inc {
+		public const int Tag = 76;
+	}
+
 	public class lilian_purch_phy_power {
 		public const int Tag = 73;
+	}
+
+	public class lilian_reset_quanguan {
+		public const int Tag = 77;
+	}
+
+	public class lilian_rewared_list {
+		public const int Tag = 78;
 	}
 
 	public class login {

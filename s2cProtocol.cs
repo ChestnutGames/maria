@@ -12,13 +12,8 @@ public class S2cProtocol : ProtocolBase {
 
 		Protocol.SetProtocol<heartbeat> (heartbeat.Tag);
 
-		Protocol.SetProtocol<lilian_phy_power> (lilian_phy_power.Tag);
-		Protocol.SetRequest<S2cSprotoType.lilian_phy_power.request> (lilian_phy_power.Tag);
-		Protocol.SetResponse<S2cSprotoType.lilian_phy_power.response> (lilian_phy_power.Tag);
-
-		Protocol.SetProtocol<lilian_result> (lilian_result.Tag);
-		Protocol.SetRequest<S2cSprotoType.lilian_result.request> (lilian_result.Tag);
-		Protocol.SetResponse<S2cSprotoType.lilian_result.response> (lilian_result.Tag);
+		Protocol.SetProtocol<lilian_update> (lilian_update.Tag);
+		Protocol.SetResponse<S2cSprotoType.lilian_update.response> (lilian_update.Tag);
 
 		Protocol.SetProtocol<mail> (mail.Tag);
 		Protocol.SetRequest<S2cSprotoType.mail.request> (mail.Tag);
@@ -34,12 +29,8 @@ public class S2cProtocol : ProtocolBase {
 		public const int Tag = 1;
 	}
 
-	public class lilian_phy_power {
+	public class lilian_update {
 		public const int Tag = 4;
-	}
-
-	public class lilian_result {
-		public const int Tag = 5;
 	}
 
 	public class mail {

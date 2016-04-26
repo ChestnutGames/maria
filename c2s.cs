@@ -3851,12 +3851,12 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (9); }
 			}
 
-			private Int64 _eventid; // tag 10
-			public Int64 eventid {
-				get { return _eventid; }
-				set { base.has_field.set_field (10, true); _eventid = value; }
+			private Int64 _present_phy_power_num; // tag 10
+			public Int64 present_phy_power_num {
+				get { return _present_phy_power_num; }
+				set { base.has_field.set_field (10, true); _present_phy_power_num = value; }
 			}
-			public bool HasEventid {
+			public bool HasPresent_phy_power_num {
 				get { return base.has_field.has_field (10); }
 			}
 
@@ -3901,7 +3901,7 @@ namespace C2sSprotoType {
 						this.phy_power_left_cd_time = base.deserialize.read_integer ();
 						break;
 					case 10:
-						this.eventid = base.deserialize.read_integer ();
+						this.present_phy_power_num = base.deserialize.read_integer ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -3954,7 +3954,7 @@ namespace C2sSprotoType {
 				}
 
 				if (base.has_field.has_field (10)) {
-					base.serialize.write_integer (this.eventid, 10);
+					base.serialize.write_integer (this.present_phy_power_num, 10);
 				}
 
 				return base.serialize.close ();
@@ -5245,30 +5245,30 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (8); }
 			}
 
-			private List<lilian_reward_info> _reward; // tag 9
-			public List<lilian_reward_info> reward {
-				get { return _reward; }
-				set { base.has_field.set_field (9, true); _reward = value; }
+			private Int64 _lilian_exp; // tag 9
+			public Int64 lilian_exp {
+				get { return _lilian_exp; }
+				set { base.has_field.set_field (9, true); _lilian_exp = value; }
 			}
-			public bool HasReward {
+			public bool HasLilian_exp {
 				get { return base.has_field.has_field (9); }
 			}
 
-			private Int64 _lilian_exp; // tag 10
-			public Int64 lilian_exp {
-				get { return _lilian_exp; }
-				set { base.has_field.set_field (10, true); _lilian_exp = value; }
+			private Int64 _eventid; // tag 10
+			public Int64 eventid {
+				get { return _eventid; }
+				set { base.has_field.set_field (10, true); _eventid = value; }
 			}
-			public bool HasLilian_exp {
+			public bool HasEventid {
 				get { return base.has_field.has_field (10); }
 			}
 
-			private Int64 _eventid; // tag 11
-			public Int64 eventid {
-				get { return _eventid; }
-				set { base.has_field.set_field (11, true); _eventid = value; }
+			private List<lilian_reward_info> _reward; // tag 11
+			public List<lilian_reward_info> reward {
+				get { return _reward; }
+				set { base.has_field.set_field (11, true); _reward = value; }
 			}
-			public bool HasEventid {
+			public bool HasReward {
 				get { return base.has_field.has_field (11); }
 			}
 
@@ -5310,13 +5310,13 @@ namespace C2sSprotoType {
 						this.if_lilian_finished = base.deserialize.read_integer ();
 						break;
 					case 9:
-						this.reward = base.deserialize.read_obj_list<lilian_reward_info> ();
-						break;
-					case 10:
 						this.lilian_exp = base.deserialize.read_integer ();
 						break;
-					case 11:
+					case 10:
 						this.eventid = base.deserialize.read_integer ();
+						break;
+					case 11:
+						this.reward = base.deserialize.read_obj_list<lilian_reward_info> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -5365,15 +5365,15 @@ namespace C2sSprotoType {
 				}
 
 				if (base.has_field.has_field (9)) {
-					base.serialize.write_obj (this.reward, 9);
+					base.serialize.write_integer (this.lilian_exp, 9);
 				}
 
 				if (base.has_field.has_field (10)) {
-					base.serialize.write_integer (this.lilian_exp, 10);
+					base.serialize.write_integer (this.eventid, 10);
 				}
 
 				if (base.has_field.has_field (11)) {
-					base.serialize.write_integer (this.eventid, 11);
+					base.serialize.write_obj (this.reward, 11);
 				}
 
 				return base.serialize.close ();
@@ -5426,6 +5426,325 @@ namespace C2sSprotoType {
 
 			return base.serialize.close ();
 		}
+	}
+
+
+	public class lilian_inc {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 2;
+			
+			
+			private Int64 _quanguan_id; // tag 0
+			public Int64 quanguan_id {
+				get { return _quanguan_id; }
+				set { base.has_field.set_field (0, true); _quanguan_id = value; }
+			}
+			public bool HasQuanguan_id {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private Int64 _inc_type; // tag 1
+			public Int64 inc_type {
+				get { return _inc_type; }
+				set { base.has_field.set_field (1, true); _inc_type = value; }
+			}
+			public bool HasInc_type {
+				get { return base.has_field.has_field (1); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.quanguan_id = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.inc_type = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.quanguan_id, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_integer (this.inc_type, 1);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 14;
+			
+			
+			private Int64 _errorcode; // tag 0
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private string _msg; // tag 1
+			public string msg {
+				get { return _msg; }
+				set { base.has_field.set_field (1, true); _msg = value; }
+			}
+			public bool HasMsg {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private Int64 _inc_num; // tag 2
+			public Int64 inc_num {
+				get { return _inc_num; }
+				set { base.has_field.set_field (2, true); _inc_num = value; }
+			}
+			public bool HasInc_num {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private Int64 _diamond_num; // tag 3
+			public Int64 diamond_num {
+				get { return _diamond_num; }
+				set { base.has_field.set_field (3, true); _diamond_num = value; }
+			}
+			public bool HasDiamond_num {
+				get { return base.has_field.has_field (3); }
+			}
+
+			private Int64 _iffinished; // tag 4
+			public Int64 iffinished {
+				get { return _iffinished; }
+				set { base.has_field.set_field (4, true); _iffinished = value; }
+			}
+			public bool HasIffinished {
+				get { return base.has_field.has_field (4); }
+			}
+
+			private Int64 _if_trigger_event; // tag 5
+			public Int64 if_trigger_event {
+				get { return _if_trigger_event; }
+				set { base.has_field.set_field (5, true); _if_trigger_event = value; }
+			}
+			public bool HasIf_trigger_event {
+				get { return base.has_field.has_field (5); }
+			}
+
+			private Int64 _left_cd_time; // tag 6
+			public Int64 left_cd_time {
+				get { return _left_cd_time; }
+				set { base.has_field.set_field (6, true); _left_cd_time = value; }
+			}
+			public bool HasLeft_cd_time {
+				get { return base.has_field.has_field (6); }
+			}
+
+			private Int64 _invitation_id; // tag 7
+			public Int64 invitation_id {
+				get { return _invitation_id; }
+				set { base.has_field.set_field (7, true); _invitation_id = value; }
+			}
+			public bool HasInvitation_id {
+				get { return base.has_field.has_field (7); }
+			}
+
+			private Int64 _lilian_level; // tag 8
+			public Int64 lilian_level {
+				get { return _lilian_level; }
+				set { base.has_field.set_field (8, true); _lilian_level = value; }
+			}
+			public bool HasLilian_level {
+				get { return base.has_field.has_field (8); }
+			}
+
+			private Int64 _if_lilian_reward; // tag 9
+			public Int64 if_lilian_reward {
+				get { return _if_lilian_reward; }
+				set { base.has_field.set_field (9, true); _if_lilian_reward = value; }
+			}
+			public bool HasIf_lilian_reward {
+				get { return base.has_field.has_field (9); }
+			}
+
+			private Int64 _if_event_reward; // tag 10
+			public Int64 if_event_reward {
+				get { return _if_event_reward; }
+				set { base.has_field.set_field (10, true); _if_event_reward = value; }
+			}
+			public bool HasIf_event_reward {
+				get { return base.has_field.has_field (10); }
+			}
+
+			private Int64 _lilian_exp; // tag 11
+			public Int64 lilian_exp {
+				get { return _lilian_exp; }
+				set { base.has_field.set_field (11, true); _lilian_exp = value; }
+			}
+			public bool HasLilian_exp {
+				get { return base.has_field.has_field (11); }
+			}
+
+			private Int64 _eventid; // tag 12
+			public Int64 eventid {
+				get { return _eventid; }
+				set { base.has_field.set_field (12, true); _eventid = value; }
+			}
+			public bool HasEventid {
+				get { return base.has_field.has_field (12); }
+			}
+
+			private List<lilian_reward_info> _reward; // tag 13
+			public List<lilian_reward_info> reward {
+				get { return _reward; }
+				set { base.has_field.set_field (13, true); _reward = value; }
+			}
+			public bool HasReward {
+				get { return base.has_field.has_field (13); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.msg = base.deserialize.read_string ();
+						break;
+					case 2:
+						this.inc_num = base.deserialize.read_integer ();
+						break;
+					case 3:
+						this.diamond_num = base.deserialize.read_integer ();
+						break;
+					case 4:
+						this.iffinished = base.deserialize.read_integer ();
+						break;
+					case 5:
+						this.if_trigger_event = base.deserialize.read_integer ();
+						break;
+					case 6:
+						this.left_cd_time = base.deserialize.read_integer ();
+						break;
+					case 7:
+						this.invitation_id = base.deserialize.read_integer ();
+						break;
+					case 8:
+						this.lilian_level = base.deserialize.read_integer ();
+						break;
+					case 9:
+						this.if_lilian_reward = base.deserialize.read_integer ();
+						break;
+					case 10:
+						this.if_event_reward = base.deserialize.read_integer ();
+						break;
+					case 11:
+						this.lilian_exp = base.deserialize.read_integer ();
+						break;
+					case 12:
+						this.eventid = base.deserialize.read_integer ();
+						break;
+					case 13:
+						this.reward = base.deserialize.read_obj_list<lilian_reward_info> ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_string (this.msg, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.inc_num, 2);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.diamond_num, 3);
+				}
+
+				if (base.has_field.has_field (4)) {
+					base.serialize.write_integer (this.iffinished, 4);
+				}
+
+				if (base.has_field.has_field (5)) {
+					base.serialize.write_integer (this.if_trigger_event, 5);
+				}
+
+				if (base.has_field.has_field (6)) {
+					base.serialize.write_integer (this.left_cd_time, 6);
+				}
+
+				if (base.has_field.has_field (7)) {
+					base.serialize.write_integer (this.invitation_id, 7);
+				}
+
+				if (base.has_field.has_field (8)) {
+					base.serialize.write_integer (this.lilian_level, 8);
+				}
+
+				if (base.has_field.has_field (9)) {
+					base.serialize.write_integer (this.if_lilian_reward, 9);
+				}
+
+				if (base.has_field.has_field (10)) {
+					base.serialize.write_integer (this.if_event_reward, 10);
+				}
+
+				if (base.has_field.has_field (11)) {
+					base.serialize.write_integer (this.lilian_exp, 11);
+				}
+
+				if (base.has_field.has_field (12)) {
+					base.serialize.write_integer (this.eventid, 12);
+				}
+
+				if (base.has_field.has_field (13)) {
+					base.serialize.write_obj (this.reward, 13);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
 	}
 
 
@@ -5527,6 +5846,133 @@ namespace C2sSprotoType {
 	}
 
 
+	public class lilian_reset_quanguan {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 1;
+			
+			
+			private Int64 _quanguan_id; // tag 0
+			public Int64 quanguan_id {
+				get { return _quanguan_id; }
+				set { base.has_field.set_field (0, true); _quanguan_id = value; }
+			}
+			public bool HasQuanguan_id {
+				get { return base.has_field.has_field (0); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.quanguan_id = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.quanguan_id, 0);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 3;
+			
+			
+			private Int64 _errorcode; // tag 0
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private string _msg; // tag 1
+			public string msg {
+				get { return _msg; }
+				set { base.has_field.set_field (1, true); _msg = value; }
+			}
+			public bool HasMsg {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private Int64 _diamond_num; // tag 2
+			public Int64 diamond_num {
+				get { return _diamond_num; }
+				set { base.has_field.set_field (2, true); _diamond_num = value; }
+			}
+			public bool HasDiamond_num {
+				get { return base.has_field.has_field (2); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.msg = base.deserialize.read_string ();
+						break;
+					case 2:
+						this.diamond_num = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_string (this.msg, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.diamond_num, 2);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
 	public class lilian_reward_info : SprotoTypeBase {
 		private static int max_field_count = 3;
 		
@@ -5585,6 +6031,165 @@ namespace C2sSprotoType {
 
 			return base.serialize.close ();
 		}
+	}
+
+
+	public class lilian_rewared_list {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 2;
+			
+			
+			private Int64 _quanguan_id; // tag 0
+			public Int64 quanguan_id {
+				get { return _quanguan_id; }
+				set { base.has_field.set_field (0, true); _quanguan_id = value; }
+			}
+			public bool HasQuanguan_id {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private Int64 _rtype; // tag 1
+			public Int64 rtype {
+				get { return _rtype; }
+				set { base.has_field.set_field (1, true); _rtype = value; }
+			}
+			public bool HasRtype {
+				get { return base.has_field.has_field (1); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.quanguan_id = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.rtype = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.quanguan_id, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_integer (this.rtype, 1);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 4;
+			
+			
+			private Int64 _errorcode; // tag 0
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private List<lilian_reward_info> _reward; // tag 1
+			public List<lilian_reward_info> reward {
+				get { return _reward; }
+				set { base.has_field.set_field (1, true); _reward = value; }
+			}
+			public bool HasReward {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private Int64 _invitation_id; // tag 2
+			public Int64 invitation_id {
+				get { return _invitation_id; }
+				set { base.has_field.set_field (2, true); _invitation_id = value; }
+			}
+			public bool HasInvitation_id {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private Int64 _left_cd_time; // tag 3
+			public Int64 left_cd_time {
+				get { return _left_cd_time; }
+				set { base.has_field.set_field (3, true); _left_cd_time = value; }
+			}
+			public bool HasLeft_cd_time {
+				get { return base.has_field.has_field (3); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.reward = base.deserialize.read_obj_list<lilian_reward_info> ();
+						break;
+					case 2:
+						this.invitation_id = base.deserialize.read_integer ();
+						break;
+					case 3:
+						this.left_cd_time = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_obj (this.reward, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.invitation_id, 2);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.left_cd_time, 3);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
 	}
 
 
@@ -6688,7 +7293,7 @@ namespace C2sSprotoType {
 
 
 	public class quanguan_basic_info : SprotoTypeBase {
-		private static int max_field_count = 11;
+		private static int max_field_count = 13;
 		
 		
 		private Int64 _quanguan_id; // tag 0
@@ -6790,6 +7395,24 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (10); }
 		}
 
+		private Int64 _eventid; // tag 11
+		public Int64 eventid {
+			get { return _eventid; }
+			set { base.has_field.set_field (11, true); _eventid = value; }
+		}
+		public bool HasEventid {
+			get { return base.has_field.has_field (11); }
+		}
+
+		private List<lilian_reward_info> _reward; // tag 12
+		public List<lilian_reward_info> reward {
+			get { return _reward; }
+			set { base.has_field.set_field (12, true); _reward = value; }
+		}
+		public bool HasReward {
+			get { return base.has_field.has_field (12); }
+		}
+
 		public quanguan_basic_info () : base(max_field_count) {}
 
 		public quanguan_basic_info (byte[] buffer) : base(max_field_count, buffer) {
@@ -6832,6 +7455,12 @@ namespace C2sSprotoType {
 					break;
 				case 10:
 					this.if_lilian_reward = base.deserialize.read_integer ();
+					break;
+				case 11:
+					this.eventid = base.deserialize.read_integer ();
+					break;
+				case 12:
+					this.reward = base.deserialize.read_obj_list<lilian_reward_info> ();
 					break;
 				default:
 					base.deserialize.read_unknow_data ();
@@ -6887,6 +7516,14 @@ namespace C2sSprotoType {
 				base.serialize.write_integer (this.if_lilian_reward, 10);
 			}
 
+			if (base.has_field.has_field (11)) {
+				base.serialize.write_integer (this.eventid, 11);
+			}
+
+			if (base.has_field.has_field (12)) {
+				base.serialize.write_obj (this.reward, 12);
+			}
+
 			return base.serialize.close ();
 		}
 	}
@@ -6914,12 +7551,12 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (1); }
 		}
 
-		private List<lilian_reward_info> _reward; // tag 2
-		public List<lilian_reward_info> reward {
-			get { return _reward; }
-			set { base.has_field.set_field (2, true); _reward = value; }
+		private Int64 _reset_num; // tag 2
+		public Int64 reset_num {
+			get { return _reset_num; }
+			set { base.has_field.set_field (2, true); _reset_num = value; }
 		}
-		public bool HasReward {
+		public bool HasReset_num {
 			get { return base.has_field.has_field (2); }
 		}
 
@@ -6940,7 +7577,7 @@ namespace C2sSprotoType {
 					this.num = base.deserialize.read_integer ();
 					break;
 				case 2:
-					this.reward = base.deserialize.read_obj_list<lilian_reward_info> ();
+					this.reset_num = base.deserialize.read_integer ();
 					break;
 				default:
 					base.deserialize.read_unknow_data ();
@@ -6961,7 +7598,7 @@ namespace C2sSprotoType {
 			}
 
 			if (base.has_field.has_field (2)) {
-				base.serialize.write_obj (this.reward, 2);
+				base.serialize.write_integer (this.reset_num, 2);
 			}
 
 			return base.serialize.close ();
