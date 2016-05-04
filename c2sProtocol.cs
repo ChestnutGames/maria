@@ -6,6 +6,14 @@ using System.Collections.Generic;
 public class C2sProtocol : ProtocolBase {
 	public static  C2sProtocol Instance = new C2sProtocol();
 	private C2sProtocol() {
+		Protocol.SetProtocol<BeginGUQNQIACoreFight> (BeginGUQNQIACoreFight.Tag);
+		Protocol.SetRequest<C2sSprotoType.BeginGUQNQIACoreFight.request> (BeginGUQNQIACoreFight.Tag);
+		Protocol.SetResponse<C2sSprotoType.BeginGUQNQIACoreFight.response> (BeginGUQNQIACoreFight.Tag);
+
+		Protocol.SetProtocol<GuanQiaBattleList> (GuanQiaBattleList.Tag);
+		Protocol.SetRequest<C2sSprotoType.GuanQiaBattleList.request> (GuanQiaBattleList.Tag);
+		Protocol.SetResponse<C2sSprotoType.GuanQiaBattleList.response> (GuanQiaBattleList.Tag);
+
 		Protocol.SetProtocol<achievement> (achievement.Tag);
 		Protocol.SetResponse<C2sSprotoType.achievement.response> (achievement.Tag);
 
@@ -301,6 +309,14 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.xilian_ok.request> (xilian_ok.Tag);
 		Protocol.SetResponse<C2sSprotoType.xilian_ok.response> (xilian_ok.Tag);
 
+	}
+
+	public class BeginGUQNQIACoreFight {
+		public const int Tag = 85;
+	}
+
+	public class GuanQiaBattleList {
+		public const int Tag = 86;
 	}
 
 	public class achievement {
