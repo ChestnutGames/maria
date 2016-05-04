@@ -11,7 +11,7 @@ public class ClientLogin : MonoBehaviour
     public delegate void CB(bool ok, object ud, byte[] secret, string dummy);
 
     private PackageSocket sock = new PackageSocket();
-    private string ip = "192.168.1.239";
+    private string ip = Def.IP;
     private int port = 3002;
     private string server = null;
     private string user = null;
@@ -86,7 +86,14 @@ public class ClientLogin : MonoBehaviour
             else
             {
                 Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
-                callback(false, ud, secret, msg);
+                if(code == 406)
+                {
+                    callback(true, ud, secret, msg);
+                }
+                else {
+                    callback(false, ud, secret, msg);
+                }
+                
                 handshake = false;
                 sock.Close();
                 Reset();

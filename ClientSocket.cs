@@ -90,7 +90,7 @@ public class ClientSocket : MonoBehaviour
     }
 
     private PackageSocket sock = new PackageSocket();
-    private string ip = "192.168.1.239";
+    private string ip = Def.IP;
     private int port = 8888;
     private User user = null;
     private int step = 0;
@@ -102,11 +102,12 @@ public class ClientSocket : MonoBehaviour
     private uint session = 0;
     private SprotoRpc host = null;
     private SprotoRpc.RpcRequest send_request = null;
-    
-    private const int c2s_req_tag = (7 & (1 << 2) & (1 << 4));
-    private const int c2s_resp_tag = (7 & (1 << 2) & (0 << 4));
-    private const int s2c_req_tag = (7 & (0 << 2) & (1 << 4));
-    private const int s2c_resp_tag = (7 & (0 << 2) & (0 << 4));
+     
+
+    private const int c2s_req_tag = (1 << 0);
+    private const int c2s_resp_tag = (1 << 1);
+    private const int s2c_req_tag = (1 << 2);
+    private const int s2c_resp_tag = (1 << 3);
    
     private Dictionary<string, RespAction> response = new Dictionary<string, RespAction>();
     private Dictionary<string, ReqAction> request = new Dictionary<string, ReqAction>();
