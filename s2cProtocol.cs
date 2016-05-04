@@ -15,6 +15,9 @@ public class S2cProtocol : ProtocolBase {
 		Protocol.SetProtocol<lilian_update> (lilian_update.Tag);
 		Protocol.SetResponse<S2cSprotoType.lilian_update.response> (lilian_update.Tag);
 
+		Protocol.SetProtocol<login> (login.Tag);
+		Protocol.SetRequest<S2cSprotoType.login.request> (login.Tag);
+
 		Protocol.SetProtocol<mail> (mail.Tag);
 		Protocol.SetRequest<S2cSprotoType.mail.request> (mail.Tag);
 		Protocol.SetResponse<S2cSprotoType.mail.response> (mail.Tag);
@@ -31,6 +34,10 @@ public class S2cProtocol : ProtocolBase {
 
 	public class lilian_update {
 		public const int Tag = 4;
+	}
+
+	public class login {
+		public const int Tag = 5;
 	}
 
 	public class mail {

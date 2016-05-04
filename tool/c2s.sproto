@@ -1107,3 +1107,20 @@ ara_clg_tms_purchase 82 {
 		ara_clg_tms 2 : integer
 	}
 }
+
+ara_worship 83 {
+    request {
+        uid 0 : integer
+    }    
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+ara_rnk_reward_collected 84 {
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}

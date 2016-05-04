@@ -42,6 +42,13 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<ara_rfh> (ara_rfh.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_rfh.response> (ara_rfh.Tag);
 
+		Protocol.SetProtocol<ara_rnk_reward_collected> (ara_rnk_reward_collected.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_rnk_reward_collected.response> (ara_rnk_reward_collected.Tag);
+
+		Protocol.SetProtocol<ara_worship> (ara_worship.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_worship.request> (ara_worship.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_worship.response> (ara_worship.Tag);
+
 		Protocol.SetProtocol<c_gold> (c_gold.Tag);
 		Protocol.SetResponse<C2sSprotoType.c_gold.response> (c_gold.Tag);
 
@@ -338,6 +345,14 @@ public class C2sProtocol : ProtocolBase {
 
 	public class ara_rfh {
 		public const int Tag = 81;
+	}
+
+	public class ara_rnk_reward_collected {
+		public const int Tag = 84;
+	}
+
+	public class ara_worship {
+		public const int Tag = 83;
 	}
 
 	public class c_gold {
