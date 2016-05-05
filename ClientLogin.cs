@@ -86,7 +86,14 @@ public class ClientLogin : MonoBehaviour
             else
             {
                 Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
-                callback(false, ud, secret, msg);
+                if(code == 406)
+                {
+                    callback(true, ud, secret, msg);
+                }
+                else {
+                    callback(false, ud, secret, msg);
+                }
+                
                 handshake = false;
                 sock.Close();
                 Reset();

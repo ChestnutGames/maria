@@ -11,6 +11,49 @@ using System.Net.Sockets;
 
 public class ClientSocket : MonoBehaviour
 {
+
+    private static ClientSocket _instance;
+    public static ClientSocket Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType(typeof(ClientSocket)) as ClientSocket;
+                if (_instance == null)
+                {
+                    GameObject obj = new GameObject();
+                    //obj.hideFlags = HideFlags.DontSave;
+                    obj.hideFlags = HideFlags.HideAndDontSave;
+                    _instance = (ClientSocket)obj.AddComponent(typeof(ClientSocket));
+                }
+            }
+            return _instance;
+        }
+    }
+    public virtual void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public virtual void Init()
+    {
+        return;
+    }
+
+    public virtual void Release()
+    {
+        return;
+    }
+
     public delegate void CB(bool ok, object ud, byte[] subid, byte[] secret);
 
     public delegate void RespCb(uint session, SprotoTypeBase responseObj, object ud);
@@ -59,12 +102,13 @@ public class ClientSocket : MonoBehaviour
     private uint session = 0;
     private SprotoRpc host = null;
     private SprotoRpc.RpcRequest send_request = null;
+
     
     private const int c2s_req_tag =  1 << 0;
     private const int c2s_resp_tag = 1 << 1;
     private const int s2c_req_tag =  1 << 2;
     private const int s2c_resp_tag = 1 << 3;
-   
+
     private Dictionary<string, RespAction> response = new Dictionary<string, RespAction>();
     private Dictionary<string, ReqAction> request = new Dictionary<string, ReqAction>();
     private Dictionary<string, ReqPg> request_pg = new Dictionary<string, ReqPg>();      /*protocal -> pg */
@@ -315,6 +359,71 @@ public class ClientSocket : MonoBehaviour
         Debug.Assert(Response != null);
         S2cSprotoType.finish_achi.response responseObj = new finish_achi.response();
         byte[] resp = Response(responseObj);
+        Wirte(resp, session, s2c_resp_tag);
+    }
+
+    /// <summary>
+    /// 注册推送接受
+    /// </summary>
+    /// <param name="req"></param>
+    /// <param name="str"></param>
+    public void RegisterResponse(ReqCb req, String str, object ud)
+    {
+        request[str] = new ReqAction { Action = req, Ud = ud };
+    }
+
+    /// <summary>
+    /// 注册请求
+    /// </summary>
+    /// <param name="req"></param>
+    /// <param name="str"></param>
+    public void RegisterRequest(RespCb resp, String str)
+    {
+        if (request.ContainsKey(str))
+        {
+            response[str].Ud = resp;
+        }
+        else
+        {
+            response.Add(str, new RespAction { Action = resp, Ud = ud });
+        }
+    }
+    /// <summary>
+    /// 发送请求
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="resp"></param>
+    /// <param name="requestObj"></param>
+    /// <param name="str"></param>
+    /// <param name="ud"></param>
+    public void Resquest<T>(RespCb resp, SprotoTypeBase requestObj, String str, object ud)
+    {
+        //request[str].Ud = new RespAction { Action = resp,Ud = ud};
+        RegisterRequest(resp, str);
+        SendReq<T>(str, requestObj);
+    }
+    /// <summary>
+    /// 发送推送后的结果
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="requestObj"></param>
+    /// <param name="response"></param>
+    /// <param name="ud"></param>
+    public void Response(uint session, SprotoTypeBase requestObj, SprotoRpc.ResponseFunction response, object ud)
+    {
+        Debug.Assert(response != null);
+        SendResp(requestObj, response);
+    }
+    public void SendReq<T>(String callback, SprotoTypeBase obj)
+    {
+        uint id = genSession();
+        byte[] req = send_request.Invoke<T>(obj, id);
+        Debug.Assert(req != null);
+        Send(null, id, req, callback);
+    }
+    public void SendResp(SprotoTypeBase requestObj, SprotoRpc.ResponseFunction Response)
+    {
+        byte[] resp = Response(requestObj);
         Wirte(resp, session, s2c_resp_tag);
     }
 }

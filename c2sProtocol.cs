@@ -6,6 +6,14 @@ using System.Collections.Generic;
 public class C2sProtocol : ProtocolBase {
 	public static  C2sProtocol Instance = new C2sProtocol();
 	private C2sProtocol() {
+		Protocol.SetProtocol<BeginGUQNQIACoreFight> (BeginGUQNQIACoreFight.Tag);
+		Protocol.SetRequest<C2sSprotoType.BeginGUQNQIACoreFight.request> (BeginGUQNQIACoreFight.Tag);
+		Protocol.SetResponse<C2sSprotoType.BeginGUQNQIACoreFight.response> (BeginGUQNQIACoreFight.Tag);
+
+		Protocol.SetProtocol<GuanQiaBattleList> (GuanQiaBattleList.Tag);
+		Protocol.SetRequest<C2sSprotoType.GuanQiaBattleList.request> (GuanQiaBattleList.Tag);
+		Protocol.SetResponse<C2sSprotoType.GuanQiaBattleList.response> (GuanQiaBattleList.Tag);
+
 		Protocol.SetProtocol<achievement> (achievement.Tag);
 		Protocol.SetResponse<C2sSprotoType.achievement.response> (achievement.Tag);
 
@@ -28,6 +36,26 @@ public class C2sProtocol : ProtocolBase {
 
 		Protocol.SetProtocol<applyfriend> (applyfriend.Tag);
 		Protocol.SetRequest<C2sSprotoType.applyfriend.request> (applyfriend.Tag);
+
+		Protocol.SetProtocol<ara_bat_clg> (ara_bat_clg.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_bat_clg.request> (ara_bat_clg.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_bat_clg.response> (ara_bat_clg.Tag);
+
+		Protocol.SetProtocol<ara_bat_ovr> (ara_bat_ovr.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_bat_ovr.response> (ara_bat_ovr.Tag);
+
+		Protocol.SetProtocol<ara_clg_tms_purchase> (ara_clg_tms_purchase.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_clg_tms_purchase.response> (ara_clg_tms_purchase.Tag);
+
+		Protocol.SetProtocol<ara_rfh> (ara_rfh.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_rfh.response> (ara_rfh.Tag);
+
+		Protocol.SetProtocol<ara_rnk_reward_collected> (ara_rnk_reward_collected.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_rnk_reward_collected.response> (ara_rnk_reward_collected.Tag);
+
+		Protocol.SetProtocol<ara_worship> (ara_worship.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_worship.request> (ara_worship.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_worship.response> (ara_worship.Tag);
 
 		Protocol.SetProtocol<c_gold> (c_gold.Tag);
 		Protocol.SetResponse<C2sSprotoType.c_gold.response> (c_gold.Tag);
@@ -124,8 +152,20 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.lilian_get_reward_list.request> (lilian_get_reward_list.Tag);
 		Protocol.SetResponse<C2sSprotoType.lilian_get_reward_list.response> (lilian_get_reward_list.Tag);
 
+		Protocol.SetProtocol<lilian_inc> (lilian_inc.Tag);
+		Protocol.SetRequest<C2sSprotoType.lilian_inc.request> (lilian_inc.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_inc.response> (lilian_inc.Tag);
+
 		Protocol.SetProtocol<lilian_purch_phy_power> (lilian_purch_phy_power.Tag);
 		Protocol.SetResponse<C2sSprotoType.lilian_purch_phy_power.response> (lilian_purch_phy_power.Tag);
+
+		Protocol.SetProtocol<lilian_reset_quanguan> (lilian_reset_quanguan.Tag);
+		Protocol.SetRequest<C2sSprotoType.lilian_reset_quanguan.request> (lilian_reset_quanguan.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_reset_quanguan.response> (lilian_reset_quanguan.Tag);
+
+		Protocol.SetProtocol<lilian_rewared_list> (lilian_rewared_list.Tag);
+		Protocol.SetRequest<C2sSprotoType.lilian_rewared_list.request> (lilian_rewared_list.Tag);
+		Protocol.SetResponse<C2sSprotoType.lilian_rewared_list.response> (lilian_rewared_list.Tag);
 
 		Protocol.SetProtocol<login> (login.Tag);
 		Protocol.SetRequest<C2sSprotoType.login.request> (login.Tag);
@@ -271,6 +311,14 @@ public class C2sProtocol : ProtocolBase {
 
 	}
 
+	public class BeginGUQNQIACoreFight {
+		public const int Tag = 85;
+	}
+
+	public class GuanQiaBattleList {
+		public const int Tag = 86;
+	}
+
 	public class achievement {
 		public const int Tag = 11;
 	}
@@ -297,6 +345,30 @@ public class C2sProtocol : ProtocolBase {
 
 	public class applyfriend {
 		public const int Tag = 19;
+	}
+
+	public class ara_bat_clg {
+		public const int Tag = 80;
+	}
+
+	public class ara_bat_ovr {
+		public const int Tag = 79;
+	}
+
+	public class ara_clg_tms_purchase {
+		public const int Tag = 82;
+	}
+
+	public class ara_rfh {
+		public const int Tag = 81;
+	}
+
+	public class ara_rnk_reward_collected {
+		public const int Tag = 84;
+	}
+
+	public class ara_worship {
+		public const int Tag = 83;
 	}
 
 	public class c_gold {
@@ -407,8 +479,20 @@ public class C2sProtocol : ProtocolBase {
 		public const int Tag = 71;
 	}
 
+	public class lilian_inc {
+		public const int Tag = 76;
+	}
+
 	public class lilian_purch_phy_power {
 		public const int Tag = 73;
+	}
+
+	public class lilian_reset_quanguan {
+		public const int Tag = 77;
+	}
+
+	public class lilian_rewared_list {
+		public const int Tag = 78;
 	}
 
 	public class login {
