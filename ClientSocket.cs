@@ -31,6 +31,7 @@ public class ClientSocket : MonoBehaviour
             return _instance;
         }
     }
+
     public virtual void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -90,8 +91,8 @@ public class ClientSocket : MonoBehaviour
     }
 
     private PackageSocket sock = new PackageSocket();
-    private string ip = "192.168.1.239";
-    private int port = 8888;
+    private string ip = String.Empty;
+    private int port = 0;
     private User user = null;
     private int step = 0;
     private bool handshake = false;

@@ -11,8 +11,8 @@ public class ClientLogin : MonoBehaviour
     public delegate void CB(bool ok, object ud, byte[] secret, string dummy);
 
     private PackageSocket sock = new PackageSocket();
-    private string ip = "192.168.1.239";
-    private int port = 3002;
+    private string ip = String.Empty;
+    private int port = 0;
     private string server = null;
     private string user = null;
     private string password = null;
