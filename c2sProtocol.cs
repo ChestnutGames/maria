@@ -47,6 +47,10 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<ara_clg_tms_purchase> (ara_clg_tms_purchase.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_clg_tms_purchase.response> (ara_clg_tms_purchase.Tag);
 
+		Protocol.SetProtocol<ara_convert_pts> (ara_convert_pts.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_convert_pts.request> (ara_convert_pts.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_convert_pts.response> (ara_convert_pts.Tag);
+
 		Protocol.SetProtocol<ara_rfh> (ara_rfh.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_rfh.response> (ara_rfh.Tag);
 
@@ -131,7 +135,6 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetResponse<C2sSprotoType.get_lilian_info.response> (get_lilian_info.Tag);
 
 		Protocol.SetProtocol<handshake> (handshake.Tag);
-		Protocol.SetRequest<C2sSprotoType.handshake.request> (handshake.Tag);
 		Protocol.SetResponse<C2sSprotoType.handshake.response> (handshake.Tag);
 
 		Protocol.SetProtocol<kungfu> (kungfu.Tag);
@@ -357,6 +360,10 @@ public class C2sProtocol : ProtocolBase {
 
 	public class ara_clg_tms_purchase {
 		public const int Tag = 82;
+	}
+
+	public class ara_convert_pts {
+		public const int Tag = 87;
 	}
 
 	public class ara_rfh {

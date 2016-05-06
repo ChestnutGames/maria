@@ -265,9 +265,6 @@
 }
 
 handshake 1 {
-    request {
-        secret 0 : string
-    }
     response {
     	errorcode 0 : integer
         msg 1 : string
@@ -1151,11 +1148,19 @@ BeginGUQNQIACoreFight 85 {
     }
 }
 
-
-
 GuanQiaBattleList 86 {
     request {
         fightlist 0 : *BattleListElem
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+ara_convert_pts 87 {
+    request {
+        pts 0 : integer
     }
     response {
         errorcode 0 : integer
