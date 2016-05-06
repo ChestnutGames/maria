@@ -262,6 +262,7 @@
     attach_effect 5 : integer
     kf_type 6 : integer
     attack 7 : integer
+    random_combo_num 8 : integer
 }
 
 handshake 1 {

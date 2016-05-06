@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace C2sSprotoType { 
 	public class BattleListElem : SprotoTypeBase {
-		private static int max_field_count = 8;
+		private static int max_field_count = 9;
 		
 		
 		private Int64 _fighterid; // tag 0
@@ -82,6 +82,15 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (7); }
 		}
 
+		private Int64 _random_combo_num; // tag 8
+		public Int64 random_combo_num {
+			get { return _random_combo_num; }
+			set { base.has_field.set_field (8, true); _random_combo_num = value; }
+		}
+		public bool HasRandom_combo_num {
+			get { return base.has_field.has_field (8); }
+		}
+
 		public BattleListElem () : base(max_field_count) {}
 
 		public BattleListElem (byte[] buffer) : base(max_field_count, buffer) {
@@ -115,6 +124,9 @@ namespace C2sSprotoType {
 					break;
 				case 7:
 					this.attack = base.deserialize.read_integer ();
+					break;
+				case 8:
+					this.random_combo_num = base.deserialize.read_integer ();
 					break;
 				default:
 					base.deserialize.read_unknow_data ();
@@ -156,6 +168,10 @@ namespace C2sSprotoType {
 
 			if (base.has_field.has_field (7)) {
 				base.serialize.write_integer (this.attack, 7);
+			}
+
+			if (base.has_field.has_field (8)) {
+				base.serialize.write_integer (this.random_combo_num, 8);
 			}
 
 			return base.serialize.close ();
