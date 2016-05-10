@@ -19,8 +19,12 @@
 #define CRYPT_API __declspec (dllexport)
 #else
 #define CRYPT_API
+#define __stdcall
 #endif
+
+#include <stdlib.h>
 #include <stdint.h>
+// #include <stdbool.b>
 
 typedef struct PACKAGE
 {

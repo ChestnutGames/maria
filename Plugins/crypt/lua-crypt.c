@@ -364,7 +364,7 @@ des_key(uint32_t SK[32], PACKAGE key1) {
 	const void * key = key1.src;
 	if (keysz != 8) {
 		assert(0);
-		return "Invalid key size %d, need 8 bytes";
+		// return "Invalid key size %d, need 8 bytes";
 		//luaL_error(L, "Invalid key size %d, need 8 bytes", (int)keysz);
 	}
 	des_main_ks(SK, key);
