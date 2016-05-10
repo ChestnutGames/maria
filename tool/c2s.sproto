@@ -167,7 +167,7 @@
     k_type 3 : integer
     k_sp_num 4 : integer 
 }
- 
+
 .kungfu_pos_and_id {
     position 0 : integer
     k_csv_id 1 : integer
@@ -200,6 +200,15 @@
     rolelist 18 : *role
     cp_chapter 19 : integer
     lilian_level 20 : integer
+    ara_rnk 21 : integer
+}
+
+.suser {
+    csv_id 0 : integer
+    uname 1 : string
+    total_combat 2 : integer
+    ara_rnk 3 : integer
+    iconid 4 : integer
 }
 
 .checkpoint_chapter {
@@ -225,6 +234,8 @@
     delay_type 8 : integer
     if_event_reward 9 : integer
     if_lilian_reward 10 : integer
+    eventid 11 : integer
+    reward 12 : *lilian_reward_info
 }   
     
 .lilian_reward_info {
@@ -235,15 +246,29 @@
 .quanguan_lilian_num {
     quanguan_id 0 : integer
     num 1 : integer
-    reward 2 : *lilian_reward_info
+    reset_num 2 : integer
 }   
 
+.kf_list {
+    id 0 : integer
+}
+
+.BattleListElem {
+    fighterid 0 : integer
+    kf_id 1 : integer
+    attcktype 2 : integer
+    isdead 3 : integer
+    kf_prob 4 : integer
+    attach_effect 5 : integer
+    kf_type 6 : integer
+    attack 7 : integer
+    random_combo_num 8 : integer
+}
+
 handshake 1 {
-    request {
-        secret 0 : string
-    }
     response {
-        msg 0  : string
+    	errorcode 0 : integer
+        msg 1 : string
     }
 }
 
@@ -500,6 +525,8 @@ user 28 {
         errorcode 0 : integer
         msg 1 : string
         user 2 : user
+        ara_leaderboards 3 : *suser
+        ara_rmd_list 4 : *suser
     }
 }
 
@@ -930,7 +957,7 @@ get_lilian_info 68 {
         lilian_num_list 7 : *quanguan_lilian_num
         purch_phy_power_num 8 : integer
         phy_power_left_cd_time 9 : integer
-        eventid 10 : integer
+        present_phy_power_num 10 : integer
     }    
 }       
 
@@ -971,11 +998,10 @@ lilian_get_reward_list 71 {
         if_event_reward 7 : integer
 
         if_lilian_finished 8 : integer
-        reward 9 : *lilian_reward_info
-        lilian_exp 10 : integer
-        eventid 11 : integer
+        lilian_exp 9 : integer
+        eventid 10 : integer
+        reward 11 : *lilian_reward_info
     }
-
 }
 
 checkpoint_exit 72 {
@@ -1002,6 +1028,141 @@ app_resume 74 {
 }
 
 app_backgroud 75 {
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+lilian_inc 76 {
+    request {
+        quanguan_id 0 : integer 
+        inc_type 1 : integer
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+        inc_num 2 : integer
+        diamond_num 3 : integer
+        iffinished 4 : integer
+        if_trigger_event 5 : integer
+        left_cd_time 6 : integer
+        invitation_id 7 : integer
+        lilian_level 8 : integer
+        if_lilian_reward 9 : integer
+        if_event_reward 10 : integer
+        lilian_exp 11 : integer
+        eventid 12 : integer
+        reward 13 : *lilian_reward_info
+    }
+}
+
+lilian_reset_quanguan 77 {
+    request {
+        quanguan_id 0 : integer
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+        diamond_num 2 : integer
+    }
+}
+
+lilian_rewared_list 78 {
+    request {
+        quanguan_id 0 : integer
+        rtype 1 : integer
+    }
+    response {
+        errorcode 0 : integer
+        reward 1 : *lilian_reward_info
+        invitation_id 2 : integer
+        left_cd_time 3 : integer
+    }
+}
+
+ara_bat_ovr 79 {
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+        ara_points 2 : integer
+        ara_win_tms 3 : integer
+        ara_lose_tms 4 : integer
+        ara_leaderboards 5 : *suser
+        ara_rmd_list 6 : *suser
+    }
+}
+
+ara_bat_clg 80 {
+    request {
+        role_id1 0 : integer
+        role_id2 1 : integer
+        role_id3 2 : integer
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+ara_rfh 81 {
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+        ara_rmd_list 2 : *suser
+    }
+}
+
+ara_clg_tms_purchase 82 {
+	response {
+		errorcode 0 : integer
+		msg 1 : string
+		ara_clg_tms 2 : integer
+	}
+}
+
+ara_worship 83 {
+    request {
+        uid 0 : integer
+    }    
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+ara_rnk_reward_collected 84 {
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+BeginGUQNQIACoreFight 85 {
+    request {
+        monsterid 0 : integer
+    }
+    response {
+        errorcode 0 : integer
+        firstfighter 1 : integer
+        delay_time 2 : integer
+    }
+}
+
+GuanQiaBattleList 86 {
+    request {
+        fightlist 0 : *BattleListElem
+    }
+    response {
+        errorcode 0 : integer
+        msg 1 : string
+    }
+}
+
+ara_convert_pts 87 {
+    request {
+        pts 0 : integer
+    }
     response {
         errorcode 0 : integer
         msg 1 : string

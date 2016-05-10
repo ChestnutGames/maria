@@ -8,14 +8,23 @@ using System.Net;
 
 public class ClientLogin : MonoBehaviour
 {
+    public delegate void CB(bool ok, object ud, byte[] secret, string dummy);
+
     private PackageSocket sock = new PackageSocket();
-    private Dictionary<string, string> Token = new Dictionary<string, string>();
+    private string ip = String.Empty;
+    private int port = 0;
+    private string server = null;
+    private string user = null;
+    private string password = null;
     private byte[] challenge = null;
     private byte[] clientkey = null;
     private byte[] secret = null;
+    private byte[] uid = null;
     private byte[] subid = null;
     private int step = 0;
-    private bool Connected = false;
+    private bool handshake = false;
+    private object ud = null;
+    private CB callback = null;
 
     // Use this for initialization
     void Start()
@@ -24,20 +33,19 @@ public class ClientLogin : MonoBehaviour
         sock.OnDisconnect = OnDisconnect;
         sock.OnRecvive = OnRecvive;
         sock.SetEnabledPing(false);
-        string ip = "192.168.1.239";
-        int port = 8001;
-        sock.Connect(ip, port);
+        sock.SetPackageSocketType(PackageSocketType.Line);
     }
 
     // Update is called once per frame
     void Update()
     {
         sock.Update();
-        sock.ProcessLine();
     }
 
     void OnConnect(bool connected)
     {
+        if (handshake)
+            step++;
     }
 
     void OnRecvive(byte[] data, int start, int length)
@@ -50,8 +58,7 @@ public class ClientLogin : MonoBehaviour
             clientkey = Crypt.randomkey();
             var buf = Crypt.base64encode(Crypt.dhexchange(clientkey));
             sock.SendLine(buf, 0, buf.Length);
-            step = 2;
-            return;
+            step++;
         }
         else if (step == 2)
         {
@@ -61,40 +68,85 @@ public class ClientLogin : MonoBehaviour
             byte[] hmac = Crypt.hmac64(challenge, secret);
             var buf = Crypt.base64encode(hmac);
             sock.SendLine(buf, 0, buf.Length);
-            WriteToke();
-            step = 3;
-            return;
+            WriteToke(server, user, password);
+            step++;
         }
         else if (step == 3)
         {
             string str = Encoding.ASCII.GetString(buffer);
             int code = Int32.Parse(str.Substring(0, 3));
-            Debug.Assert(code == 200);
-            sock.Close();
-            string en = str.Substring(4, 4);
-            subid = Crypt.base64decode(Encoding.ASCII.GetBytes(en));
-            step = 4;
-        }
-        else if (step == 4)
-        {
-            var agent = GameObject.Find("Agent").GetComponent<ClientAgent>();
-            agent.StartConnServer(secret, subid);
-            step = 0;
+            string msg = str.Substring(4);
+            if (code == 200)
+            {
+                callback(true, ud, secret, msg);
+                handshake = false;
+                sock.Close();
+                Reset();
+            }
+            else
+            {
+                Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
+                if(code == 406)
+                {
+                    callback(true, ud, secret, msg);
+                }
+                else {
+                    callback(false, ud, secret, msg);
+                }
+                
+                handshake = false;
+                sock.Close();
+                Reset();
+            }
         }
     }
 
     void OnDisconnect(SocketError socketError, PackageSocketError packageSocketError)
     {
+        if (handshake)
+        {
+            callback(false, ud, secret, string.Empty);
+            Reset();
+        }
     }
 
-    public void WriteToke()
+    protected void WriteToke(string server, string user, string password)
     {
-        string str = String.Format("{0}@{1}:{2}", Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes("hello"))),
-            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes("sample"))),
-            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes("password"))));
-        Debug.Log(str);
+        string str = String.Format("{0}@{1}:{2}", Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(user))),
+            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(server))),
+            Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(password))));
         byte[] etoken = Crypt.desencode(secret, Encoding.ASCII.GetBytes(str));
         byte[] b = Crypt.base64encode(etoken);
         sock.SendLine(b, 0, b.Length);
+    }
+
+    private void Reset()
+    {
+        ip = null;
+        port = 0;
+        server = null;
+        user = null;
+        password = null;
+        challenge = null;
+        clientkey = null;
+        secret = null;
+        subid = null;
+        step = 0;
+        handshake = false;
+        ud = null;
+        callback = null;
+    }
+
+    public void Auth(string ipstr, int pt, string s, string u, string pwd, object d, CB cb)
+    {
+        ip = ipstr;
+        port = pt;
+        server = s;
+        user = u;
+        password = pwd;
+        ud = d;
+        callback = cb;
+        handshake = true;
+        sock.Connect(ip, port);
     }
 }
