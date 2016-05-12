@@ -1622,6 +1622,51 @@ namespace C2sSprotoType {
 
 	public class ara_choose_role_enter {
 	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 2;
+			
+			
+			private Int64 _enemy_id; // tag 1
+			public Int64 enemy_id {
+				get { return _enemy_id; }
+				set { base.has_field.set_field (0, true); _enemy_id = value; }
+			}
+			public bool HasEnemy_id {
+				get { return base.has_field.has_field (0); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 1:
+						this.enemy_id = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.enemy_id, 1);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
 		public class response : SprotoTypeBase {
 			private static int max_field_count = 4;
 			

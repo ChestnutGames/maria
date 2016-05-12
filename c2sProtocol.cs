@@ -58,6 +58,7 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetResponse<C2sSprotoType.ara_choose_role.response> (ara_choose_role.Tag);
 
 		Protocol.SetProtocol<ara_choose_role_enter> (ara_choose_role_enter.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_choose_role_enter.request> (ara_choose_role_enter.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_choose_role_enter.response> (ara_choose_role_enter.Tag);
 
 		Protocol.SetProtocol<ara_clg_tms_purchase> (ara_clg_tms_purchase.Tag);
