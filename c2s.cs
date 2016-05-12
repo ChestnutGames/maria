@@ -9,7 +9,7 @@ namespace C2sSprotoType {
 	public class Arena_OnPrepareNextRole {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 3;
+			private static int max_field_count = 5;
 			
 			
 			private Int64 _errorcode; // tag 1
@@ -30,6 +30,24 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (1); }
 			}
 
+			private Int64 _firstfighter; // tag 3
+			public Int64 firstfighter {
+				get { return _firstfighter; }
+				set { base.has_field.set_field (2, true); _firstfighter = value; }
+			}
+			public bool HasFirstfighter {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private Int64 _delay_time; // tag 4
+			public Int64 delay_time {
+				get { return _delay_time; }
+				set { base.has_field.set_field (3, true); _delay_time = value; }
+			}
+			public bool HasDelay_time {
+				get { return base.has_field.has_field (3); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -45,6 +63,12 @@ namespace C2sSprotoType {
 						break;
 					case 2:
 						this.msg = base.deserialize.read_string ();
+						break;
+					case 3:
+						this.firstfighter = base.deserialize.read_integer ();
+						break;
+					case 4:
+						this.delay_time = base.deserialize.read_integer ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -62,6 +86,14 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (1)) {
 					base.serialize.write_string (this.msg, 2);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.firstfighter, 3);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.delay_time, 4);
 				}
 
 				return base.serialize.close ();
