@@ -12,7 +12,7 @@ if [[ ! -f "$lua" ]]; then
 	#statements	
 	if [[ ! -f "./../../skynet/3rd/lua/lua" ]]; then
 		#statements
-		make -C ./../../skynet/3rd/lua
+		make -C ./../../skynet/3rd/lua linux
 	fi
 	cp ./../../skynet/3rd/lua/lua $lua
 fi
