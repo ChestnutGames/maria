@@ -14,6 +14,11 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.GuanQiaBattleList.request> (GuanQiaBattleList.Tag);
 		Protocol.SetResponse<C2sSprotoType.GuanQiaBattleList.response> (GuanQiaBattleList.Tag);
 
+		Protocol.SetProtocol<OnNormalExitCoreFight> (OnNormalExitCoreFight.Tag);
+
+		Protocol.SetProtocol<OnReEnterCoreFight> (OnReEnterCoreFight.Tag);
+		Protocol.SetResponse<C2sSprotoType.OnReEnterCoreFight.response> (OnReEnterCoreFight.Tag);
+
 		Protocol.SetProtocol<achievement> (achievement.Tag);
 		Protocol.SetResponse<C2sSprotoType.achievement.response> (achievement.Tag);
 
@@ -320,6 +325,14 @@ public class C2sProtocol : ProtocolBase {
 
 	public class GuanQiaBattleList {
 		public const int Tag = 86;
+	}
+
+	public class OnNormalExitCoreFight {
+		public const int Tag = 88;
+	}
+
+	public class OnReEnterCoreFight {
+		public const int Tag = 89;
 	}
 
 	public class achievement {
