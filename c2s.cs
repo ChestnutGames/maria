@@ -6,6 +6,72 @@ using Sproto;
 using System.Collections.Generic;
 
 namespace C2sSprotoType { 
+	public class Arena_OnPrepareNextRole {
+	
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 3;
+			
+			
+			private Int64 _errorcode; // tag 1
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private string _msg; // tag 2
+			public string msg {
+				get { return _msg; }
+				set { base.has_field.set_field (1, true); _msg = value; }
+			}
+			public bool HasMsg {
+				get { return base.has_field.has_field (1); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 1:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 2:
+						this.msg = base.deserialize.read_string ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 1);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_string (this.msg, 2);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
 	public class BattleListElem : SprotoTypeBase {
 		private static int max_field_count = 9;
 		

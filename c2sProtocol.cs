@@ -6,6 +6,9 @@ using System.Collections.Generic;
 public class C2sProtocol : ProtocolBase {
 	public static  C2sProtocol Instance = new C2sProtocol();
 	private C2sProtocol() {
+		Protocol.SetProtocol<Arena_OnPrepareNextRole> (Arena_OnPrepareNextRole.Tag);
+		Protocol.SetResponse<C2sSprotoType.Arena_OnPrepareNextRole.response> (Arena_OnPrepareNextRole.Tag);
+
 		Protocol.SetProtocol<BeginGUQNQIACoreFight> (BeginGUQNQIACoreFight.Tag);
 		Protocol.SetRequest<C2sSprotoType.BeginGUQNQIACoreFight.request> (BeginGUQNQIACoreFight.Tag);
 		Protocol.SetResponse<C2sSprotoType.BeginGUQNQIACoreFight.response> (BeginGUQNQIACoreFight.Tag);
@@ -317,6 +320,10 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.xilian_ok.request> (xilian_ok.Tag);
 		Protocol.SetResponse<C2sSprotoType.xilian_ok.response> (xilian_ok.Tag);
 
+	}
+
+	public class Arena_OnPrepareNextRole {
+		public const int Tag = 90;
 	}
 
 	public class BeginGUQNQIACoreFight {
