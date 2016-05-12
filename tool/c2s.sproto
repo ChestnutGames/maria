@@ -1081,28 +1081,23 @@ lilian_rewared_list 78 {
     }
 }
 
-ara_bat_ovr 79 {
+ara_enter 79 {
     response {
         errorcode 0 : integer
         msg 1 : string
-        ara_points 2 : integer
+        ara_rmd_list 2 : *suser
         ara_win_tms 3 : integer
         ara_lose_tms 4 : integer
-        ara_leaderboards 5 : *suser
-        ara_rmd_list 6 : *suser
+        ara_tie_tms 5 : integer
+        ara_clg_tms 6 : integer
+        ara_integral 7 : integer
+        ara_rfh_tms 8 : integer
+        ara_rfh_cost_tms 9 : integer
+        ara_clg_cost_tms 10 : integer
     }
 }
 
-ara_bat_clg 80 {
-    request {
-        role_id1 0 : integer
-        role_id2 1 : integer
-        role_id3 2 : integer
-    }
-    response {
-        errorcode 0 : integer
-        msg 1 : string
-    }
+ara_exit 80 {
 }
 
 ara_rfh 81 {
@@ -1188,4 +1183,36 @@ Arena_OnPrepareNextRole 90 {
     }   
 }
 
+ara_choose_role_enter 91 {
+	response {
+		errorcode 1 : integer
+		msg 2 : string
+		bat_roleid 3 : *integer
+	}
+}
 
+ara_choose_role 92 {
+	request {
+		bat_roleid 1 : *integer
+	}
+	response {
+		errorcode 1 : integer
+		msg 2 : string
+	}
+}
+
+ara_bat_enter 93 {
+	request {
+
+	}
+	response {
+	
+	}
+}
+
+ara_bat_exit 94 {
+	request {
+	}
+	response {
+	}
+}

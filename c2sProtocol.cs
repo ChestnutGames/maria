@@ -45,12 +45,20 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<applyfriend> (applyfriend.Tag);
 		Protocol.SetRequest<C2sSprotoType.applyfriend.request> (applyfriend.Tag);
 
-		Protocol.SetProtocol<ara_bat_clg> (ara_bat_clg.Tag);
-		Protocol.SetRequest<C2sSprotoType.ara_bat_clg.request> (ara_bat_clg.Tag);
-		Protocol.SetResponse<C2sSprotoType.ara_bat_clg.response> (ara_bat_clg.Tag);
+		Protocol.SetProtocol<ara_bat_enter> (ara_bat_enter.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_bat_enter.request> (ara_bat_enter.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_bat_enter.response> (ara_bat_enter.Tag);
 
-		Protocol.SetProtocol<ara_bat_ovr> (ara_bat_ovr.Tag);
-		Protocol.SetResponse<C2sSprotoType.ara_bat_ovr.response> (ara_bat_ovr.Tag);
+		Protocol.SetProtocol<ara_bat_exit> (ara_bat_exit.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_bat_exit.request> (ara_bat_exit.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_bat_exit.response> (ara_bat_exit.Tag);
+
+		Protocol.SetProtocol<ara_choose_role> (ara_choose_role.Tag);
+		Protocol.SetRequest<C2sSprotoType.ara_choose_role.request> (ara_choose_role.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_choose_role.response> (ara_choose_role.Tag);
+
+		Protocol.SetProtocol<ara_choose_role_enter> (ara_choose_role_enter.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_choose_role_enter.response> (ara_choose_role_enter.Tag);
 
 		Protocol.SetProtocol<ara_clg_tms_purchase> (ara_clg_tms_purchase.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_clg_tms_purchase.response> (ara_clg_tms_purchase.Tag);
@@ -58,6 +66,11 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<ara_convert_pts> (ara_convert_pts.Tag);
 		Protocol.SetRequest<C2sSprotoType.ara_convert_pts.request> (ara_convert_pts.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_convert_pts.response> (ara_convert_pts.Tag);
+
+		Protocol.SetProtocol<ara_enter> (ara_enter.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_enter.response> (ara_enter.Tag);
+
+		Protocol.SetProtocol<ara_exit> (ara_exit.Tag);
 
 		Protocol.SetProtocol<ara_rfh> (ara_rfh.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_rfh.response> (ara_rfh.Tag);
@@ -370,12 +383,20 @@ public class C2sProtocol : ProtocolBase {
 		public const int Tag = 19;
 	}
 
-	public class ara_bat_clg {
-		public const int Tag = 80;
+	public class ara_bat_enter {
+		public const int Tag = 93;
 	}
 
-	public class ara_bat_ovr {
-		public const int Tag = 79;
+	public class ara_bat_exit {
+		public const int Tag = 94;
+	}
+
+	public class ara_choose_role {
+		public const int Tag = 92;
+	}
+
+	public class ara_choose_role_enter {
+		public const int Tag = 91;
 	}
 
 	public class ara_clg_tms_purchase {
@@ -384,6 +405,14 @@ public class C2sProtocol : ProtocolBase {
 
 	public class ara_convert_pts {
 		public const int Tag = 87;
+	}
+
+	public class ara_enter {
+		public const int Tag = 79;
+	}
+
+	public class ara_exit {
+		public const int Tag = 80;
 	}
 
 	public class ara_rfh {

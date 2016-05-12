@@ -1383,37 +1383,145 @@ namespace C2sSprotoType {
 	}
 
 
-	public class ara_bat_clg {
+	public class ara_bat_enter {
 	
 		public class request : SprotoTypeBase {
-			private static int max_field_count = 3;
+			private static int max_field_count = 0;
 			
 			
-			private Int64 _role_id1; // tag 0
-			public Int64 role_id1 {
-				get { return _role_id1; }
-				set { base.has_field.set_field (0, true); _role_id1 = value; }
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
 			}
-			public bool HasRole_id1 {
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 0;
+			
+			
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
+	public class ara_bat_exit {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 0;
+			
+			
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 0;
+			
+			
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
+	public class ara_choose_role {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 2;
+			
+			
+			private List<Int64> _bat_roleid; // tag 1
+			public List<Int64> bat_roleid {
+				get { return _bat_roleid; }
+				set { base.has_field.set_field (0, true); _bat_roleid = value; }
+			}
+			public bool HasBat_roleid {
 				get { return base.has_field.has_field (0); }
-			}
-
-			private Int64 _role_id2; // tag 1
-			public Int64 role_id2 {
-				get { return _role_id2; }
-				set { base.has_field.set_field (1, true); _role_id2 = value; }
-			}
-			public bool HasRole_id2 {
-				get { return base.has_field.has_field (1); }
-			}
-
-			private Int64 _role_id3; // tag 2
-			public Int64 role_id3 {
-				get { return _role_id3; }
-				set { base.has_field.set_field (2, true); _role_id3 = value; }
-			}
-			public bool HasRole_id3 {
-				get { return base.has_field.has_field (2); }
 			}
 
 			public request () : base(max_field_count) {}
@@ -1426,14 +1534,8 @@ namespace C2sSprotoType {
 				int tag = -1;
 				while (-1 != (tag = base.deserialize.read_tag ())) {
 					switch (tag) {
-					case 0:
-						this.role_id1 = base.deserialize.read_integer ();
-						break;
 					case 1:
-						this.role_id2 = base.deserialize.read_integer ();
-						break;
-					case 2:
-						this.role_id3 = base.deserialize.read_integer ();
+						this.bat_roleid = base.deserialize.read_integer_list ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -1446,15 +1548,7 @@ namespace C2sSprotoType {
 				base.serialize.open (stream);
 
 				if (base.has_field.has_field (0)) {
-					base.serialize.write_integer (this.role_id1, 0);
-				}
-
-				if (base.has_field.has_field (1)) {
-					base.serialize.write_integer (this.role_id2, 1);
-				}
-
-				if (base.has_field.has_field (2)) {
-					base.serialize.write_integer (this.role_id3, 2);
+					base.serialize.write_integer (this.bat_roleid, 1);
 				}
 
 				return base.serialize.close ();
@@ -1463,10 +1557,10 @@ namespace C2sSprotoType {
 
 
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 2;
+			private static int max_field_count = 3;
 			
 			
-			private Int64 _errorcode; // tag 0
+			private Int64 _errorcode; // tag 1
 			public Int64 errorcode {
 				get { return _errorcode; }
 				set { base.has_field.set_field (0, true); _errorcode = value; }
@@ -1475,7 +1569,7 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (0); }
 			}
 
-			private string _msg; // tag 1
+			private string _msg; // tag 2
 			public string msg {
 				get { return _msg; }
 				set { base.has_field.set_field (1, true); _msg = value; }
@@ -1494,10 +1588,10 @@ namespace C2sSprotoType {
 				int tag = -1;
 				while (-1 != (tag = base.deserialize.read_tag ())) {
 					switch (tag) {
-					case 0:
+					case 1:
 						this.errorcode = base.deserialize.read_integer ();
 						break;
-					case 1:
+					case 2:
 						this.msg = base.deserialize.read_string ();
 						break;
 					default:
@@ -1511,11 +1605,11 @@ namespace C2sSprotoType {
 				base.serialize.open (stream);
 
 				if (base.has_field.has_field (0)) {
-					base.serialize.write_integer (this.errorcode, 0);
+					base.serialize.write_integer (this.errorcode, 1);
 				}
 
 				if (base.has_field.has_field (1)) {
-					base.serialize.write_string (this.msg, 1);
+					base.serialize.write_string (this.msg, 2);
 				}
 
 				return base.serialize.close ();
@@ -1526,13 +1620,13 @@ namespace C2sSprotoType {
 	}
 
 
-	public class ara_bat_ovr {
+	public class ara_choose_role_enter {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 7;
+			private static int max_field_count = 4;
 			
 			
-			private Int64 _errorcode; // tag 0
+			private Int64 _errorcode; // tag 1
 			public Int64 errorcode {
 				get { return _errorcode; }
 				set { base.has_field.set_field (0, true); _errorcode = value; }
@@ -1541,7 +1635,7 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (0); }
 			}
 
-			private string _msg; // tag 1
+			private string _msg; // tag 2
 			public string msg {
 				get { return _msg; }
 				set { base.has_field.set_field (1, true); _msg = value; }
@@ -1550,49 +1644,13 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (1); }
 			}
 
-			private Int64 _ara_points; // tag 2
-			public Int64 ara_points {
-				get { return _ara_points; }
-				set { base.has_field.set_field (2, true); _ara_points = value; }
+			private List<Int64> _bat_roleid; // tag 3
+			public List<Int64> bat_roleid {
+				get { return _bat_roleid; }
+				set { base.has_field.set_field (2, true); _bat_roleid = value; }
 			}
-			public bool HasAra_points {
+			public bool HasBat_roleid {
 				get { return base.has_field.has_field (2); }
-			}
-
-			private Int64 _ara_win_tms; // tag 3
-			public Int64 ara_win_tms {
-				get { return _ara_win_tms; }
-				set { base.has_field.set_field (3, true); _ara_win_tms = value; }
-			}
-			public bool HasAra_win_tms {
-				get { return base.has_field.has_field (3); }
-			}
-
-			private Int64 _ara_lose_tms; // tag 4
-			public Int64 ara_lose_tms {
-				get { return _ara_lose_tms; }
-				set { base.has_field.set_field (4, true); _ara_lose_tms = value; }
-			}
-			public bool HasAra_lose_tms {
-				get { return base.has_field.has_field (4); }
-			}
-
-			private List<suser> _ara_leaderboards; // tag 5
-			public List<suser> ara_leaderboards {
-				get { return _ara_leaderboards; }
-				set { base.has_field.set_field (5, true); _ara_leaderboards = value; }
-			}
-			public bool HasAra_leaderboards {
-				get { return base.has_field.has_field (5); }
-			}
-
-			private List<suser> _ara_rmd_list; // tag 6
-			public List<suser> ara_rmd_list {
-				get { return _ara_rmd_list; }
-				set { base.has_field.set_field (6, true); _ara_rmd_list = value; }
-			}
-			public bool HasAra_rmd_list {
-				get { return base.has_field.has_field (6); }
 			}
 
 			public response () : base(max_field_count) {}
@@ -1605,26 +1663,14 @@ namespace C2sSprotoType {
 				int tag = -1;
 				while (-1 != (tag = base.deserialize.read_tag ())) {
 					switch (tag) {
-					case 0:
+					case 1:
 						this.errorcode = base.deserialize.read_integer ();
 						break;
-					case 1:
+					case 2:
 						this.msg = base.deserialize.read_string ();
 						break;
-					case 2:
-						this.ara_points = base.deserialize.read_integer ();
-						break;
 					case 3:
-						this.ara_win_tms = base.deserialize.read_integer ();
-						break;
-					case 4:
-						this.ara_lose_tms = base.deserialize.read_integer ();
-						break;
-					case 5:
-						this.ara_leaderboards = base.deserialize.read_obj_list<suser> ();
-						break;
-					case 6:
-						this.ara_rmd_list = base.deserialize.read_obj_list<suser> ();
+						this.bat_roleid = base.deserialize.read_integer_list ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -1637,31 +1683,15 @@ namespace C2sSprotoType {
 				base.serialize.open (stream);
 
 				if (base.has_field.has_field (0)) {
-					base.serialize.write_integer (this.errorcode, 0);
+					base.serialize.write_integer (this.errorcode, 1);
 				}
 
 				if (base.has_field.has_field (1)) {
-					base.serialize.write_string (this.msg, 1);
+					base.serialize.write_string (this.msg, 2);
 				}
 
 				if (base.has_field.has_field (2)) {
-					base.serialize.write_integer (this.ara_points, 2);
-				}
-
-				if (base.has_field.has_field (3)) {
-					base.serialize.write_integer (this.ara_win_tms, 3);
-				}
-
-				if (base.has_field.has_field (4)) {
-					base.serialize.write_integer (this.ara_lose_tms, 4);
-				}
-
-				if (base.has_field.has_field (5)) {
-					base.serialize.write_obj (this.ara_leaderboards, 5);
-				}
-
-				if (base.has_field.has_field (6)) {
-					base.serialize.write_obj (this.ara_rmd_list, 6);
+					base.serialize.write_integer (this.bat_roleid, 3);
 				}
 
 				return base.serialize.close ();
@@ -1855,6 +1885,216 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (1)) {
 					base.serialize.write_string (this.msg, 1);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
+	public class ara_enter {
+	
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 11;
+			
+			
+			private Int64 _errorcode; // tag 0
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private string _msg; // tag 1
+			public string msg {
+				get { return _msg; }
+				set { base.has_field.set_field (1, true); _msg = value; }
+			}
+			public bool HasMsg {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private List<suser> _ara_rmd_list; // tag 2
+			public List<suser> ara_rmd_list {
+				get { return _ara_rmd_list; }
+				set { base.has_field.set_field (2, true); _ara_rmd_list = value; }
+			}
+			public bool HasAra_rmd_list {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private Int64 _ara_win_tms; // tag 3
+			public Int64 ara_win_tms {
+				get { return _ara_win_tms; }
+				set { base.has_field.set_field (3, true); _ara_win_tms = value; }
+			}
+			public bool HasAra_win_tms {
+				get { return base.has_field.has_field (3); }
+			}
+
+			private Int64 _ara_lose_tms; // tag 4
+			public Int64 ara_lose_tms {
+				get { return _ara_lose_tms; }
+				set { base.has_field.set_field (4, true); _ara_lose_tms = value; }
+			}
+			public bool HasAra_lose_tms {
+				get { return base.has_field.has_field (4); }
+			}
+
+			private Int64 _ara_tie_tms; // tag 5
+			public Int64 ara_tie_tms {
+				get { return _ara_tie_tms; }
+				set { base.has_field.set_field (5, true); _ara_tie_tms = value; }
+			}
+			public bool HasAra_tie_tms {
+				get { return base.has_field.has_field (5); }
+			}
+
+			private Int64 _ara_clg_tms; // tag 6
+			public Int64 ara_clg_tms {
+				get { return _ara_clg_tms; }
+				set { base.has_field.set_field (6, true); _ara_clg_tms = value; }
+			}
+			public bool HasAra_clg_tms {
+				get { return base.has_field.has_field (6); }
+			}
+
+			private Int64 _ara_integral; // tag 7
+			public Int64 ara_integral {
+				get { return _ara_integral; }
+				set { base.has_field.set_field (7, true); _ara_integral = value; }
+			}
+			public bool HasAra_integral {
+				get { return base.has_field.has_field (7); }
+			}
+
+			private Int64 _ara_rfh_tms; // tag 8
+			public Int64 ara_rfh_tms {
+				get { return _ara_rfh_tms; }
+				set { base.has_field.set_field (8, true); _ara_rfh_tms = value; }
+			}
+			public bool HasAra_rfh_tms {
+				get { return base.has_field.has_field (8); }
+			}
+
+			private Int64 _ara_rfh_cost_tms; // tag 9
+			public Int64 ara_rfh_cost_tms {
+				get { return _ara_rfh_cost_tms; }
+				set { base.has_field.set_field (9, true); _ara_rfh_cost_tms = value; }
+			}
+			public bool HasAra_rfh_cost_tms {
+				get { return base.has_field.has_field (9); }
+			}
+
+			private Int64 _ara_clg_cost_tms; // tag 10
+			public Int64 ara_clg_cost_tms {
+				get { return _ara_clg_cost_tms; }
+				set { base.has_field.set_field (10, true); _ara_clg_cost_tms = value; }
+			}
+			public bool HasAra_clg_cost_tms {
+				get { return base.has_field.has_field (10); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.msg = base.deserialize.read_string ();
+						break;
+					case 2:
+						this.ara_rmd_list = base.deserialize.read_obj_list<suser> ();
+						break;
+					case 3:
+						this.ara_win_tms = base.deserialize.read_integer ();
+						break;
+					case 4:
+						this.ara_lose_tms = base.deserialize.read_integer ();
+						break;
+					case 5:
+						this.ara_tie_tms = base.deserialize.read_integer ();
+						break;
+					case 6:
+						this.ara_clg_tms = base.deserialize.read_integer ();
+						break;
+					case 7:
+						this.ara_integral = base.deserialize.read_integer ();
+						break;
+					case 8:
+						this.ara_rfh_tms = base.deserialize.read_integer ();
+						break;
+					case 9:
+						this.ara_rfh_cost_tms = base.deserialize.read_integer ();
+						break;
+					case 10:
+						this.ara_clg_cost_tms = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_string (this.msg, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_obj (this.ara_rmd_list, 2);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.ara_win_tms, 3);
+				}
+
+				if (base.has_field.has_field (4)) {
+					base.serialize.write_integer (this.ara_lose_tms, 4);
+				}
+
+				if (base.has_field.has_field (5)) {
+					base.serialize.write_integer (this.ara_tie_tms, 5);
+				}
+
+				if (base.has_field.has_field (6)) {
+					base.serialize.write_integer (this.ara_clg_tms, 6);
+				}
+
+				if (base.has_field.has_field (7)) {
+					base.serialize.write_integer (this.ara_integral, 7);
+				}
+
+				if (base.has_field.has_field (8)) {
+					base.serialize.write_integer (this.ara_rfh_tms, 8);
+				}
+
+				if (base.has_field.has_field (9)) {
+					base.serialize.write_integer (this.ara_rfh_cost_tms, 9);
+				}
+
+				if (base.has_field.has_field (10)) {
+					base.serialize.write_integer (this.ara_clg_cost_tms, 10);
 				}
 
 				return base.serialize.close ();
