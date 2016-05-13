@@ -3106,12 +3106,12 @@ namespace C2sSprotoType {
 			private static int max_field_count = 1;
 			
 			
-			private Int64 _uid; // tag 0
-			public Int64 uid {
-				get { return _uid; }
-				set { base.has_field.set_field (0, true); _uid = value; }
+			private List<Int64> _uids; // tag 0
+			public List<Int64> uids {
+				get { return _uids; }
+				set { base.has_field.set_field (0, true); _uids = value; }
 			}
-			public bool HasUid {
+			public bool HasUids {
 				get { return base.has_field.has_field (0); }
 			}
 
@@ -3126,7 +3126,7 @@ namespace C2sSprotoType {
 				while (-1 != (tag = base.deserialize.read_tag ())) {
 					switch (tag) {
 					case 0:
-						this.uid = base.deserialize.read_integer ();
+						this.uids = base.deserialize.read_integer_list ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -3139,7 +3139,7 @@ namespace C2sSprotoType {
 				base.serialize.open (stream);
 
 				if (base.has_field.has_field (0)) {
-					base.serialize.write_integer (this.uid, 0);
+					base.serialize.write_integer (this.uids, 0);
 				}
 
 				return base.serialize.close ();
@@ -3148,7 +3148,7 @@ namespace C2sSprotoType {
 
 
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 2;
+			private static int max_field_count = 3;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -3169,6 +3169,15 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (1); }
 			}
 
+			private List<suser> _ara_rmd_list; // tag 2
+			public List<suser> ara_rmd_list {
+				get { return _ara_rmd_list; }
+				set { base.has_field.set_field (2, true); _ara_rmd_list = value; }
+			}
+			public bool HasAra_rmd_list {
+				get { return base.has_field.has_field (2); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -3184,6 +3193,9 @@ namespace C2sSprotoType {
 						break;
 					case 1:
 						this.msg = base.deserialize.read_string ();
+						break;
+					case 2:
+						this.ara_rmd_list = base.deserialize.read_obj_list<suser> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -3201,6 +3213,10 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (1)) {
 					base.serialize.write_string (this.msg, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_obj (this.ara_rmd_list, 2);
 				}
 
 				return base.serialize.close ();
@@ -13395,7 +13411,7 @@ namespace C2sSprotoType {
 
 
 	public class suser : SprotoTypeBase {
-		private static int max_field_count = 5;
+		private static int max_field_count = 6;
 		
 		
 		private Int64 _uid; // tag 0
@@ -13443,6 +13459,15 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (4); }
 		}
 
+		private bool _worship; // tag 5
+		public bool worship {
+			get { return _worship; }
+			set { base.has_field.set_field (5, true); _worship = value; }
+		}
+		public bool HasWorship {
+			get { return base.has_field.has_field (5); }
+		}
+
 		public suser () : base(max_field_count) {}
 
 		public suser (byte[] buffer) : base(max_field_count, buffer) {
@@ -13467,6 +13492,9 @@ namespace C2sSprotoType {
 					break;
 				case 4:
 					this.iconid = base.deserialize.read_integer ();
+					break;
+				case 5:
+					this.worship = base.deserialize.read_boolean ();
 					break;
 				default:
 					base.deserialize.read_unknow_data ();
@@ -13496,6 +13524,10 @@ namespace C2sSprotoType {
 
 			if (base.has_field.has_field (4)) {
 				base.serialize.write_integer (this.iconid, 4);
+			}
+
+			if (base.has_field.has_field (5)) {
+				base.serialize.write_boolean (this.worship, 5);
 			}
 
 			return base.serialize.close ();
