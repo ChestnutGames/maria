@@ -6,6 +6,117 @@ using Sproto;
 using System.Collections.Generic;
 
 namespace C2sSprotoType { 
+	public class ArenaBattleList {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 1;
+			
+			
+			private List<BattleListElem> _fightlist; // tag 0
+			public List<BattleListElem> fightlist {
+				get { return _fightlist; }
+				set { base.has_field.set_field (0, true); _fightlist = value; }
+			}
+			public bool HasFightlist {
+				get { return base.has_field.has_field (0); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.fightlist = base.deserialize.read_obj_list<BattleListElem> ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_obj (this.fightlist, 0);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 2;
+			
+			
+			private Int64 _errorcode; // tag 0
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private string _msg; // tag 1
+			public string msg {
+				get { return _msg; }
+				set { base.has_field.set_field (1, true); _msg = value; }
+			}
+			public bool HasMsg {
+				get { return base.has_field.has_field (1); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.msg = base.deserialize.read_string ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_string (this.msg, 1);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
 	public class Arena_OnPrepareNextRole {
 	
 		public class response : SprotoTypeBase {
@@ -274,6 +385,133 @@ namespace C2sSprotoType {
 
 			return base.serialize.close ();
 		}
+	}
+
+
+	public class BeginArenaCoreFight {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 1;
+			
+			
+			private Int64 _monsterid; // tag 0
+			public Int64 monsterid {
+				get { return _monsterid; }
+				set { base.has_field.set_field (0, true); _monsterid = value; }
+			}
+			public bool HasMonsterid {
+				get { return base.has_field.has_field (0); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.monsterid = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.monsterid, 0);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 3;
+			
+			
+			private Int64 _errorcode; // tag 0
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private Int64 _firstfighter; // tag 1
+			public Int64 firstfighter {
+				get { return _firstfighter; }
+				set { base.has_field.set_field (1, true); _firstfighter = value; }
+			}
+			public bool HasFirstfighter {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private Int64 _delay_time; // tag 2
+			public Int64 delay_time {
+				get { return _delay_time; }
+				set { base.has_field.set_field (2, true); _delay_time = value; }
+			}
+			public bool HasDelay_time {
+				get { return base.has_field.has_field (2); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.firstfighter = base.deserialize.read_integer ();
+						break;
+					case 2:
+						this.delay_time = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_integer (this.firstfighter, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.delay_time, 2);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
 	}
 
 
@@ -587,6 +825,468 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (2)) {
 					base.serialize.write_integer (this.loserid, 2);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
+	public class TMP_BeginGUQNQIACoreFight {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 2;
+			
+			
+			private Int64 _monsterid; // tag 1
+			public Int64 monsterid {
+				get { return _monsterid; }
+				set { base.has_field.set_field (0, true); _monsterid = value; }
+			}
+			public bool HasMonsterid {
+				get { return base.has_field.has_field (0); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 1:
+						this.monsterid = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.monsterid, 1);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 6;
+			
+			
+			private Int64 _errorcode; // tag 1
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private string _msg; // tag 2
+			public string msg {
+				get { return _msg; }
+				set { base.has_field.set_field (1, true); _msg = value; }
+			}
+			public bool HasMsg {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private Int64 _firstfighter; // tag 3
+			public Int64 firstfighter {
+				get { return _firstfighter; }
+				set { base.has_field.set_field (2, true); _firstfighter = value; }
+			}
+			public bool HasFirstfighter {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private Int64 _kf_id; // tag 4
+			public Int64 kf_id {
+				get { return _kf_id; }
+				set { base.has_field.set_field (3, true); _kf_id = value; }
+			}
+			public bool HasKf_id {
+				get { return base.has_field.has_field (3); }
+			}
+
+			private Int64 _delay_time; // tag 5
+			public Int64 delay_time {
+				get { return _delay_time; }
+				set { base.has_field.set_field (4, true); _delay_time = value; }
+			}
+			public bool HasDelay_time {
+				get { return base.has_field.has_field (4); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 1:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 2:
+						this.msg = base.deserialize.read_string ();
+						break;
+					case 3:
+						this.firstfighter = base.deserialize.read_integer ();
+						break;
+					case 4:
+						this.kf_id = base.deserialize.read_integer ();
+						break;
+					case 5:
+						this.delay_time = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 1);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_string (this.msg, 2);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.firstfighter, 3);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.kf_id, 4);
+				}
+
+				if (base.has_field.has_field (4)) {
+					base.serialize.write_integer (this.delay_time, 5);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+	}
+
+
+	public class TMP_GuanQiaBattleList {
+	
+		public class request : SprotoTypeBase {
+			private static int max_field_count = 9;
+			
+			
+			private Int64 _fighterid; // tag 0
+			public Int64 fighterid {
+				get { return _fighterid; }
+				set { base.has_field.set_field (0, true); _fighterid = value; }
+			}
+			public bool HasFighterid {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private Int64 _kf_id; // tag 1
+			public Int64 kf_id {
+				get { return _kf_id; }
+				set { base.has_field.set_field (1, true); _kf_id = value; }
+			}
+			public bool HasKf_id {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private Int64 _attcktype; // tag 2
+			public Int64 attcktype {
+				get { return _attcktype; }
+				set { base.has_field.set_field (2, true); _attcktype = value; }
+			}
+			public bool HasAttcktype {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private Int64 _isdead; // tag 3
+			public Int64 isdead {
+				get { return _isdead; }
+				set { base.has_field.set_field (3, true); _isdead = value; }
+			}
+			public bool HasIsdead {
+				get { return base.has_field.has_field (3); }
+			}
+
+			private Int64 _kf_prob; // tag 4
+			public Int64 kf_prob {
+				get { return _kf_prob; }
+				set { base.has_field.set_field (4, true); _kf_prob = value; }
+			}
+			public bool HasKf_prob {
+				get { return base.has_field.has_field (4); }
+			}
+
+			private Int64 _attach_effect; // tag 5
+			public Int64 attach_effect {
+				get { return _attach_effect; }
+				set { base.has_field.set_field (5, true); _attach_effect = value; }
+			}
+			public bool HasAttach_effect {
+				get { return base.has_field.has_field (5); }
+			}
+
+			private Int64 _kf_type; // tag 6
+			public Int64 kf_type {
+				get { return _kf_type; }
+				set { base.has_field.set_field (6, true); _kf_type = value; }
+			}
+			public bool HasKf_type {
+				get { return base.has_field.has_field (6); }
+			}
+
+			private Int64 _attack; // tag 7
+			public Int64 attack {
+				get { return _attack; }
+				set { base.has_field.set_field (7, true); _attack = value; }
+			}
+			public bool HasAttack {
+				get { return base.has_field.has_field (7); }
+			}
+
+			private Int64 _random_combo_num; // tag 8
+			public Int64 random_combo_num {
+				get { return _random_combo_num; }
+				set { base.has_field.set_field (8, true); _random_combo_num = value; }
+			}
+			public bool HasRandom_combo_num {
+				get { return base.has_field.has_field (8); }
+			}
+
+			public request () : base(max_field_count) {}
+
+			public request (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 0:
+						this.fighterid = base.deserialize.read_integer ();
+						break;
+					case 1:
+						this.kf_id = base.deserialize.read_integer ();
+						break;
+					case 2:
+						this.attcktype = base.deserialize.read_integer ();
+						break;
+					case 3:
+						this.isdead = base.deserialize.read_integer ();
+						break;
+					case 4:
+						this.kf_prob = base.deserialize.read_integer ();
+						break;
+					case 5:
+						this.attach_effect = base.deserialize.read_integer ();
+						break;
+					case 6:
+						this.kf_type = base.deserialize.read_integer ();
+						break;
+					case 7:
+						this.attack = base.deserialize.read_integer ();
+						break;
+					case 8:
+						this.random_combo_num = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.fighterid, 0);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_integer (this.kf_id, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.attcktype, 2);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.isdead, 3);
+				}
+
+				if (base.has_field.has_field (4)) {
+					base.serialize.write_integer (this.kf_prob, 4);
+				}
+
+				if (base.has_field.has_field (5)) {
+					base.serialize.write_integer (this.attach_effect, 5);
+				}
+
+				if (base.has_field.has_field (6)) {
+					base.serialize.write_integer (this.kf_type, 6);
+				}
+
+				if (base.has_field.has_field (7)) {
+					base.serialize.write_integer (this.attack, 7);
+				}
+
+				if (base.has_field.has_field (8)) {
+					base.serialize.write_integer (this.random_combo_num, 8);
+				}
+
+				return base.serialize.close ();
+			}
+		}
+
+
+		public class response : SprotoTypeBase {
+			private static int max_field_count = 7;
+			
+			
+			private Int64 _errorcode; // tag 1
+			public Int64 errorcode {
+				get { return _errorcode; }
+				set { base.has_field.set_field (0, true); _errorcode = value; }
+			}
+			public bool HasErrorcode {
+				get { return base.has_field.has_field (0); }
+			}
+
+			private string _msg; // tag 2
+			public string msg {
+				get { return _msg; }
+				set { base.has_field.set_field (1, true); _msg = value; }
+			}
+			public bool HasMsg {
+				get { return base.has_field.has_field (1); }
+			}
+
+			private Int64 _totalattack; // tag 3
+			public Int64 totalattack {
+				get { return _totalattack; }
+				set { base.has_field.set_field (2, true); _totalattack = value; }
+			}
+			public bool HasTotalattack {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private Int64 _effect; // tag 4
+			public Int64 effect {
+				get { return _effect; }
+				set { base.has_field.set_field (3, true); _effect = value; }
+			}
+			public bool HasEffect {
+				get { return base.has_field.has_field (3); }
+			}
+
+			private Int64 _kf_id; // tag 5
+			public Int64 kf_id {
+				get { return _kf_id; }
+				set { base.has_field.set_field (4, true); _kf_id = value; }
+			}
+			public bool HasKf_id {
+				get { return base.has_field.has_field (4); }
+			}
+
+			private Int64 _loser; // tag 6
+			public Int64 loser {
+				get { return _loser; }
+				set { base.has_field.set_field (5, true); _loser = value; }
+			}
+			public bool HasLoser {
+				get { return base.has_field.has_field (5); }
+			}
+
+			public response () : base(max_field_count) {}
+
+			public response (byte[] buffer) : base(max_field_count, buffer) {
+				this.decode ();
+			}
+
+			protected override void decode () {
+				int tag = -1;
+				while (-1 != (tag = base.deserialize.read_tag ())) {
+					switch (tag) {
+					case 1:
+						this.errorcode = base.deserialize.read_integer ();
+						break;
+					case 2:
+						this.msg = base.deserialize.read_string ();
+						break;
+					case 3:
+						this.totalattack = base.deserialize.read_integer ();
+						break;
+					case 4:
+						this.effect = base.deserialize.read_integer ();
+						break;
+					case 5:
+						this.kf_id = base.deserialize.read_integer ();
+						break;
+					case 6:
+						this.loser = base.deserialize.read_integer ();
+						break;
+					default:
+						base.deserialize.read_unknow_data ();
+						break;
+					}
+				}
+			}
+
+			public override int encode (SprotoStream stream) {
+				base.serialize.open (stream);
+
+				if (base.has_field.has_field (0)) {
+					base.serialize.write_integer (this.errorcode, 1);
+				}
+
+				if (base.has_field.has_field (1)) {
+					base.serialize.write_string (this.msg, 2);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_integer (this.totalattack, 3);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.effect, 4);
+				}
+
+				if (base.has_field.has_field (4)) {
+					base.serialize.write_integer (this.kf_id, 5);
+				}
+
+				if (base.has_field.has_field (5)) {
+					base.serialize.write_integer (this.loser, 6);
 				}
 
 				return base.serialize.close ();

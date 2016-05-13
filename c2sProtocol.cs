@@ -6,8 +6,16 @@ using System.Collections.Generic;
 public class C2sProtocol : ProtocolBase {
 	public static  C2sProtocol Instance = new C2sProtocol();
 	private C2sProtocol() {
+		Protocol.SetProtocol<ArenaBattleList> (ArenaBattleList.Tag);
+		Protocol.SetRequest<C2sSprotoType.ArenaBattleList.request> (ArenaBattleList.Tag);
+		Protocol.SetResponse<C2sSprotoType.ArenaBattleList.response> (ArenaBattleList.Tag);
+
 		Protocol.SetProtocol<Arena_OnPrepareNextRole> (Arena_OnPrepareNextRole.Tag);
 		Protocol.SetResponse<C2sSprotoType.Arena_OnPrepareNextRole.response> (Arena_OnPrepareNextRole.Tag);
+
+		Protocol.SetProtocol<BeginArenaCoreFight> (BeginArenaCoreFight.Tag);
+		Protocol.SetRequest<C2sSprotoType.BeginArenaCoreFight.request> (BeginArenaCoreFight.Tag);
+		Protocol.SetResponse<C2sSprotoType.BeginArenaCoreFight.response> (BeginArenaCoreFight.Tag);
 
 		Protocol.SetProtocol<BeginGUQNQIACoreFight> (BeginGUQNQIACoreFight.Tag);
 		Protocol.SetRequest<C2sSprotoType.BeginGUQNQIACoreFight.request> (BeginGUQNQIACoreFight.Tag);
@@ -21,6 +29,14 @@ public class C2sProtocol : ProtocolBase {
 
 		Protocol.SetProtocol<OnReEnterCoreFight> (OnReEnterCoreFight.Tag);
 		Protocol.SetResponse<C2sSprotoType.OnReEnterCoreFight.response> (OnReEnterCoreFight.Tag);
+
+		Protocol.SetProtocol<TMP_BeginGUQNQIACoreFight> (TMP_BeginGUQNQIACoreFight.Tag);
+		Protocol.SetRequest<C2sSprotoType.TMP_BeginGUQNQIACoreFight.request> (TMP_BeginGUQNQIACoreFight.Tag);
+		Protocol.SetResponse<C2sSprotoType.TMP_BeginGUQNQIACoreFight.response> (TMP_BeginGUQNQIACoreFight.Tag);
+
+		Protocol.SetProtocol<TMP_GuanQiaBattleList> (TMP_GuanQiaBattleList.Tag);
+		Protocol.SetRequest<C2sSprotoType.TMP_GuanQiaBattleList.request> (TMP_GuanQiaBattleList.Tag);
+		Protocol.SetResponse<C2sSprotoType.TMP_GuanQiaBattleList.response> (TMP_GuanQiaBattleList.Tag);
 
 		Protocol.SetProtocol<achievement> (achievement.Tag);
 		Protocol.SetResponse<C2sSprotoType.achievement.response> (achievement.Tag);
@@ -336,8 +352,16 @@ public class C2sProtocol : ProtocolBase {
 
 	}
 
+	public class ArenaBattleList {
+		public const int Tag = 96;
+	}
+
 	public class Arena_OnPrepareNextRole {
 		public const int Tag = 90;
+	}
+
+	public class BeginArenaCoreFight {
+		public const int Tag = 95;
 	}
 
 	public class BeginGUQNQIACoreFight {
@@ -354,6 +378,14 @@ public class C2sProtocol : ProtocolBase {
 
 	public class OnReEnterCoreFight {
 		public const int Tag = 89;
+	}
+
+	public class TMP_BeginGUQNQIACoreFight {
+		public const int Tag = 97;
+	}
+
+	public class TMP_GuanQiaBattleList {
+		public const int Tag = 98;
 	}
 
 	public class achievement {
