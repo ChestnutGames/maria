@@ -2565,7 +2565,7 @@ namespace C2sSprotoType {
 	public class ara_enter {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 11;
+			private static int max_field_count = 12;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -2667,6 +2667,15 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (10); }
 			}
 
+			private Int64 _ara_rfh_cd; // tag 11
+			public Int64 ara_rfh_cd {
+				get { return _ara_rfh_cd; }
+				set { base.has_field.set_field (11, true); _ara_rfh_cd = value; }
+			}
+			public bool HasAra_rfh_cd {
+				get { return base.has_field.has_field (11); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -2709,6 +2718,9 @@ namespace C2sSprotoType {
 						break;
 					case 10:
 						this.ara_clg_cost_tms = base.deserialize.read_integer ();
+						break;
+					case 11:
+						this.ara_rfh_cd = base.deserialize.read_integer ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -2762,6 +2774,10 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (10)) {
 					base.serialize.write_integer (this.ara_clg_cost_tms, 10);
+				}
+
+				if (base.has_field.has_field (11)) {
+					base.serialize.write_integer (this.ara_rfh_cd, 11);
 				}
 
 				return base.serialize.close ();
@@ -2923,7 +2939,7 @@ namespace C2sSprotoType {
 	public class ara_rfh {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 3;
+			private static int max_field_count = 4;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -2953,6 +2969,15 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (2); }
 			}
 
+			private Int64 _ara_rfh_cd; // tag 3
+			public Int64 ara_rfh_cd {
+				get { return _ara_rfh_cd; }
+				set { base.has_field.set_field (3, true); _ara_rfh_cd = value; }
+			}
+			public bool HasAra_rfh_cd {
+				get { return base.has_field.has_field (3); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -2971,6 +2996,9 @@ namespace C2sSprotoType {
 						break;
 					case 2:
 						this.ara_rmd_list = base.deserialize.read_obj_list<suser> ();
+						break;
+					case 3:
+						this.ara_rfh_cd = base.deserialize.read_integer ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -2992,6 +3020,10 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (2)) {
 					base.serialize.write_obj (this.ara_rmd_list, 2);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_integer (this.ara_rfh_cd, 3);
 				}
 
 				return base.serialize.close ();
