@@ -86,6 +86,9 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetProtocol<ara_exit> (ara_exit.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_exit.response> (ara_exit.Tag);
 
+		Protocol.SetProtocol<ara_lp> (ara_lp.Tag);
+		Protocol.SetResponse<C2sSprotoType.ara_lp.response> (ara_lp.Tag);
+
 		Protocol.SetProtocol<ara_rfh> (ara_rfh.Tag);
 		Protocol.SetResponse<C2sSprotoType.ara_rfh.response> (ara_rfh.Tag);
 
@@ -443,6 +446,10 @@ public class C2sProtocol : ProtocolBase {
 
 	public class ara_exit {
 		public const int Tag = 80;
+	}
+
+	public class ara_lp {
+		public const int Tag = 99;
 	}
 
 	public class ara_rfh {
