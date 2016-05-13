@@ -13366,12 +13366,12 @@ namespace C2sSprotoType {
 		private static int max_field_count = 5;
 		
 		
-		private Int64 _csv_id; // tag 0
-		public Int64 csv_id {
-			get { return _csv_id; }
-			set { base.has_field.set_field (0, true); _csv_id = value; }
+		private Int64 _uid; // tag 0
+		public Int64 uid {
+			get { return _uid; }
+			set { base.has_field.set_field (0, true); _uid = value; }
 		}
-		public bool HasCsv_id {
+		public bool HasUid {
 			get { return base.has_field.has_field (0); }
 		}
 
@@ -13393,12 +13393,12 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (2); }
 		}
 
-		private Int64 _ara_rnk; // tag 3
-		public Int64 ara_rnk {
-			get { return _ara_rnk; }
-			set { base.has_field.set_field (3, true); _ara_rnk = value; }
+		private Int64 _ranking; // tag 3
+		public Int64 ranking {
+			get { return _ranking; }
+			set { base.has_field.set_field (3, true); _ranking = value; }
 		}
-		public bool HasAra_rnk {
+		public bool HasRanking {
 			get { return base.has_field.has_field (3); }
 		}
 
@@ -13422,7 +13422,7 @@ namespace C2sSprotoType {
 			while (-1 != (tag = base.deserialize.read_tag ())) {
 				switch (tag) {
 				case 0:
-					this.csv_id = base.deserialize.read_integer ();
+					this.uid = base.deserialize.read_integer ();
 					break;
 				case 1:
 					this.uname = base.deserialize.read_string ();
@@ -13431,7 +13431,7 @@ namespace C2sSprotoType {
 					this.total_combat = base.deserialize.read_integer ();
 					break;
 				case 3:
-					this.ara_rnk = base.deserialize.read_integer ();
+					this.ranking = base.deserialize.read_integer ();
 					break;
 				case 4:
 					this.iconid = base.deserialize.read_integer ();
@@ -13447,7 +13447,7 @@ namespace C2sSprotoType {
 			base.serialize.open (stream);
 
 			if (base.has_field.has_field (0)) {
-				base.serialize.write_integer (this.csv_id, 0);
+				base.serialize.write_integer (this.uid, 0);
 			}
 
 			if (base.has_field.has_field (1)) {
@@ -13459,7 +13459,7 @@ namespace C2sSprotoType {
 			}
 
 			if (base.has_field.has_field (3)) {
-				base.serialize.write_integer (this.ara_rnk, 3);
+				base.serialize.write_integer (this.ranking, 3);
 			}
 
 			if (base.has_field.has_field (4)) {
