@@ -2529,8 +2529,8 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (2); }
 			}
 
-			private List<integral> _cl; // tag 3
-			public List<integral> cl {
+			private List<integral_reward> _cl; // tag 3
+			public List<integral_reward> cl {
 				get { return _cl; }
 				set { base.has_field.set_field (3, true); _cl = value; }
 			}
@@ -2558,7 +2558,7 @@ namespace C2sSprotoType {
 						this.props = base.deserialize.read_obj_list<prop> ();
 						break;
 					case 3:
-						this.cl = base.deserialize.read_obj_list<integral> ();
+						this.cl = base.deserialize.read_obj_list<integral_reward> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -2708,8 +2708,8 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (11); }
 			}
 
-			private List<integral> _cl; // tag 12
-			public List<integral> cl {
+			private List<integral_reward> _cl; // tag 12
+			public List<integral_reward> cl {
 				get { return _cl; }
 				set { base.has_field.set_field (12, true); _cl = value; }
 			}
@@ -2773,7 +2773,7 @@ namespace C2sSprotoType {
 						this.ara_rfh_cd = base.deserialize.read_integer ();
 						break;
 					case 12:
-						this.cl = base.deserialize.read_obj_list<integral> ();
+						this.cl = base.deserialize.read_obj_list<integral_reward> ();
 						break;
 					case 13:
 						this.rl = base.deserialize.read_obj_list<rnk_reward> ();
@@ -6979,7 +6979,7 @@ namespace C2sSprotoType {
 	}
 
 
-	public class integral : SprotoTypeBase {
+	public class integral_reward : SprotoTypeBase {
 		private static int max_field_count = 2;
 		
 		
@@ -7001,9 +7001,9 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (1); }
 		}
 
-		public integral () : base(max_field_count) {}
+		public integral_reward () : base(max_field_count) {}
 
-		public integral (byte[] buffer) : base(max_field_count, buffer) {
+		public integral_reward (byte[] buffer) : base(max_field_count, buffer) {
 			this.decode ();
 		}
 
