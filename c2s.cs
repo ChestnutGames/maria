@@ -2499,7 +2499,7 @@ namespace C2sSprotoType {
 
 
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 2;
+			private static int max_field_count = 4;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -2520,6 +2520,24 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (1); }
 			}
 
+			private List<prop> _props; // tag 2
+			public List<prop> props {
+				get { return _props; }
+				set { base.has_field.set_field (2, true); _props = value; }
+			}
+			public bool HasProps {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private List<integral> _cl; // tag 3
+			public List<integral> cl {
+				get { return _cl; }
+				set { base.has_field.set_field (3, true); _cl = value; }
+			}
+			public bool HasCl {
+				get { return base.has_field.has_field (3); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -2535,6 +2553,12 @@ namespace C2sSprotoType {
 						break;
 					case 1:
 						this.msg = base.deserialize.read_string ();
+						break;
+					case 2:
+						this.props = base.deserialize.read_obj_list<prop> ();
+						break;
+					case 3:
+						this.cl = base.deserialize.read_obj_list<integral> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -2554,6 +2578,14 @@ namespace C2sSprotoType {
 					base.serialize.write_string (this.msg, 1);
 				}
 
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_obj (this.props, 2);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_obj (this.cl, 3);
+				}
+
 				return base.serialize.close ();
 			}
 		}
@@ -2565,7 +2597,7 @@ namespace C2sSprotoType {
 	public class ara_enter {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 12;
+			private static int max_field_count = 14;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -2676,6 +2708,24 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (11); }
 			}
 
+			private List<integral> _cl; // tag 12
+			public List<integral> cl {
+				get { return _cl; }
+				set { base.has_field.set_field (12, true); _cl = value; }
+			}
+			public bool HasCl {
+				get { return base.has_field.has_field (12); }
+			}
+
+			private List<rnk_reward> _rl; // tag 13
+			public List<rnk_reward> rl {
+				get { return _rl; }
+				set { base.has_field.set_field (13, true); _rl = value; }
+			}
+			public bool HasRl {
+				get { return base.has_field.has_field (13); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -2721,6 +2771,12 @@ namespace C2sSprotoType {
 						break;
 					case 11:
 						this.ara_rfh_cd = base.deserialize.read_integer ();
+						break;
+					case 12:
+						this.cl = base.deserialize.read_obj_list<integral> ();
+						break;
+					case 13:
+						this.rl = base.deserialize.read_obj_list<rnk_reward> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -2778,6 +2834,14 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (11)) {
 					base.serialize.write_integer (this.ara_rfh_cd, 11);
+				}
+
+				if (base.has_field.has_field (12)) {
+					base.serialize.write_obj (this.cl, 12);
+				}
+
+				if (base.has_field.has_field (13)) {
+					base.serialize.write_obj (this.rl, 13);
 				}
 
 				return base.serialize.close ();
@@ -3037,7 +3101,7 @@ namespace C2sSprotoType {
 	public class ara_rnk_reward_collected {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 2;
+			private static int max_field_count = 4;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -3058,6 +3122,24 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (1); }
 			}
 
+			private List<prop> _props; // tag 2
+			public List<prop> props {
+				get { return _props; }
+				set { base.has_field.set_field (2, true); _props = value; }
+			}
+			public bool HasProps {
+				get { return base.has_field.has_field (2); }
+			}
+
+			private List<rnk_reward> _rl; // tag 3
+			public List<rnk_reward> rl {
+				get { return _rl; }
+				set { base.has_field.set_field (3, true); _rl = value; }
+			}
+			public bool HasRl {
+				get { return base.has_field.has_field (3); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -3073,6 +3155,12 @@ namespace C2sSprotoType {
 						break;
 					case 1:
 						this.msg = base.deserialize.read_string ();
+						break;
+					case 2:
+						this.props = base.deserialize.read_obj_list<prop> ();
+						break;
+					case 3:
+						this.rl = base.deserialize.read_obj_list<rnk_reward> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -3090,6 +3178,14 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (1)) {
 					base.serialize.write_string (this.msg, 1);
+				}
+
+				if (base.has_field.has_field (2)) {
+					base.serialize.write_obj (this.props, 2);
+				}
+
+				if (base.has_field.has_field (3)) {
+					base.serialize.write_obj (this.rl, 3);
 				}
 
 				return base.serialize.close ();
@@ -6876,6 +6972,67 @@ namespace C2sSprotoType {
 
 			if (base.has_field.has_field (0)) {
 				base.serialize.write_integer (this.id, 0);
+			}
+
+			return base.serialize.close ();
+		}
+	}
+
+
+	public class integral : SprotoTypeBase {
+		private static int max_field_count = 2;
+		
+		
+		private Int64 _integral; // tag 0
+		public Int64 integral {
+			get { return _integral; }
+			set { base.has_field.set_field (0, true); _integral = value; }
+		}
+		public bool HasIntegral {
+			get { return base.has_field.has_field (0); }
+		}
+
+		private bool _collected; // tag 1
+		public bool collected {
+			get { return _collected; }
+			set { base.has_field.set_field (1, true); _collected = value; }
+		}
+		public bool HasCollected {
+			get { return base.has_field.has_field (1); }
+		}
+
+		public integral () : base(max_field_count) {}
+
+		public integral (byte[] buffer) : base(max_field_count, buffer) {
+			this.decode ();
+		}
+
+		protected override void decode () {
+			int tag = -1;
+			while (-1 != (tag = base.deserialize.read_tag ())) {
+				switch (tag) {
+				case 0:
+					this.integral = base.deserialize.read_integer ();
+					break;
+				case 1:
+					this.collected = base.deserialize.read_boolean ();
+					break;
+				default:
+					base.deserialize.read_unknow_data ();
+					break;
+				}
+			}
+		}
+
+		public override int encode (SprotoStream stream) {
+			base.serialize.open (stream);
+
+			if (base.has_field.has_field (0)) {
+				base.serialize.write_integer (this.integral, 0);
+			}
+
+			if (base.has_field.has_field (1)) {
+				base.serialize.write_boolean (this.collected, 1);
 			}
 
 			return base.serialize.close ();
@@ -11402,6 +11559,67 @@ namespace C2sSprotoType {
 		}
 
 
+	}
+
+
+	public class rnk_reward : SprotoTypeBase {
+		private static int max_field_count = 2;
+		
+		
+		private integral _ranking; // tag 0
+		public integral ranking {
+			get { return _ranking; }
+			set { base.has_field.set_field (0, true); _ranking = value; }
+		}
+		public bool HasRanking {
+			get { return base.has_field.has_field (0); }
+		}
+
+		private bool _collected; // tag 1
+		public bool collected {
+			get { return _collected; }
+			set { base.has_field.set_field (1, true); _collected = value; }
+		}
+		public bool HasCollected {
+			get { return base.has_field.has_field (1); }
+		}
+
+		public rnk_reward () : base(max_field_count) {}
+
+		public rnk_reward (byte[] buffer) : base(max_field_count, buffer) {
+			this.decode ();
+		}
+
+		protected override void decode () {
+			int tag = -1;
+			while (-1 != (tag = base.deserialize.read_tag ())) {
+				switch (tag) {
+				case 0:
+					this.ranking = base.deserialize.read_obj<integral> ();
+					break;
+				case 1:
+					this.collected = base.deserialize.read_boolean ();
+					break;
+				default:
+					base.deserialize.read_unknow_data ();
+					break;
+				}
+			}
+		}
+
+		public override int encode (SprotoStream stream) {
+			base.serialize.open (stream);
+
+			if (base.has_field.has_field (0)) {
+				base.serialize.write_obj (this.ranking, 0);
+			}
+
+			if (base.has_field.has_field (1)) {
+				base.serialize.write_boolean (this.collected, 1);
+			}
+
+			return base.serialize.close ();
+		}
 	}
 
 
