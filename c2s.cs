@@ -11566,8 +11566,8 @@ namespace C2sSprotoType {
 		private static int max_field_count = 2;
 		
 		
-		private integral _ranking; // tag 0
-		public integral ranking {
+		private Int64 _ranking; // tag 0
+		public Int64 ranking {
 			get { return _ranking; }
 			set { base.has_field.set_field (0, true); _ranking = value; }
 		}
@@ -11595,7 +11595,7 @@ namespace C2sSprotoType {
 			while (-1 != (tag = base.deserialize.read_tag ())) {
 				switch (tag) {
 				case 0:
-					this.ranking = base.deserialize.read_obj<integral> ();
+					this.ranking = base.deserialize.read_integer ();
 					break;
 				case 1:
 					this.collected = base.deserialize.read_boolean ();
@@ -11611,7 +11611,7 @@ namespace C2sSprotoType {
 			base.serialize.open (stream);
 
 			if (base.has_field.has_field (0)) {
-				base.serialize.write_obj (this.ranking, 0);
+				base.serialize.write_integer (this.ranking, 0);
 			}
 
 			if (base.has_field.has_field (1)) {
