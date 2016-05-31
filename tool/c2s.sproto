@@ -1256,7 +1256,7 @@ BeginArenaCoreFight 95 {
 
 ArenaBattleList 96 {
     request {
-        fightlist 0 : *BattleListElem
+        fightlist 0 : BattleListElem
     }   
     response {
         errorcode 0 : integer
