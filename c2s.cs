@@ -997,88 +997,16 @@ namespace C2sSprotoType {
 	public class TMP_GuanQiaBattleList {
 	
 		public class request : SprotoTypeBase {
-			private static int max_field_count = 9;
+			private static int max_field_count = 1;
 			
 			
-			private Int64 _fighterid; // tag 0
-			public Int64 fighterid {
-				get { return _fighterid; }
-				set { base.has_field.set_field (0, true); _fighterid = value; }
+			private List<BattleListElem> _fightinfo; // tag 0
+			public List<BattleListElem> fightinfo {
+				get { return _fightinfo; }
+				set { base.has_field.set_field (0, true); _fightinfo = value; }
 			}
-			public bool HasFighterid {
+			public bool HasFightinfo {
 				get { return base.has_field.has_field (0); }
-			}
-
-			private Int64 _kf_id; // tag 1
-			public Int64 kf_id {
-				get { return _kf_id; }
-				set { base.has_field.set_field (1, true); _kf_id = value; }
-			}
-			public bool HasKf_id {
-				get { return base.has_field.has_field (1); }
-			}
-
-			private Int64 _attcktype; // tag 2
-			public Int64 attcktype {
-				get { return _attcktype; }
-				set { base.has_field.set_field (2, true); _attcktype = value; }
-			}
-			public bool HasAttcktype {
-				get { return base.has_field.has_field (2); }
-			}
-
-			private Int64 _isdead; // tag 3
-			public Int64 isdead {
-				get { return _isdead; }
-				set { base.has_field.set_field (3, true); _isdead = value; }
-			}
-			public bool HasIsdead {
-				get { return base.has_field.has_field (3); }
-			}
-
-			private Int64 _kf_prob; // tag 4
-			public Int64 kf_prob {
-				get { return _kf_prob; }
-				set { base.has_field.set_field (4, true); _kf_prob = value; }
-			}
-			public bool HasKf_prob {
-				get { return base.has_field.has_field (4); }
-			}
-
-			private Int64 _attach_effect; // tag 5
-			public Int64 attach_effect {
-				get { return _attach_effect; }
-				set { base.has_field.set_field (5, true); _attach_effect = value; }
-			}
-			public bool HasAttach_effect {
-				get { return base.has_field.has_field (5); }
-			}
-
-			private Int64 _kf_type; // tag 6
-			public Int64 kf_type {
-				get { return _kf_type; }
-				set { base.has_field.set_field (6, true); _kf_type = value; }
-			}
-			public bool HasKf_type {
-				get { return base.has_field.has_field (6); }
-			}
-
-			private Int64 _attack; // tag 7
-			public Int64 attack {
-				get { return _attack; }
-				set { base.has_field.set_field (7, true); _attack = value; }
-			}
-			public bool HasAttack {
-				get { return base.has_field.has_field (7); }
-			}
-
-			private Int64 _random_combo_num; // tag 8
-			public Int64 random_combo_num {
-				get { return _random_combo_num; }
-				set { base.has_field.set_field (8, true); _random_combo_num = value; }
-			}
-			public bool HasRandom_combo_num {
-				get { return base.has_field.has_field (8); }
 			}
 
 			public request () : base(max_field_count) {}
@@ -1092,31 +1020,7 @@ namespace C2sSprotoType {
 				while (-1 != (tag = base.deserialize.read_tag ())) {
 					switch (tag) {
 					case 0:
-						this.fighterid = base.deserialize.read_integer ();
-						break;
-					case 1:
-						this.kf_id = base.deserialize.read_integer ();
-						break;
-					case 2:
-						this.attcktype = base.deserialize.read_integer ();
-						break;
-					case 3:
-						this.isdead = base.deserialize.read_integer ();
-						break;
-					case 4:
-						this.kf_prob = base.deserialize.read_integer ();
-						break;
-					case 5:
-						this.attach_effect = base.deserialize.read_integer ();
-						break;
-					case 6:
-						this.kf_type = base.deserialize.read_integer ();
-						break;
-					case 7:
-						this.attack = base.deserialize.read_integer ();
-						break;
-					case 8:
-						this.random_combo_num = base.deserialize.read_integer ();
+						this.fightinfo = base.deserialize.read_obj_list<BattleListElem> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -1129,39 +1033,7 @@ namespace C2sSprotoType {
 				base.serialize.open (stream);
 
 				if (base.has_field.has_field (0)) {
-					base.serialize.write_integer (this.fighterid, 0);
-				}
-
-				if (base.has_field.has_field (1)) {
-					base.serialize.write_integer (this.kf_id, 1);
-				}
-
-				if (base.has_field.has_field (2)) {
-					base.serialize.write_integer (this.attcktype, 2);
-				}
-
-				if (base.has_field.has_field (3)) {
-					base.serialize.write_integer (this.isdead, 3);
-				}
-
-				if (base.has_field.has_field (4)) {
-					base.serialize.write_integer (this.kf_prob, 4);
-				}
-
-				if (base.has_field.has_field (5)) {
-					base.serialize.write_integer (this.attach_effect, 5);
-				}
-
-				if (base.has_field.has_field (6)) {
-					base.serialize.write_integer (this.kf_type, 6);
-				}
-
-				if (base.has_field.has_field (7)) {
-					base.serialize.write_integer (this.attack, 7);
-				}
-
-				if (base.has_field.has_field (8)) {
-					base.serialize.write_integer (this.random_combo_num, 8);
+					base.serialize.write_obj (this.fightinfo, 0);
 				}
 
 				return base.serialize.close ();
