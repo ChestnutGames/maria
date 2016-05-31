@@ -1000,8 +1000,8 @@ namespace C2sSprotoType {
 			private static int max_field_count = 1;
 			
 			
-			private List<BattleListElem> _fightinfo; // tag 0
-			public List<BattleListElem> fightinfo {
+			private BattleListElem _fightinfo; // tag 0
+			public BattleListElem fightinfo {
 				get { return _fightinfo; }
 				set { base.has_field.set_field (0, true); _fightinfo = value; }
 			}
@@ -1020,7 +1020,7 @@ namespace C2sSprotoType {
 				while (-1 != (tag = base.deserialize.read_tag ())) {
 					switch (tag) {
 					case 0:
-						this.fightinfo = base.deserialize.read_obj_list<BattleListElem> ();
+						this.fightinfo = base.deserialize.read_obj<BattleListElem> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
