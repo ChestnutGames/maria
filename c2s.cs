@@ -2469,7 +2469,7 @@ namespace C2sSprotoType {
 	public class ara_enter {
 	
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 14;
+			private static int max_field_count = 17;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -2526,76 +2526,103 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (5); }
 			}
 
-			private Int64 _ara_clg_tms; // tag 6
-			public Int64 ara_clg_tms {
-				get { return _ara_clg_tms; }
-				set { base.has_field.set_field (6, true); _ara_clg_tms = value; }
+			private Int64 _ara_integral; // tag 6
+			public Int64 ara_integral {
+				get { return _ara_integral; }
+				set { base.has_field.set_field (6, true); _ara_integral = value; }
 			}
-			public bool HasAra_clg_tms {
+			public bool HasAra_integral {
 				get { return base.has_field.has_field (6); }
 			}
 
-			private Int64 _ara_integral; // tag 7
-			public Int64 ara_integral {
-				get { return _ara_integral; }
-				set { base.has_field.set_field (7, true); _ara_integral = value; }
+			private Int64 _ara_clg_tms; // tag 7
+			public Int64 ara_clg_tms {
+				get { return _ara_clg_tms; }
+				set { base.has_field.set_field (7, true); _ara_clg_tms = value; }
 			}
-			public bool HasAra_integral {
+			public bool HasAra_clg_tms {
 				get { return base.has_field.has_field (7); }
 			}
 
-			private Int64 _ara_rfh_tms; // tag 8
-			public Int64 ara_rfh_tms {
-				get { return _ara_rfh_tms; }
-				set { base.has_field.set_field (8, true); _ara_rfh_tms = value; }
+			private Int64 _ara_clg_cost_tms; // tag 8
+			public Int64 ara_clg_cost_tms {
+				get { return _ara_clg_cost_tms; }
+				set { base.has_field.set_field (8, true); _ara_clg_cost_tms = value; }
 			}
-			public bool HasAra_rfh_tms {
+			public bool HasAra_clg_cost_tms {
 				get { return base.has_field.has_field (8); }
 			}
 
-			private Int64 _ara_rfh_cost_tms; // tag 9
-			public Int64 ara_rfh_cost_tms {
-				get { return _ara_rfh_cost_tms; }
-				set { base.has_field.set_field (9, true); _ara_rfh_cost_tms = value; }
+			private prop _ara_clg_cost_tms_cost; // tag 9
+			public prop ara_clg_cost_tms_cost {
+				get { return _ara_clg_cost_tms_cost; }
+				set { base.has_field.set_field (9, true); _ara_clg_cost_tms_cost = value; }
 			}
-			public bool HasAra_rfh_cost_tms {
+			public bool HasAra_clg_cost_tms_cost {
 				get { return base.has_field.has_field (9); }
 			}
 
-			private Int64 _ara_clg_cost_tms; // tag 10
-			public Int64 ara_clg_cost_tms {
-				get { return _ara_clg_cost_tms; }
-				set { base.has_field.set_field (10, true); _ara_clg_cost_tms = value; }
+			private Int64 _ara_rfh_tms; // tag 10
+			public Int64 ara_rfh_tms {
+				get { return _ara_rfh_tms; }
+				set { base.has_field.set_field (10, true); _ara_rfh_tms = value; }
 			}
-			public bool HasAra_clg_cost_tms {
+			public bool HasAra_rfh_tms {
 				get { return base.has_field.has_field (10); }
 			}
 
-			private Int64 _ara_rfh_cd; // tag 11
-			public Int64 ara_rfh_cd {
-				get { return _ara_rfh_cd; }
-				set { base.has_field.set_field (11, true); _ara_rfh_cd = value; }
+			private Int64 _ara_rfh_cost_tms; // tag 11
+			public Int64 ara_rfh_cost_tms {
+				get { return _ara_rfh_cost_tms; }
+				set { base.has_field.set_field (11, true); _ara_rfh_cost_tms = value; }
 			}
-			public bool HasAra_rfh_cd {
+			public bool HasAra_rfh_cost_tms {
 				get { return base.has_field.has_field (11); }
 			}
 
-			private List<integral_reward> _cl; // tag 12
-			public List<integral_reward> cl {
-				get { return _cl; }
-				set { base.has_field.set_field (12, true); _cl = value; }
+			private prop _ara_rfh_cost_tms_cost; // tag 12
+			public prop ara_rfh_cost_tms_cost {
+				get { return _ara_rfh_cost_tms_cost; }
+				set { base.has_field.set_field (12, true); _ara_rfh_cost_tms_cost = value; }
 			}
-			public bool HasCl {
+			public bool HasAra_rfh_cost_tms_cost {
 				get { return base.has_field.has_field (12); }
 			}
 
-			private List<rnk_reward> _rl; // tag 13
+			private Int64 _ara_rfh_cd; // tag 13
+			public Int64 ara_rfh_cd {
+				get { return _ara_rfh_cd; }
+				set { base.has_field.set_field (13, true); _ara_rfh_cd = value; }
+			}
+			public bool HasAra_rfh_cd {
+				get { return base.has_field.has_field (13); }
+			}
+
+			private prop _ara_rfh_cd_cost; // tag 14
+			public prop ara_rfh_cd_cost {
+				get { return _ara_rfh_cd_cost; }
+				set { base.has_field.set_field (14, true); _ara_rfh_cd_cost = value; }
+			}
+			public bool HasAra_rfh_cd_cost {
+				get { return base.has_field.has_field (14); }
+			}
+
+			private List<integral_reward> _cl; // tag 15
+			public List<integral_reward> cl {
+				get { return _cl; }
+				set { base.has_field.set_field (15, true); _cl = value; }
+			}
+			public bool HasCl {
+				get { return base.has_field.has_field (15); }
+			}
+
+			private List<rnk_reward> _rl; // tag 16
 			public List<rnk_reward> rl {
 				get { return _rl; }
-				set { base.has_field.set_field (13, true); _rl = value; }
+				set { base.has_field.set_field (16, true); _rl = value; }
 			}
 			public bool HasRl {
-				get { return base.has_field.has_field (13); }
+				get { return base.has_field.has_field (16); }
 			}
 
 			public response () : base(max_field_count) {}
@@ -2627,27 +2654,36 @@ namespace C2sSprotoType {
 						this.ara_tie_tms = base.deserialize.read_integer ();
 						break;
 					case 6:
-						this.ara_clg_tms = base.deserialize.read_integer ();
-						break;
-					case 7:
 						this.ara_integral = base.deserialize.read_integer ();
 						break;
+					case 7:
+						this.ara_clg_tms = base.deserialize.read_integer ();
+						break;
 					case 8:
-						this.ara_rfh_tms = base.deserialize.read_integer ();
-						break;
-					case 9:
-						this.ara_rfh_cost_tms = base.deserialize.read_integer ();
-						break;
-					case 10:
 						this.ara_clg_cost_tms = base.deserialize.read_integer ();
 						break;
+					case 9:
+						this.ara_clg_cost_tms_cost = base.deserialize.read_obj<prop> ();
+						break;
+					case 10:
+						this.ara_rfh_tms = base.deserialize.read_integer ();
+						break;
 					case 11:
-						this.ara_rfh_cd = base.deserialize.read_integer ();
+						this.ara_rfh_cost_tms = base.deserialize.read_integer ();
 						break;
 					case 12:
-						this.cl = base.deserialize.read_obj_list<integral_reward> ();
+						this.ara_rfh_cost_tms_cost = base.deserialize.read_obj<prop> ();
 						break;
 					case 13:
+						this.ara_rfh_cd = base.deserialize.read_integer ();
+						break;
+					case 14:
+						this.ara_rfh_cd_cost = base.deserialize.read_obj<prop> ();
+						break;
+					case 15:
+						this.cl = base.deserialize.read_obj_list<integral_reward> ();
+						break;
+					case 16:
 						this.rl = base.deserialize.read_obj_list<rnk_reward> ();
 						break;
 					default:
@@ -2685,35 +2721,47 @@ namespace C2sSprotoType {
 				}
 
 				if (base.has_field.has_field (6)) {
-					base.serialize.write_integer (this.ara_clg_tms, 6);
+					base.serialize.write_integer (this.ara_integral, 6);
 				}
 
 				if (base.has_field.has_field (7)) {
-					base.serialize.write_integer (this.ara_integral, 7);
+					base.serialize.write_integer (this.ara_clg_tms, 7);
 				}
 
 				if (base.has_field.has_field (8)) {
-					base.serialize.write_integer (this.ara_rfh_tms, 8);
+					base.serialize.write_integer (this.ara_clg_cost_tms, 8);
 				}
 
 				if (base.has_field.has_field (9)) {
-					base.serialize.write_integer (this.ara_rfh_cost_tms, 9);
+					base.serialize.write_obj (this.ara_clg_cost_tms_cost, 9);
 				}
 
 				if (base.has_field.has_field (10)) {
-					base.serialize.write_integer (this.ara_clg_cost_tms, 10);
+					base.serialize.write_integer (this.ara_rfh_tms, 10);
 				}
 
 				if (base.has_field.has_field (11)) {
-					base.serialize.write_integer (this.ara_rfh_cd, 11);
+					base.serialize.write_integer (this.ara_rfh_cost_tms, 11);
 				}
 
 				if (base.has_field.has_field (12)) {
-					base.serialize.write_obj (this.cl, 12);
+					base.serialize.write_obj (this.ara_rfh_cost_tms_cost, 12);
 				}
 
 				if (base.has_field.has_field (13)) {
-					base.serialize.write_obj (this.rl, 13);
+					base.serialize.write_integer (this.ara_rfh_cd, 13);
+				}
+
+				if (base.has_field.has_field (14)) {
+					base.serialize.write_obj (this.ara_rfh_cd_cost, 14);
+				}
+
+				if (base.has_field.has_field (15)) {
+					base.serialize.write_obj (this.cl, 15);
+				}
+
+				if (base.has_field.has_field (16)) {
+					base.serialize.write_obj (this.rl, 16);
 				}
 
 				return base.serialize.close ();
