@@ -18,7 +18,7 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(pg.src);
             return buffer;
         }
         catch (Exception ex)
@@ -47,9 +47,9 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr1);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr1);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception ex)
@@ -84,9 +84,9 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
-            Marshal.FreeHGlobal(ptr1);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(ptr1);
             return buffer;
         }
         catch (Exception ex)
@@ -108,8 +108,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception ex)
@@ -131,8 +131,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception ex)
@@ -154,8 +154,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception)
@@ -177,8 +177,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception)
@@ -200,8 +200,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception)
@@ -229,9 +229,9 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr1);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr1);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception)
@@ -253,8 +253,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception ex)
@@ -282,9 +282,9 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr1);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr1);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception)
@@ -307,8 +307,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception ex)
@@ -330,8 +330,8 @@ public class Crypt
             byte[] buffer = new byte[pg.len];
             Marshal.Copy(pg.src, buffer, 0, pg.len);
             // 释放pg.src;
-            Marshal.FreeHGlobal(pg.src);
-            Marshal.FreeHGlobal(ptr);
+            //Marshal.FreeHGlobal(pg.src);
+            //Marshal.FreeHGlobal(ptr);
             return buffer;
         }
         catch (Exception)

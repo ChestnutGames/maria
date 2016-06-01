@@ -380,7 +380,7 @@ public class ClientSocket : MonoBehaviour
     /// <param name="str"></param>
     public void RegisterRequest(RespCb resp, String str)
     {
-        if (request.ContainsKey(str))
+        if (response.ContainsKey(str))
         {
             response[str].Ud = resp;
         }
