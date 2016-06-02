@@ -5154,43 +5154,124 @@ namespace C2sSprotoType {
 
 
 	public class enemy : SprotoTypeBase {
-		private static int max_field_count = 4;
+		private static int max_field_count = 13;
 		
 		
-		private user _user; // tag 0
-		public user user {
-			get { return _user; }
-			set { base.has_field.set_field (0, true); _user = value; }
+		private Int64 _csv_id; // tag 0
+		public Int64 csv_id {
+			get { return _csv_id; }
+			set { base.has_field.set_field (0, true); _csv_id = value; }
 		}
-		public bool HasUser {
+		public bool HasCsv_id {
 			get { return base.has_field.has_field (0); }
 		}
 
-		private List<equipment> _u_equipment; // tag 1
-		public List<equipment> u_equipment {
-			get { return _u_equipment; }
-			set { base.has_field.set_field (1, true); _u_equipment = value; }
+		private string _uname; // tag 1
+		public string uname {
+			get { return _uname; }
+			set { base.has_field.set_field (1, true); _uname = value; }
 		}
-		public bool HasU_equipment {
+		public bool HasUname {
 			get { return base.has_field.has_field (1); }
 		}
 
-		private List<kungfu_content> _u_kungfu; // tag 2
-		public List<kungfu_content> u_kungfu {
-			get { return _u_kungfu; }
-			set { base.has_field.set_field (2, true); _u_kungfu = value; }
+		private Int64 _avatar; // tag 2
+		public Int64 avatar {
+			get { return _avatar; }
+			set { base.has_field.set_field (2, true); _avatar = value; }
 		}
-		public bool HasU_kungfu {
+		public bool HasAvatar {
 			get { return base.has_field.has_field (2); }
 		}
 
-		private List<role> _u_role; // tag 3
-		public List<role> u_role {
-			get { return _u_role; }
-			set { base.has_field.set_field (3, true); _u_role = value; }
+		private Int64 _ara_role_id1; // tag 3
+		public Int64 ara_role_id1 {
+			get { return _ara_role_id1; }
+			set { base.has_field.set_field (3, true); _ara_role_id1 = value; }
 		}
-		public bool HasU_role {
+		public bool HasAra_role_id1 {
 			get { return base.has_field.has_field (3); }
+		}
+
+		private Int64 _ara_role_id2; // tag 4
+		public Int64 ara_role_id2 {
+			get { return _ara_role_id2; }
+			set { base.has_field.set_field (4, true); _ara_role_id2 = value; }
+		}
+		public bool HasAra_role_id2 {
+			get { return base.has_field.has_field (4); }
+		}
+
+		private Int64 _ara_role_id3; // tag 5
+		public Int64 ara_role_id3 {
+			get { return _ara_role_id3; }
+			set { base.has_field.set_field (5, true); _ara_role_id3 = value; }
+		}
+		public bool HasAra_role_id3 {
+			get { return base.has_field.has_field (5); }
+		}
+
+		private Int64 _sum_combat; // tag 6
+		public Int64 sum_combat {
+			get { return _sum_combat; }
+			set { base.has_field.set_field (6, true); _sum_combat = value; }
+		}
+		public bool HasSum_combat {
+			get { return base.has_field.has_field (6); }
+		}
+
+		private Int64 _sum_defense; // tag 7
+		public Int64 sum_defense {
+			get { return _sum_defense; }
+			set { base.has_field.set_field (7, true); _sum_defense = value; }
+		}
+		public bool HasSum_defense {
+			get { return base.has_field.has_field (7); }
+		}
+
+		private Int64 _sum_critical_hit; // tag 8
+		public Int64 sum_critical_hit {
+			get { return _sum_critical_hit; }
+			set { base.has_field.set_field (8, true); _sum_critical_hit = value; }
+		}
+		public bool HasSum_critical_hit {
+			get { return base.has_field.has_field (8); }
+		}
+
+		private Int64 _sum_king; // tag 9
+		public Int64 sum_king {
+			get { return _sum_king; }
+			set { base.has_field.set_field (9, true); _sum_king = value; }
+		}
+		public bool HasSum_king {
+			get { return base.has_field.has_field (9); }
+		}
+
+		private List<Int64> _ara_role_id1_kf; // tag 10
+		public List<Int64> ara_role_id1_kf {
+			get { return _ara_role_id1_kf; }
+			set { base.has_field.set_field (10, true); _ara_role_id1_kf = value; }
+		}
+		public bool HasAra_role_id1_kf {
+			get { return base.has_field.has_field (10); }
+		}
+
+		private List<Int64> _ara_role_id2_kf; // tag 11
+		public List<Int64> ara_role_id2_kf {
+			get { return _ara_role_id2_kf; }
+			set { base.has_field.set_field (11, true); _ara_role_id2_kf = value; }
+		}
+		public bool HasAra_role_id2_kf {
+			get { return base.has_field.has_field (11); }
+		}
+
+		private List<Int64> _ara_role_id3_kf; // tag 12
+		public List<Int64> ara_role_id3_kf {
+			get { return _ara_role_id3_kf; }
+			set { base.has_field.set_field (12, true); _ara_role_id3_kf = value; }
+		}
+		public bool HasAra_role_id3_kf {
+			get { return base.has_field.has_field (12); }
 		}
 
 		public enemy () : base(max_field_count) {}
@@ -5204,16 +5285,43 @@ namespace C2sSprotoType {
 			while (-1 != (tag = base.deserialize.read_tag ())) {
 				switch (tag) {
 				case 0:
-					this.user = base.deserialize.read_obj<user> ();
+					this.csv_id = base.deserialize.read_integer ();
 					break;
 				case 1:
-					this.u_equipment = base.deserialize.read_obj_list<equipment> ();
+					this.uname = base.deserialize.read_string ();
 					break;
 				case 2:
-					this.u_kungfu = base.deserialize.read_obj_list<kungfu_content> ();
+					this.avatar = base.deserialize.read_integer ();
 					break;
 				case 3:
-					this.u_role = base.deserialize.read_obj_list<role> ();
+					this.ara_role_id1 = base.deserialize.read_integer ();
+					break;
+				case 4:
+					this.ara_role_id2 = base.deserialize.read_integer ();
+					break;
+				case 5:
+					this.ara_role_id3 = base.deserialize.read_integer ();
+					break;
+				case 6:
+					this.sum_combat = base.deserialize.read_integer ();
+					break;
+				case 7:
+					this.sum_defense = base.deserialize.read_integer ();
+					break;
+				case 8:
+					this.sum_critical_hit = base.deserialize.read_integer ();
+					break;
+				case 9:
+					this.sum_king = base.deserialize.read_integer ();
+					break;
+				case 10:
+					this.ara_role_id1_kf = base.deserialize.read_integer_list ();
+					break;
+				case 11:
+					this.ara_role_id2_kf = base.deserialize.read_integer_list ();
+					break;
+				case 12:
+					this.ara_role_id3_kf = base.deserialize.read_integer_list ();
 					break;
 				default:
 					base.deserialize.read_unknow_data ();
@@ -5226,19 +5334,55 @@ namespace C2sSprotoType {
 			base.serialize.open (stream);
 
 			if (base.has_field.has_field (0)) {
-				base.serialize.write_obj (this.user, 0);
+				base.serialize.write_integer (this.csv_id, 0);
 			}
 
 			if (base.has_field.has_field (1)) {
-				base.serialize.write_obj (this.u_equipment, 1);
+				base.serialize.write_string (this.uname, 1);
 			}
 
 			if (base.has_field.has_field (2)) {
-				base.serialize.write_obj (this.u_kungfu, 2);
+				base.serialize.write_integer (this.avatar, 2);
 			}
 
 			if (base.has_field.has_field (3)) {
-				base.serialize.write_obj (this.u_role, 3);
+				base.serialize.write_integer (this.ara_role_id1, 3);
+			}
+
+			if (base.has_field.has_field (4)) {
+				base.serialize.write_integer (this.ara_role_id2, 4);
+			}
+
+			if (base.has_field.has_field (5)) {
+				base.serialize.write_integer (this.ara_role_id3, 5);
+			}
+
+			if (base.has_field.has_field (6)) {
+				base.serialize.write_integer (this.sum_combat, 6);
+			}
+
+			if (base.has_field.has_field (7)) {
+				base.serialize.write_integer (this.sum_defense, 7);
+			}
+
+			if (base.has_field.has_field (8)) {
+				base.serialize.write_integer (this.sum_critical_hit, 8);
+			}
+
+			if (base.has_field.has_field (9)) {
+				base.serialize.write_integer (this.sum_king, 9);
+			}
+
+			if (base.has_field.has_field (10)) {
+				base.serialize.write_integer (this.ara_role_id1_kf, 10);
+			}
+
+			if (base.has_field.has_field (11)) {
+				base.serialize.write_integer (this.ara_role_id2_kf, 11);
+			}
+
+			if (base.has_field.has_field (12)) {
+				base.serialize.write_integer (this.ara_role_id3_kf, 12);
 			}
 
 			return base.serialize.close ();
@@ -13833,7 +13977,7 @@ namespace C2sSprotoType {
 
 
 	public class user : SprotoTypeBase {
-		private static int max_field_count = 22;
+		private static int max_field_count = 29;
 		
 		public class response : SprotoTypeBase {
 			private static int max_field_count = 5;
@@ -14143,6 +14287,69 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (21); }
 		}
 
+		private Int64 _ara_role_id1; // tag 22
+		public Int64 ara_role_id1 {
+			get { return _ara_role_id1; }
+			set { base.has_field.set_field (22, true); _ara_role_id1 = value; }
+		}
+		public bool HasAra_role_id1 {
+			get { return base.has_field.has_field (22); }
+		}
+
+		private Int64 _ara_role_id2; // tag 23
+		public Int64 ara_role_id2 {
+			get { return _ara_role_id2; }
+			set { base.has_field.set_field (23, true); _ara_role_id2 = value; }
+		}
+		public bool HasAra_role_id2 {
+			get { return base.has_field.has_field (23); }
+		}
+
+		private Int64 _ara_role_id3; // tag 24
+		public Int64 ara_role_id3 {
+			get { return _ara_role_id3; }
+			set { base.has_field.set_field (24, true); _ara_role_id3 = value; }
+		}
+		public bool HasAra_role_id3 {
+			get { return base.has_field.has_field (24); }
+		}
+
+		private Int64 _sum_combat; // tag 25
+		public Int64 sum_combat {
+			get { return _sum_combat; }
+			set { base.has_field.set_field (25, true); _sum_combat = value; }
+		}
+		public bool HasSum_combat {
+			get { return base.has_field.has_field (25); }
+		}
+
+		private Int64 _sum_defense; // tag 26
+		public Int64 sum_defense {
+			get { return _sum_defense; }
+			set { base.has_field.set_field (26, true); _sum_defense = value; }
+		}
+		public bool HasSum_defense {
+			get { return base.has_field.has_field (26); }
+		}
+
+		private Int64 _sum_critical_hit; // tag 27
+		public Int64 sum_critical_hit {
+			get { return _sum_critical_hit; }
+			set { base.has_field.set_field (27, true); _sum_critical_hit = value; }
+		}
+		public bool HasSum_critical_hit {
+			get { return base.has_field.has_field (27); }
+		}
+
+		private Int64 _sum_king; // tag 28
+		public Int64 sum_king {
+			get { return _sum_king; }
+			set { base.has_field.set_field (28, true); _sum_king = value; }
+		}
+		public bool HasSum_king {
+			get { return base.has_field.has_field (28); }
+		}
+
 		public user () : base(max_field_count) {}
 
 		public user (byte[] buffer) : base(max_field_count, buffer) {
@@ -14218,6 +14425,27 @@ namespace C2sSprotoType {
 					break;
 				case 21:
 					this.ara_rnk = base.deserialize.read_integer ();
+					break;
+				case 22:
+					this.ara_role_id1 = base.deserialize.read_integer ();
+					break;
+				case 23:
+					this.ara_role_id2 = base.deserialize.read_integer ();
+					break;
+				case 24:
+					this.ara_role_id3 = base.deserialize.read_integer ();
+					break;
+				case 25:
+					this.sum_combat = base.deserialize.read_integer ();
+					break;
+				case 26:
+					this.sum_defense = base.deserialize.read_integer ();
+					break;
+				case 27:
+					this.sum_critical_hit = base.deserialize.read_integer ();
+					break;
+				case 28:
+					this.sum_king = base.deserialize.read_integer ();
 					break;
 				default:
 					base.deserialize.read_unknow_data ();
@@ -14315,6 +14543,34 @@ namespace C2sSprotoType {
 
 			if (base.has_field.has_field (21)) {
 				base.serialize.write_integer (this.ara_rnk, 21);
+			}
+
+			if (base.has_field.has_field (22)) {
+				base.serialize.write_integer (this.ara_role_id1, 22);
+			}
+
+			if (base.has_field.has_field (23)) {
+				base.serialize.write_integer (this.ara_role_id2, 23);
+			}
+
+			if (base.has_field.has_field (24)) {
+				base.serialize.write_integer (this.ara_role_id3, 24);
+			}
+
+			if (base.has_field.has_field (25)) {
+				base.serialize.write_integer (this.sum_combat, 25);
+			}
+
+			if (base.has_field.has_field (26)) {
+				base.serialize.write_integer (this.sum_defense, 26);
+			}
+
+			if (base.has_field.has_field (27)) {
+				base.serialize.write_integer (this.sum_critical_hit, 27);
+			}
+
+			if (base.has_field.has_field (28)) {
+				base.serialize.write_integer (this.sum_king, 28);
 			}
 
 			return base.serialize.close ();
