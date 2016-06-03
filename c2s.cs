@@ -5154,7 +5154,7 @@ namespace C2sSprotoType {
 
 
 	public class enemy : SprotoTypeBase {
-		private static int max_field_count = 13;
+		private static int max_field_count = 21;
 		
 		
 		private Int64 _csv_id; // tag 0
@@ -5211,39 +5211,39 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (5); }
 		}
 
-		private Int64 _sum_combat; // tag 6
-		public Int64 sum_combat {
-			get { return _sum_combat; }
-			set { base.has_field.set_field (6, true); _sum_combat = value; }
+		private Int64 _ara_r1_sum_combat; // tag 6
+		public Int64 ara_r1_sum_combat {
+			get { return _ara_r1_sum_combat; }
+			set { base.has_field.set_field (6, true); _ara_r1_sum_combat = value; }
 		}
-		public bool HasSum_combat {
+		public bool HasAra_r1_sum_combat {
 			get { return base.has_field.has_field (6); }
 		}
 
-		private Int64 _sum_defense; // tag 7
-		public Int64 sum_defense {
-			get { return _sum_defense; }
-			set { base.has_field.set_field (7, true); _sum_defense = value; }
+		private Int64 _ara_r1_sum_defense; // tag 7
+		public Int64 ara_r1_sum_defense {
+			get { return _ara_r1_sum_defense; }
+			set { base.has_field.set_field (7, true); _ara_r1_sum_defense = value; }
 		}
-		public bool HasSum_defense {
+		public bool HasAra_r1_sum_defense {
 			get { return base.has_field.has_field (7); }
 		}
 
-		private Int64 _sum_critical_hit; // tag 8
-		public Int64 sum_critical_hit {
-			get { return _sum_critical_hit; }
-			set { base.has_field.set_field (8, true); _sum_critical_hit = value; }
+		private Int64 _ara_r1_sum_critical_hit; // tag 8
+		public Int64 ara_r1_sum_critical_hit {
+			get { return _ara_r1_sum_critical_hit; }
+			set { base.has_field.set_field (8, true); _ara_r1_sum_critical_hit = value; }
 		}
-		public bool HasSum_critical_hit {
+		public bool HasAra_r1_sum_critical_hit {
 			get { return base.has_field.has_field (8); }
 		}
 
-		private Int64 _sum_king; // tag 9
-		public Int64 sum_king {
-			get { return _sum_king; }
-			set { base.has_field.set_field (9, true); _sum_king = value; }
+		private Int64 _ara_r1_sum_king; // tag 9
+		public Int64 ara_r1_sum_king {
+			get { return _ara_r1_sum_king; }
+			set { base.has_field.set_field (9, true); _ara_r1_sum_king = value; }
 		}
-		public bool HasSum_king {
+		public bool HasAra_r1_sum_king {
 			get { return base.has_field.has_field (9); }
 		}
 
@@ -5272,6 +5272,78 @@ namespace C2sSprotoType {
 		}
 		public bool HasAra_role_id3_kf {
 			get { return base.has_field.has_field (12); }
+		}
+
+		private Int64 _ara_r2_sum_combat; // tag 13
+		public Int64 ara_r2_sum_combat {
+			get { return _ara_r2_sum_combat; }
+			set { base.has_field.set_field (13, true); _ara_r2_sum_combat = value; }
+		}
+		public bool HasAra_r2_sum_combat {
+			get { return base.has_field.has_field (13); }
+		}
+
+		private Int64 _ara_r2_sum_defense; // tag 14
+		public Int64 ara_r2_sum_defense {
+			get { return _ara_r2_sum_defense; }
+			set { base.has_field.set_field (14, true); _ara_r2_sum_defense = value; }
+		}
+		public bool HasAra_r2_sum_defense {
+			get { return base.has_field.has_field (14); }
+		}
+
+		private Int64 _ara_r2_sum_critical_hit; // tag 15
+		public Int64 ara_r2_sum_critical_hit {
+			get { return _ara_r2_sum_critical_hit; }
+			set { base.has_field.set_field (15, true); _ara_r2_sum_critical_hit = value; }
+		}
+		public bool HasAra_r2_sum_critical_hit {
+			get { return base.has_field.has_field (15); }
+		}
+
+		private Int64 _ara_r2_sum_king; // tag 16
+		public Int64 ara_r2_sum_king {
+			get { return _ara_r2_sum_king; }
+			set { base.has_field.set_field (16, true); _ara_r2_sum_king = value; }
+		}
+		public bool HasAra_r2_sum_king {
+			get { return base.has_field.has_field (16); }
+		}
+
+		private Int64 _ara_r3_sum_combat; // tag 17
+		public Int64 ara_r3_sum_combat {
+			get { return _ara_r3_sum_combat; }
+			set { base.has_field.set_field (17, true); _ara_r3_sum_combat = value; }
+		}
+		public bool HasAra_r3_sum_combat {
+			get { return base.has_field.has_field (17); }
+		}
+
+		private Int64 _ara_r3_sum_defanse; // tag 18
+		public Int64 ara_r3_sum_defanse {
+			get { return _ara_r3_sum_defanse; }
+			set { base.has_field.set_field (18, true); _ara_r3_sum_defanse = value; }
+		}
+		public bool HasAra_r3_sum_defanse {
+			get { return base.has_field.has_field (18); }
+		}
+
+		private Int64 _ara_r3_sum_critical_hit; // tag 19
+		public Int64 ara_r3_sum_critical_hit {
+			get { return _ara_r3_sum_critical_hit; }
+			set { base.has_field.set_field (19, true); _ara_r3_sum_critical_hit = value; }
+		}
+		public bool HasAra_r3_sum_critical_hit {
+			get { return base.has_field.has_field (19); }
+		}
+
+		private Int64 _ara_r3_sum_king; // tag 20
+		public Int64 ara_r3_sum_king {
+			get { return _ara_r3_sum_king; }
+			set { base.has_field.set_field (20, true); _ara_r3_sum_king = value; }
+		}
+		public bool HasAra_r3_sum_king {
+			get { return base.has_field.has_field (20); }
 		}
 
 		public enemy () : base(max_field_count) {}
@@ -5303,16 +5375,16 @@ namespace C2sSprotoType {
 					this.ara_role_id3 = base.deserialize.read_integer ();
 					break;
 				case 6:
-					this.sum_combat = base.deserialize.read_integer ();
+					this.ara_r1_sum_combat = base.deserialize.read_integer ();
 					break;
 				case 7:
-					this.sum_defense = base.deserialize.read_integer ();
+					this.ara_r1_sum_defense = base.deserialize.read_integer ();
 					break;
 				case 8:
-					this.sum_critical_hit = base.deserialize.read_integer ();
+					this.ara_r1_sum_critical_hit = base.deserialize.read_integer ();
 					break;
 				case 9:
-					this.sum_king = base.deserialize.read_integer ();
+					this.ara_r1_sum_king = base.deserialize.read_integer ();
 					break;
 				case 10:
 					this.ara_role_id1_kf = base.deserialize.read_integer_list ();
@@ -5322,6 +5394,30 @@ namespace C2sSprotoType {
 					break;
 				case 12:
 					this.ara_role_id3_kf = base.deserialize.read_integer_list ();
+					break;
+				case 13:
+					this.ara_r2_sum_combat = base.deserialize.read_integer ();
+					break;
+				case 14:
+					this.ara_r2_sum_defense = base.deserialize.read_integer ();
+					break;
+				case 15:
+					this.ara_r2_sum_critical_hit = base.deserialize.read_integer ();
+					break;
+				case 16:
+					this.ara_r2_sum_king = base.deserialize.read_integer ();
+					break;
+				case 17:
+					this.ara_r3_sum_combat = base.deserialize.read_integer ();
+					break;
+				case 18:
+					this.ara_r3_sum_defanse = base.deserialize.read_integer ();
+					break;
+				case 19:
+					this.ara_r3_sum_critical_hit = base.deserialize.read_integer ();
+					break;
+				case 20:
+					this.ara_r3_sum_king = base.deserialize.read_integer ();
 					break;
 				default:
 					base.deserialize.read_unknow_data ();
@@ -5358,19 +5454,19 @@ namespace C2sSprotoType {
 			}
 
 			if (base.has_field.has_field (6)) {
-				base.serialize.write_integer (this.sum_combat, 6);
+				base.serialize.write_integer (this.ara_r1_sum_combat, 6);
 			}
 
 			if (base.has_field.has_field (7)) {
-				base.serialize.write_integer (this.sum_defense, 7);
+				base.serialize.write_integer (this.ara_r1_sum_defense, 7);
 			}
 
 			if (base.has_field.has_field (8)) {
-				base.serialize.write_integer (this.sum_critical_hit, 8);
+				base.serialize.write_integer (this.ara_r1_sum_critical_hit, 8);
 			}
 
 			if (base.has_field.has_field (9)) {
-				base.serialize.write_integer (this.sum_king, 9);
+				base.serialize.write_integer (this.ara_r1_sum_king, 9);
 			}
 
 			if (base.has_field.has_field (10)) {
@@ -5383,6 +5479,38 @@ namespace C2sSprotoType {
 
 			if (base.has_field.has_field (12)) {
 				base.serialize.write_integer (this.ara_role_id3_kf, 12);
+			}
+
+			if (base.has_field.has_field (13)) {
+				base.serialize.write_integer (this.ara_r2_sum_combat, 13);
+			}
+
+			if (base.has_field.has_field (14)) {
+				base.serialize.write_integer (this.ara_r2_sum_defense, 14);
+			}
+
+			if (base.has_field.has_field (15)) {
+				base.serialize.write_integer (this.ara_r2_sum_critical_hit, 15);
+			}
+
+			if (base.has_field.has_field (16)) {
+				base.serialize.write_integer (this.ara_r2_sum_king, 16);
+			}
+
+			if (base.has_field.has_field (17)) {
+				base.serialize.write_integer (this.ara_r3_sum_combat, 17);
+			}
+
+			if (base.has_field.has_field (18)) {
+				base.serialize.write_integer (this.ara_r3_sum_defanse, 18);
+			}
+
+			if (base.has_field.has_field (19)) {
+				base.serialize.write_integer (this.ara_r3_sum_critical_hit, 19);
+			}
+
+			if (base.has_field.has_field (20)) {
+				base.serialize.write_integer (this.ara_r3_sum_king, 20);
 			}
 
 			return base.serialize.close ();
