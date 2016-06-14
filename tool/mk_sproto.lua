@@ -1,4 +1,4 @@
-local filename = "./../../cat/proto.lua"
+local filename = "./../../../service/cat/proto.lua"
 local fd = io.open(filename, "r")
 local buffer = fd:read("a")
 fd:close()
