@@ -124,8 +124,16 @@ public class C2sProtocol : ProtocolBase {
 		Protocol.SetRequest<C2sSprotoType.checkpoint_battle_exit.request> (checkpoint_battle_exit.Tag);
 		Protocol.SetResponse<C2sSprotoType.checkpoint_battle_exit.response> (checkpoint_battle_exit.Tag);
 
+		Protocol.SetProtocol<checkpoint_battle_play> (checkpoint_battle_play.Tag);
+		Protocol.SetRequest<C2sSprotoType.checkpoint_battle_play.request> (checkpoint_battle_play.Tag);
+		Protocol.SetResponse<C2sSprotoType.checkpoint_battle_play.response> (checkpoint_battle_play.Tag);
+
 		Protocol.SetProtocol<checkpoint_chapter> (checkpoint_chapter.Tag);
 		Protocol.SetResponse<C2sSprotoType.checkpoint_chapter.response> (checkpoint_chapter.Tag);
+
+		Protocol.SetProtocol<checkpoint_drop_collect> (checkpoint_drop_collect.Tag);
+		Protocol.SetRequest<C2sSprotoType.checkpoint_drop_collect.request> (checkpoint_drop_collect.Tag);
+		Protocol.SetResponse<C2sSprotoType.checkpoint_drop_collect.response> (checkpoint_drop_collect.Tag);
 
 		Protocol.SetProtocol<checkpoint_exit> (checkpoint_exit.Tag);
 		Protocol.SetResponse<C2sSprotoType.checkpoint_exit.response> (checkpoint_exit.Tag);
@@ -492,8 +500,16 @@ public class C2sProtocol : ProtocolBase {
 		public const int Tag = 65;
 	}
 
+	public class checkpoint_battle_play {
+		public const int Tag = 100;
+	}
+
 	public class checkpoint_chapter {
 		public const int Tag = 63;
+	}
+
+	public class checkpoint_drop_collect {
+		public const int Tag = 101;
 	}
 
 	public class checkpoint_exit {
