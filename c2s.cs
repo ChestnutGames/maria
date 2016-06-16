@@ -14458,7 +14458,7 @@ namespace C2sSprotoType {
 		private static int max_field_count = 29;
 		
 		public class response : SprotoTypeBase {
-			private static int max_field_count = 5;
+			private static int max_field_count = 8;
 			
 			
 			private Int64 _errorcode; // tag 0
@@ -14506,6 +14506,33 @@ namespace C2sSprotoType {
 				get { return base.has_field.has_field (4); }
 			}
 
+			private List<equipment> _equipment_list; // tag 5
+			public List<equipment> equipment_list {
+				get { return _equipment_list; }
+				set { base.has_field.set_field (5, true); _equipment_list = value; }
+			}
+			public bool HasEquipment_list {
+				get { return base.has_field.has_field (5); }
+			}
+
+			private List<kungfu_content> _kungfu_list; // tag 6
+			public List<kungfu_content> kungfu_list {
+				get { return _kungfu_list; }
+				set { base.has_field.set_field (6, true); _kungfu_list = value; }
+			}
+			public bool HasKungfu_list {
+				get { return base.has_field.has_field (6); }
+			}
+
+			private List<role> _rolelist; // tag 7
+			public List<role> rolelist {
+				get { return _rolelist; }
+				set { base.has_field.set_field (7, true); _rolelist = value; }
+			}
+			public bool HasRolelist {
+				get { return base.has_field.has_field (7); }
+			}
+
 			public response () : base(max_field_count) {}
 
 			public response (byte[] buffer) : base(max_field_count, buffer) {
@@ -14530,6 +14557,15 @@ namespace C2sSprotoType {
 						break;
 					case 4:
 						this.ara_rmd_list = base.deserialize.read_obj_list<suser> ();
+						break;
+					case 5:
+						this.equipment_list = base.deserialize.read_obj_list<equipment> ();
+						break;
+					case 6:
+						this.kungfu_list = base.deserialize.read_obj_list<kungfu_content> ();
+						break;
+					case 7:
+						this.rolelist = base.deserialize.read_obj_list<role> ();
 						break;
 					default:
 						base.deserialize.read_unknow_data ();
@@ -14559,6 +14595,18 @@ namespace C2sSprotoType {
 
 				if (base.has_field.has_field (4)) {
 					base.serialize.write_obj (this.ara_rmd_list, 4);
+				}
+
+				if (base.has_field.has_field (5)) {
+					base.serialize.write_obj (this.equipment_list, 5);
+				}
+
+				if (base.has_field.has_field (6)) {
+					base.serialize.write_obj (this.kungfu_list, 6);
+				}
+
+				if (base.has_field.has_field (7)) {
+					base.serialize.write_obj (this.rolelist, 7);
 				}
 
 				return base.serialize.close ();
@@ -14711,8 +14759,8 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (15); }
 		}
 
-		private Int64 _equipment_list; // tag 16
-		public Int64 equipment_list {
+		private bool _equipment_list; // tag 16
+		public bool equipment_list {
 			get { return _equipment_list; }
 			set { base.has_field.set_field (16, true); _equipment_list = value; }
 		}
@@ -14720,8 +14768,8 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (16); }
 		}
 
-		private List<kungfu_content> _kungfu_list; // tag 17
-		public List<kungfu_content> kungfu_list {
+		private bool _kungfu_list; // tag 17
+		public bool kungfu_list {
 			get { return _kungfu_list; }
 			set { base.has_field.set_field (17, true); _kungfu_list = value; }
 		}
@@ -14729,8 +14777,8 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (17); }
 		}
 
-		private List<role> _rolelist; // tag 18
-		public List<role> rolelist {
+		private bool _rolelist; // tag 18
+		public bool rolelist {
 			get { return _rolelist; }
 			set { base.has_field.set_field (18, true); _rolelist = value; }
 		}
@@ -14887,13 +14935,13 @@ namespace C2sSprotoType {
 					this.love = base.deserialize.read_integer ();
 					break;
 				case 16:
-					this.equipment_list = base.deserialize.read_integer ();
+					this.equipment_list = base.deserialize.read_boolean ();
 					break;
 				case 17:
-					this.kungfu_list = base.deserialize.read_obj_list<kungfu_content> ();
+					this.kungfu_list = base.deserialize.read_boolean ();
 					break;
 				case 18:
-					this.rolelist = base.deserialize.read_obj_list<role> ();
+					this.rolelist = base.deserialize.read_boolean ();
 					break;
 				case 19:
 					this.cp_chapter = base.deserialize.read_integer ();
@@ -15000,15 +15048,15 @@ namespace C2sSprotoType {
 			}
 
 			if (base.has_field.has_field (16)) {
-				base.serialize.write_integer (this.equipment_list, 16);
+				base.serialize.write_boolean (this.equipment_list, 16);
 			}
 
 			if (base.has_field.has_field (17)) {
-				base.serialize.write_obj (this.kungfu_list, 17);
+				base.serialize.write_boolean (this.kungfu_list, 17);
 			}
 
 			if (base.has_field.has_field (18)) {
-				base.serialize.write_obj (this.rolelist, 18);
+				base.serialize.write_boolean (this.rolelist, 18);
 			}
 
 			if (base.has_field.has_field (19)) {

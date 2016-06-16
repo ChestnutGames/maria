@@ -195,9 +195,9 @@
     gold 13 : integer
     diamond 14 : integer
     love 15 : integer
-    equipment_list 16 : integer
-    kungfu_list 17 : *kungfu_content
-    rolelist 18 : *role
+    equipment_list 16 : boolean
+    kungfu_list 17 : boolean
+    rolelist 18 : boolean
     cp_chapter 19 : integer
     lilian_level 20 : integer
     ara_rnk 21 : integer
@@ -569,6 +569,9 @@ user 28 {
         user 2 : user
         ara_leaderboards 3 : *suser
         ara_rmd_list 4 : *suser
+        equipment_list 5 : *equipment
+        kungfu_list 6 : *kungfu_content
+        rolelist 7 : *role
     }
 }
 
