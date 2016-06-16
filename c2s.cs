@@ -14711,8 +14711,8 @@ namespace C2sSprotoType {
 			get { return base.has_field.has_field (15); }
 		}
 
-		private List<equipment> _equipment_list; // tag 16
-		public List<equipment> equipment_list {
+		private Int64 _equipment_list; // tag 16
+		public Int64 equipment_list {
 			get { return _equipment_list; }
 			set { base.has_field.set_field (16, true); _equipment_list = value; }
 		}
@@ -14887,7 +14887,7 @@ namespace C2sSprotoType {
 					this.love = base.deserialize.read_integer ();
 					break;
 				case 16:
-					this.equipment_list = base.deserialize.read_obj_list<equipment> ();
+					this.equipment_list = base.deserialize.read_integer ();
 					break;
 				case 17:
 					this.kungfu_list = base.deserialize.read_obj_list<kungfu_content> ();
@@ -15000,7 +15000,7 @@ namespace C2sSprotoType {
 			}
 
 			if (base.has_field.has_field (16)) {
-				base.serialize.write_obj (this.equipment_list, 16);
+				base.serialize.write_integer (this.equipment_list, 16);
 			}
 
 			if (base.has_field.has_field (17)) {
