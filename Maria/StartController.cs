@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Maria.Ball
+namespace Maria
 {
     public class StartController : Controller
     {
@@ -22,6 +22,12 @@ namespace Maria.Ball
         {
             Debug.Log("hello word.");
             _ctx.Push("login");
+        }
+
+        public override void Run()
+        {
+            base.Run();
+            _ctx.Push("start");
         }
     }
 }

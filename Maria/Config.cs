@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Maria.Ball
+namespace Maria
 {
     public class Config
     {
-        private string _loginIp;
-        private int _loginPort;
-        private string _gateIp;
-        private int _gatePort;
+        protected string _loginIp;
+        protected int _loginPort;
+        protected string _gateIp;
+        protected int _gatePort;
 
         public Config()
         {

@@ -22,7 +22,7 @@ namespace Maria
         }
 
         // Update is called once per frame
-        internal void update()
+        internal virtual void Update(float delta)
         {
 
         }
@@ -52,6 +52,16 @@ namespace Maria
         }
 
         public virtual void Exit()
+        {
+
+        }
+
+        public virtual void Run()
+        {
+
+        }
+
+        public virtual void OnDisconnect()
         {
 
         }

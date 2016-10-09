@@ -4,10 +4,7 @@ using System.Threading;
 using Maria.Network;
 using System;
 using Sproto;
-using Maria.Ball;
 using System.Text;
-using UnityEngine.SceneManagement;
-using System.Collections;
 
 namespace Maria
 {
@@ -31,14 +28,19 @@ namespace Maria
         protected ClientSocket _client = null;
         protected Gate _gate = null;
         protected User _user = new User();
-        private ClientLogin.CB _loginCb;
+        private ClientSocket.CB _authcb;
         protected readonly global::App _app;
         private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
-
+        protected bool _authtcp = false;
+        protected Config _config = null;
+        protected TimeSync _ts = null;
+        private float _handshakecd = 5f;
 
         public Context(global::App app)
         {
             _app = app;
+            var go = GameObject.Find("/Assets");
+            Assets = go;
 
             _worker = new Thread(new ThreadStart(Worker));
             _worker.Start();
@@ -48,12 +50,13 @@ namespace Maria
             _login = new ClientLogin(this);
             _client = new ClientSocket(this);
 
-            Config = new Config();
-
             _hash["start"] = new StartController(this);
+            _hash["login"] = new LoginController(this);
 
-            Push("start");
+            _hash["start"].Run();
 
+            _config = new Config();
+            _ts = new TimeSync();
         }
 
         // Use this for initialization
@@ -63,7 +66,7 @@ namespace Maria
         }
 
         // Update is called once per frame
-        public void Update(float delta)
+        public virtual void Update(float delta)
         {
 
             _login.Update();
@@ -94,13 +97,19 @@ namespace Maria
 
             if (_cur != null)
             {
-                _cur.update();
+                _cur.Update(delta);
             }
+
+            Handshake(delta);
         }
 
-        public Config Config { get; set; }
+        public Config Config { get { return _config; } set { _config = value; } }
+
+        public TimeSync TiSync { get { return _ts; } set { _ts = value; } }
 
         public global::App App { get { return _app; } }
+
+        public GameObject Assets { get; set; }
 
         public void Enqueue(Message msg)
         {
@@ -140,14 +149,21 @@ namespace Maria
             return (T)_hash[name];
         }
 
+        public Controller GetCurController()
+        {
+            return _cur;
+        }
+
         public void SendReq<T>(String callback, SprotoTypeBase obj)
         {
             _client.SendReq<T>(callback, obj);
         }
 
-        public void AuthLogin(string s, string u, string pwd, ClientLogin.CB cb)
+        public void AuthLogin(string s, string u, string pwd, ClientSocket.CB cb)
         {
-            _loginCb = cb;
+            _authtcp = false;
+            _authcb = cb;
+
             _user.Server = s;
             _user.Username = u;
             _user.Password = pwd;
@@ -183,22 +199,39 @@ namespace Maria
             }
         }
 
+        public void AuthGate(ClientSocket.CB cb)
+        {
+            _authcb = cb;
+            _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
+        }
+
         public void AuthGateCB(int ok)
         {
             if (ok == 200)
             {
+                _authtcp = true;
                 string dummy = string.Empty;
-                _loginCb(true, _user.Secret, dummy);
+                _authcb(ok);
             }
             else if (ok == 403)
             {
-                AuthLogin(_user.Server, _user.Username, _user.Password, _loginCb);
+                AuthLogin(_user.Server, _user.Username, _user.Password, _authcb);
             }
         }
 
-        public void AuthUdp()
+        public void AuthUdp(ClientSocket.CB cb)
         {
-            //_client.au
+            _client.AuthUdp(cb);
+        }
+
+        public void SendUdp(byte[] data)
+        {
+            _client.SendUdp(data);
+        }
+
+        public void AuthUdpCb(long session, string ip, int port)
+        {
+            _client.AuthUdpCb(session, ip, port);
         }
 
         public void Push(string name)
@@ -210,6 +243,11 @@ namespace Maria
             _cur.Enter();
         }
 
+        public void Pop()
+        {
+
+        }
+
         public void Countdown(string name, float cd, CountdownCb cb)
         {
             var tm = new Timer();
@@ -217,6 +255,22 @@ namespace Maria
             tm.CD = cd;
             tm.CB = cb;
             _timer[name] = tm;
+        }
+
+        public void Handshake(float delta)
+        {
+            if (_authtcp)
+            {
+                if (_handshakecd > 0)
+                {
+                    _handshakecd -= delta;
+                    if (_handshakecd <= 0)
+                    {
+                        _handshakecd = 5f;
+                        SendReq<C2sProtocol.handshake>("handshake", null);
+                    }
+                }
+            }
         }
     }
 }

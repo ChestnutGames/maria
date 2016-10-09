@@ -1,0 +1,3 @@
+[submodule "3rd/sproto-Csharp"]
+	path = 3rd/sproto-Csharp
+	url = https://github.com/lvzixun/sproto-Csharp
