@@ -29,9 +29,9 @@ namespace Maria
 
         protected void LoadScene(string name)
         {
-            //SceneManager.LoadScene(name);
             SceneManager.LoadSceneAsync(name);
-            _scene = GameObject.Find("Root");
+            SceneManager.activeSceneChanged += ActiveSceneChanged;
+            SceneManager.sceneLoaded += SceneLoaded;
         }
 
         public GameObject InitScene()
@@ -40,9 +40,10 @@ namespace Maria
             {
                 _scene = GameObject.Find("Root");
                 Debug.Assert(_scene != null);
+                var com = _scene.GetComponent<RootBehaviour>();
+                com.OnEnter(_ctx, this);
             }
-            var com = _scene.GetComponent<RootBehaviour>();
-            com.OnEnter(_ctx, this);
+            
             return _scene;
         }
 
@@ -64,6 +65,14 @@ namespace Maria
         public virtual void OnDisconnect()
         {
 
+        }
+
+        public virtual void ActiveSceneChanged(Scene from, Scene to)
+        {
+        }
+
+        public virtual void SceneLoaded (Scene scene, LoadSceneMode sm)
+        {
         }
     }
 }
