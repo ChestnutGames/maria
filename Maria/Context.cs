@@ -23,7 +23,6 @@ namespace Maria
         protected Queue<Message> _queue = new Queue<Message>();
         protected Dictionary<string, Controller> _hash = new Dictionary<string, Controller>();
         protected Stack<Controller> _stack = new Stack<Controller>();
-        protected Controller _cur;
         protected ClientLogin _login = null;
         protected ClientSocket _client = null;
         protected Gate _gate = null;
@@ -32,6 +31,7 @@ namespace Maria
         protected readonly global::App _app;
         private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
         protected bool _authtcp = false;
+        protected bool _authudp = false;
         protected Config _config = null;
         protected TimeSync _ts = null;
         private float _handshakecd = 5f;
@@ -62,13 +62,11 @@ namespace Maria
         // Use this for initialization
         public void Start()
         {
-
         }
 
         // Update is called once per frame
         public virtual void Update(float delta)
         {
-
             _login.Update();
             _client.Update();
 
@@ -95,11 +93,12 @@ namespace Maria
                 }
             }
 
-            if (_cur != null)
+            Controller controller = Top();
+            if (controller != null)
             {
-                _cur.Update(delta);
+                controller.Update(delta);
             }
-
+            
             Handshake(delta);
         }
 
@@ -110,6 +109,12 @@ namespace Maria
         public global::App App { get { return _app; } }
 
         public GameObject Assets { get; set; }
+
+        public Controller GetController<T>(string name)
+        {
+            Controller controller = _hash[name];
+            return controller;
+        }
 
         public void Enqueue(Message msg)
         {
@@ -142,16 +147,6 @@ namespace Maria
                     Thread.Sleep(1000);
                 }
             }
-        }
-
-        public T GetController<T>(string name) where T : Controller
-        {
-            return (T)_hash[name];
-        }
-
-        public Controller GetCurController()
-        {
-            return _cur;
         }
 
         public void SendReq<T>(String callback, SprotoTypeBase obj)
@@ -211,7 +206,10 @@ namespace Maria
             {
                 _authtcp = true;
                 string dummy = string.Empty;
-                _authcb(ok);
+                foreach (var item in _hash)
+                {
+                    item.Value.AuthGateCB(ok);
+                }
             }
             else if (ok == 403)
             {
@@ -232,6 +230,16 @@ namespace Maria
         public void AuthUdpCb(long session, string ip, int port)
         {
             _client.AuthUdpCb(session, ip, port);
+            _authudp = true;
+            foreach (var item in _hash)
+            {
+                item.Value.AuthUdpCb(true);
+            }
+        }
+
+        public Controller Top()
+        {
+            return _stack.Peek();
         }
 
         public void Push(string name)
@@ -239,13 +247,12 @@ namespace Maria
             var ctr = _hash[name];
             Debug.Assert(ctr != null);
             _stack.Push(ctr);
-            _cur = ctr;
-            _cur.Enter();
+            ctr.Enter();
         }
 
         public void Pop()
         {
-
+            _stack.Pop();
         }
 
         public void Countdown(string name, float cd, CountdownCb cb)

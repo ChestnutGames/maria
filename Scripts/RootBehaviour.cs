@@ -84,7 +84,7 @@ public class RootBehaviour : MonoBehaviour
             
             if (_controller == null)
             {
-                return this.Context.GetCurController();
+                return this.Context.Top();
             }
             else
             {

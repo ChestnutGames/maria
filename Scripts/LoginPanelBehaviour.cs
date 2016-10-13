@@ -51,7 +51,7 @@ public class LoginPanelBehaviour : MonoBehaviour {
         _server = "sample";
         Context ctx = _root.App.AppContext;
 
-        LoginController ctr = ctx.GetController<LoginController>("login");
+        LoginController ctr = ctx.Top() as LoginController;
         ctr.Auth(_server, _username, _password);
     }
 }

@@ -33,9 +33,15 @@ namespace Maria.Network
             Debug.Log(string.Format("handshake {0}", o.errorcode));
         }
 
+        public void enter_room(uint session, SprotoTypeBase responseObj)
+        {
+            GameController ctr = _ctx.Top() as GameController;
+            ctr.EnterRoom(responseObj);
+        }
+
         public void born(uint session, SprotoTypeBase responseObj)
         {
-            GameController ctr = _ctx.GetController<GameController>("game");
+            GameController ctr = _ctx.Top() as GameController;
             //ctr.Born()
         }
     }

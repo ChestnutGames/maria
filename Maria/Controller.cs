@@ -8,6 +8,8 @@ namespace Maria
     {
         protected Context _ctx = null;
         protected GameObject _scene = null;
+        protected bool _authtcp = false;
+        protected bool _authudp = false;
 
         public Controller(Context ctx)
         {
@@ -18,13 +20,11 @@ namespace Maria
         // Use this for initialization
         internal void start()
         {
-
         }
 
         // Update is called once per frame
         internal virtual void Update(float delta)
         {
-
         }
 
         protected void LoadScene(string name)
@@ -49,22 +49,31 @@ namespace Maria
 
         public virtual void Enter()
         {
-
         }
 
         public virtual void Exit()
         {
-
         }
 
         public virtual void Run()
         {
-
         }
 
+        public virtual void AuthGateCB(int code)
+        {
+            if (code == 200)
+            {
+                _authtcp = true;
+            }
+        }
+
+        public virtual void AuthUdpCb(bool ok)
+        {
+            _authudp = ok;
+        }
+        
         public virtual void OnDisconnect()
         {
-
         }
 
         public virtual void ActiveSceneChanged(Scene from, Scene to)

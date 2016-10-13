@@ -30,7 +30,7 @@ namespace Maria
 
         public void RunGame()
         {
-            GameController ctr = _ctx.GetController<GameController>("game");
+            GameController ctr = _ctx.GetController<GameController>("game") as GameController;
             ctr.Run();
         }
 

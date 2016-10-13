@@ -249,7 +249,7 @@ namespace Maria.Network
             _tcpflag = false;
             _tcp = null;
 
-            var ctr = _ctx.GetCurController();
+            var ctr = _ctx.Top();
             ctr.OnDisconnect();
         }
 

@@ -1,4 +1,5 @@
-﻿using Sproto;
+﻿using Bacon;
+using Sproto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,12 @@ namespace Maria.Network
         public SprotoTypeBase role_info(uint session, SprotoTypeBase requestObj)
         {
             return null;
+        }
+
+        public SprotoTypeBase enter_room(uint session, SprotoTypeBase requestObj)
+        {
+            GameController controller = _ctx.Top() as GameController;
+            return controller.OnEnterRoom(requestObj);
         }
     }
 }
