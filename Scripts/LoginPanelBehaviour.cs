@@ -13,6 +13,7 @@ public class LoginPanelBehaviour : MonoBehaviour {
     private string _server = null;
     private string _username = null;
     private string _password = null;
+    private bool _commit = false;
 
     // Use this for initialization
     void Start () {
@@ -36,22 +37,25 @@ public class LoginPanelBehaviour : MonoBehaviour {
 
     public void OnLoginCommit()
     {
-        
-        _username = GetUsername();
-        _password = GetPassword();
-        if (_username.Length < 4)
+        if (!_commit)
         {
-            Debug.Log("you should have more lenth.");
-            return;
-        }
-        if (_password.Length < 3)
-        {
-            return;
-        }
-        _server = "sample";
-        Context ctx = _root.App.AppContext;
+            _commit = true;
+            _username = GetUsername();
+            _password = GetPassword();
+            if (_username.Length < 4)
+            {
+                Debug.Log("you should have more lenth.");
+                return;
+            }
+            if (_password.Length < 3)
+            {
+                return;
+            }
+            _server = "sample";
+            Context ctx = _root.App.AppContext;
 
-        LoginController ctr = ctx.Top() as LoginController;
-        ctr.Auth(_server, _username, _password);
+            LoginController ctr = ctx.Top() as LoginController;
+            ctr.Auth(_server, _username, _password);
+        }
     }
 }

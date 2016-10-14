@@ -34,7 +34,6 @@ namespace Maria
         protected bool _authudp = false;
         protected Config _config = null;
         protected TimeSync _ts = null;
-        private float _handshakecd = 5f;
 
         public Context(global::App app)
         {
@@ -98,8 +97,6 @@ namespace Maria
             {
                 controller.Update(delta);
             }
-            
-            Handshake(delta);
         }
 
         public Config Config { get { return _config; } set { _config = value; } }
@@ -109,6 +106,10 @@ namespace Maria
         public global::App App { get { return _app; } }
 
         public GameObject Assets { get; set; }
+
+        public User U { get { return _user; } }
+
+        public long Session { get; set; }
 
         public Controller GetController<T>(string name)
         {
@@ -229,6 +230,7 @@ namespace Maria
 
         public void AuthUdpCb(long session, string ip, int port)
         {
+            this.Session = session;
             _client.AuthUdpCb(session, ip, port);
             _authudp = true;
             foreach (var item in _hash)
@@ -264,21 +266,6 @@ namespace Maria
             _timer[name] = tm;
         }
 
-        public void Handshake(float delta)
-        {
-            if (_authtcp)
-            {
-                if (_handshakecd > 0)
-                {
-                    _handshakecd -= delta;
-                    if (_handshakecd <= 0)
-                    {
-                        _handshakecd = 5f;
-                        SendReq<C2sProtocol.handshake>("handshake", null);
-                    }
-                }
-            }
-        }
     }
 }
 

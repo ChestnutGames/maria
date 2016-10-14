@@ -1,5 +1,7 @@
 ﻿using Bacon;
 using Sproto;
+using System;
+using System.Text;
 using UnityEngine;
 
 namespace Maria.Network
@@ -12,37 +14,31 @@ namespace Maria.Network
             _ctx = ctx;
         }
 
-        public void role_info(uint session, SprotoTypeBase responseObj)
-        {
-        }
-
-        public void join(uint session, SprotoTypeBase responseObj)
-        {
-            if (responseObj != null)
-            {
-                C2sSprotoType.join.response o = responseObj as C2sSprotoType.join.response;
-                string host = o.host;
-                int port = (int)o.port;
-                _ctx.AuthUdpCb(o.session, host, port);
-            }
-        }
-
         public void handshake(uint session, SprotoTypeBase responseObj)
         {
             C2sSprotoType.handshake.response o = responseObj as C2sSprotoType.handshake.response;
             Debug.Log(string.Format("handshake {0}", o.errorcode));
         }
 
-        public void enter_room(uint session, SprotoTypeBase responseObj)
+        // 进入房间这个协议
+        public void join(uint session, SprotoTypeBase responseObj)
         {
-            GameController ctr = _ctx.Top() as GameController;
-            ctr.EnterRoom(responseObj);
+            GameController controller = _ctx.Top() as GameController;
+            controller.Join(responseObj);
         }
 
         public void born(uint session, SprotoTypeBase responseObj)
         {
             GameController ctr = _ctx.Top() as GameController;
-            //ctr.Born()
+            ctr.Born(responseObj);
+        }
+
+        public void test(uint session, SprotoTypeBase responseObj)
+        {
+            C2sSprotoType.test.response obj = responseObj as C2sSprotoType.test.response;
+            long msg = obj.msg;
+            double num = BitConverter.Int64BitsToDouble(msg);
+            Debug.Log(string.Format("num: {0}", null));
         }
     }
 }

@@ -377,16 +377,19 @@ namespace Maria.Network
 
         private void RegisterResponse()
         {
-            _rsp["role_info"] = _response.role_info;
-            _rsp["join"] = _response.join;
             _rsp["handshake"] = _response.handshake;
+            _rsp["join"] = _response.join;
+            _rsp["born"] = _response.born;
+            _rsp["test"] = _response.test;
         }
 
         private void RegisterRequest()
         {
-            _req["role_info"] = _request.role_info;
+            _req["handshake"] = _request.handshake;
+            _req["born"] = _request.born;
         }
 
+        // UDP
         public void AuthUdp(CB cb)
         {
             _udpflag = false;
@@ -426,10 +429,9 @@ namespace Maria.Network
 
         void OnRecviveUdp(PackageSocketUdp.R r)
         {
-            Debug.Log(r.Eventtime);
-            Debug.Log(r.Session);
-            string str = Encoding.ASCII.GetString(r.Data);
-            Debug.Log(str);
+            Debug.Log(string.Format("eventtime: {0}, session: {1}", r.Eventtime, r.Session));
+            Controller controller = _ctx.Top();
+            controller.OnRecviveUdp(r);
         }
 
         public void SendUdp(byte[] data)

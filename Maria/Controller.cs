@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Maria.Network;
 
 namespace Maria
 {
@@ -74,8 +75,15 @@ namespace Maria
         
         public virtual void OnDisconnect()
         {
+            _authtcp = false;
+            _ctx.AuthGate(null);
         }
 
+        public virtual void OnRecviveUdp(PackageSocketUdp.R r)
+        {
+
+        }
+        
         public virtual void ActiveSceneChanged(Scene from, Scene to)
         {
         }

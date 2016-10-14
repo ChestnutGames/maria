@@ -9,12 +9,13 @@ using Maria.Encrypt;
 
 namespace Maria.Network
 {
-    class PackageSocketUdp
+    public class PackageSocketUdp
     {
         public class R
         {
             public int Eventtime { get; set; }
             public long Session { get; set; }
+            public uint Protocol { get; set; }
             public byte[] Data { get; set; }
         }
 
@@ -23,14 +24,19 @@ namespace Maria.Network
         private Socket _so = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         private string _host = String.Empty;
         private int _port = 0;
-        private IPEndPoint _ipEndPt = null;
-        private byte[] _buffer = new byte[1024];
+        private IPEndPoint _ep = null;
+
+        private byte[] _buffer = new byte[3072];
         private int _head = 0;
         private int _tail = 0;
-        private int _cap = 1024;
+        private int _cap = 3072;
+
         private byte[] _secret;
         private long _session;
         private TimeSync _timeSync;
+
+        private bool _connected = false;
+        private List<byte[]> _sendBuffer = new List<byte[]>();
 
         public PackageSocketUdp(byte[] secret, long session, TimeSync ts)
         {
@@ -38,6 +44,7 @@ namespace Maria.Network
             _secret = secret;
             _session = session;
             _timeSync = ts;
+
         }
 
         public RecviveCB OnRecviveUdp { get; set; }
@@ -54,134 +61,125 @@ namespace Maria.Network
             _host = "192.168.199.239";
             _port = port;
             IPAddress ipadd = IPAddress.Parse(_host);
-            _ipEndPt = new IPEndPoint(ipadd, _port);
+            _ep = new IPEndPoint(ipadd, _port);
             //_so.Connect(host, port);
+            _connected = false;
         }
 
         public void Sync()
         {
             int now = _timeSync.LocalTime();
             byte[] buffer = new byte[12];
-            PackL(buffer, 0, (uint)now);
-            PackL(buffer, 4, 0xffffffff);
-            PackL(buffer, 8, (uint)_session);
+            NetPack.PacklI(buffer, 0, (uint)now);
+            NetPack.PacklI(buffer, 4, 0xffffffff);
+            NetPack.PacklI(buffer, 8, (uint)_session);
             byte[] head = Crypt.hmac_hash(_secret, buffer);
             byte[] data = new byte[8 + buffer.Length];
             Array.Copy(head, data, 8);
             Array.Copy(buffer, 0, data, 8, buffer.Length);
-            _so.SendTo(data, _ipEndPt);
+            _so.SendTo(data, _ep);
+            _connected = true;
         }
 
         public void Send(byte[] data)
         {
-            int now = _timeSync.LocalTime();
-            byte[] buffer = new byte[12 + data.Length];
-            PackL(buffer, 0, (uint)now);
-            PackL(buffer, 4, 0xffffffff);
-            PackL(buffer, 8, (uint)_session);
-            Array.Copy(data, 0, buffer, 12, data.Length);
-            byte[] head = Crypt.hmac_hash(_secret, buffer);
-            byte[] send = new byte[8 + buffer.Length];
-            Array.Copy(head, send, 8);
-            Array.Copy(buffer, 0, send, 8, buffer.Length);
-            _so.SendTo(send, _ipEndPt);
+            if (_connected)
+            {
+                int local = _timeSync.LocalTime();
+                int[] global = _timeSync.GlobalTime();
+                byte[] buffer = new byte[12 + data.Length];
+                NetPack.PacklI(buffer, 0, (uint)local);
+                NetPack.PacklI(buffer, 4, (uint)global[0]);
+                NetPack.PacklI(buffer, 8, (uint)_session);
+                Array.Copy(data, 0, buffer, 12, data.Length);
+                byte[] head = Crypt.hmac_hash(_secret, buffer);
+                byte[] send = new byte[8 + buffer.Length];
+                Array.Copy(head, send, 8);
+                Array.Copy(buffer, 0, send, 8, buffer.Length);
+                Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", local, global[0], _session));
+                _so.SendTo(send, _ep);
+            }
+            else
+            {
+                _sendBuffer.Add(data);
+            }
         }
 
         public void Update()
         {
+            if (!_connected)
+            {
+                return;
+            }
             if (!_so.Poll(0, SelectMode.SelectRead))
             {
             }
             else
             {
-                while (true)
+                int remaining = 0;
+                do
                 {
-                    if (_cap - _tail < 100)
-                    {
-                        Array.Copy(_buffer, 0, _buffer, _head, _tail - _head);
-                        _head = 0;
-                        _tail = _tail = _tail - _head;
-                    }
-                    EndPoint ep = _ipEndPt as EndPoint;
-                    int sz = _so.ReceiveFrom(_buffer, _tail, _cap - _tail, SocketFlags.None, ref ep);
+                    int size = Rebase();
+                    EndPoint ep = _ep as EndPoint;
+                    int sz = _so.ReceiveFrom(_buffer, _tail, size, SocketFlags.None, ref ep);
                     _tail += sz;
-                    if (_cap - _tail <= 100)
-                    {
-                        Array.Copy(_buffer, 0, _buffer, _head, _tail - _head);
-                        _head = 0;
-                        _tail = _tail = _tail - _head;
-                    }
-                    int globaltime = UnpackIntL(_buffer, _head);
-                    int localtime = UnpackIntL(_buffer, _head + 4);
-                    int eventtime = UnpackIntL(_buffer, _head + 8);
-                    int session = UnpackIntL(_buffer, _head + 12);
+
+                    int globaltime = NetUnpack.Unpackli(_buffer, _head);
+                    int localtime = NetUnpack.Unpackli(_buffer, _head + 4);
+                    int eventtime = NetUnpack.Unpackli(_buffer, _head + 8);
+                    int session = NetUnpack.Unpackli(_buffer, _head + 12);
+                    Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", localtime, eventtime, session));
                     if (session == _session)
                     {
                         _timeSync.Sync(localtime, globaltime);
                     }
 
-                    int datalen = _tail - _head - 16;
-                    if (datalen > 0)
+                    remaining = _tail - _head - 16;
+                    if (remaining > 0)
                     {
                         R r = new R();
                         r.Eventtime = eventtime;
                         r.Session = session;
-
-                        byte[] buffer = new byte[datalen];
-                        Array.Copy(buffer, 0, _buffer, _head + 16, datalen);
-                        r.Data = buffer;
-                        OnRecviveUdp(r);
-                        _head += datalen;
-                        break;
+                        r.Protocol = NetUnpack.UnpacklI(_buffer, _head + 16);
+                        if (r.Protocol == 1)
+                        {
+                            int datalen = 28;
+                            Debug.Assert(remaining >= 28 + 4);
+                            byte[] buffer = new byte[datalen];
+                            Array.Copy(_buffer, _head + 16, buffer, 0, datalen);
+                            r.Data = buffer;
+                            OnRecviveUdp(r);
+                            _head += 16 + 4 + datalen;
+                        }
+                        else
+                        {
+                            Debug.Assert(false);
+                        }
                     }
                     else
                     {
-                        _head = _head + 16;
+                        _head += 16;
                         break;
                     }
-                }
+                    remaining = _tail - _head;
+                } while (remaining > 0);
             }
         }
 
-        private void Pack(byte[] buffer, int start, uint n)
+        private int Rebase()
         {
-            Debug.Assert(start + 4 <= buffer.Length);
-            for (int i = 0; i < 4; i++)
+            if (_head == _tail)
             {
-                buffer[start + i] = (byte)(n >> (8 * (3-i)) & 0xff);
+                _head = 0;
+                _tail = 0;
             }
-        }
-
-        private void PackL(byte[] buffer, int start, uint n)
-        {
-            int t = 1;
-            int tt = t >> 1;    // 0
-            int ttt = t << 1;   // 2
-            Debug.Assert(start + 4 <= buffer.Length);
-            for (int i = 0; i < 4; i++)
+            else
             {
-                buffer[start + i] = (byte)(n >> (8 * i) & 0xff);
+                Array.Copy(_buffer, 0, _buffer, _head, _tail - _head);
+                _head = 0;
+                _tail = _tail - _head;
             }
-        }
-
-        private int UnpackInt(byte[] buffer, int offset)
-        {
-            int res = 0;
-            res |= buffer[offset] & 0xff << (3 * 8);
-            res |= buffer[offset + 1] & 0xff << (2 * 8);
-            res |= buffer[offset + 2] & 0xff << (1 * 8);
-            res |= buffer[offset + 3] & 0xff << (0 * 8);
-            return res;
-        }
-
-        private int UnpackIntL(byte[] buffer, int offset)
-        {
-            int res = 0;
-            res |= buffer[offset] & 0xff << (0 * 8);
-            res |= buffer[offset + 1] & 0xff << (1 * 8);
-            res |= buffer[offset + 2] & 0xff << (2 * 8);
-            res |= buffer[offset + 3] & 0xff << (3 * 8);
-            return res;
+            return _cap - _tail;
         }
     }
 }

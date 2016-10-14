@@ -28,23 +28,10 @@ namespace Maria
             _ctx.Push("login");
         }
 
-        public void RunGame()
+        public override void AuthGateCB(int code)
         {
-            GameController ctr = _ctx.GetController<GameController>("game") as GameController;
-            ctr.Run();
-        }
-
-        public void Auth(string server, string username, string password)
-        {
-            _server = server;
-            _username = username;
-            _password = password;
-            _ctx.AuthLogin(server, username, password, OnAuth);
-        }
-
-        public void OnAuth(int ok)
-        {
-            if (ok == 200)
+            base.AuthGateCB(code);
+            if (code == 200)
             {
                 RunGame();
             }
@@ -53,8 +40,22 @@ namespace Maria
         public override void OnDisconnect()
         {
             base.OnDisconnect();
-            _ctx.AuthGate(OnAuth);
+            _ctx.AuthGate(null);
         }
- 
+
+        public void Auth(string server, string username, string password)
+        {
+            _server = server;
+            _username = username;
+            _password = password;
+            _ctx.AuthLogin(server, username, password, null);
+        }
+
+        private void RunGame()
+        {
+            GameController ctr = _ctx.GetController<GameController>("game") as GameController;
+            ctr.Run();
+        }
+
     }
 }
