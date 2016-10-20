@@ -380,7 +380,6 @@ namespace Maria.Network
             _rsp["handshake"] = _response.handshake;
             _rsp["join"] = _response.join;
             _rsp["born"] = _response.born;
-            _rsp["test"] = _response.test;
         }
 
         private void RegisterRequest()

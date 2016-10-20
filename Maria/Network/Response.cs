@@ -32,13 +32,5 @@ namespace Maria.Network
             GameController ctr = _ctx.Top() as GameController;
             ctr.Born(responseObj);
         }
-
-        public void test(uint session, SprotoTypeBase responseObj)
-        {
-            C2sSprotoType.test.response obj = responseObj as C2sSprotoType.test.response;
-            long msg = obj.msg;
-            double num = BitConverter.Int64BitsToDouble(msg);
-            Debug.Log(string.Format("num: {0}", null));
-        }
     }
 }
