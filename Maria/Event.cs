@@ -1,0 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Maria {
+    public class Event {
+
+        //public static const uint EVENT_P
+    }
+}
