@@ -5,11 +5,13 @@ using Maria;
 
 public class LoginPanelBehaviour : MonoBehaviour {
 
+
     public RootBehaviour _root = null;
     public GameObject _uiroot = null;
     public GameObject _usernmIF = null;
     public GameObject _passwdIF = null;
 
+    private Actor _actor;
     private string _server = null;
     private string _username = null;
     private string _password = null;
@@ -52,10 +54,15 @@ public class LoginPanelBehaviour : MonoBehaviour {
                 return;
             }
             _server = "sample";
-            Context ctx = _root.App.AppContext;
 
-            LoginController ctr = ctx.Top() as LoginController;
-            ctr.Auth(_server, _username, _password);
+            Maria.Message msg = new Message();
+            msg["username"] = _username;
+            msg["password"] = _password;
+            msg["server"] = _server;
+
+            Maria.Command cmd = new Command(Bacon.MyEventCmd.EVENT_LOGIN, gameObject, msg);
+            _root.App.Application.Enqueue(cmd);
+
         }
     }
 }

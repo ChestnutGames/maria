@@ -237,8 +237,13 @@ namespace Maria.Network
                         uint session = (uint)sinfo.session;
                         string key = idToHex((uint)sinfo.session);
                         RspPg pg = _rspPg[key];
-                        var cb = _rsp[pg.Protocol];
-                        cb(session, sinfo.responseObj);
+                        try {
+                            var cb = _rsp[pg.Protocol];
+                            cb(session, sinfo.responseObj);
+                        } catch (KeyNotFoundException ex) {
+                            Debug.LogError(ex.Message);
+                            //throw;
+                        }
                     }
                 }
             }
@@ -380,6 +385,7 @@ namespace Maria.Network
             _rsp["handshake"] = _response.handshake;
             _rsp["join"] = _response.join;
             _rsp["born"] = _response.born;
+            _rsp["opcode"] = _response.opcode;
         }
 
         private void RegisterRequest()

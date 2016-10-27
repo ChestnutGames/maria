@@ -2,29 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Maria
 {
     public class Message
     {
-        public delegate void Handler(object param);
-
-        private Handler _handler = null;
-        private object _param = null;
+        private Hashtable _hash = new Hashtable();
 
         public Message()
         {
         }
 
-        public Message(Handler handler, object param)
-        {
-            _handler = handler;
-            _param = param;
-        }
-
-        internal void execute()
-        {
-            _handler(_param);
+        public object this[string index] {
+            get {
+                if (_hash.Contains(index)) {
+                    return _hash[index];
+                } else {
+                    throw new Exception("");
+                }
+            }
+            set { _hash[index] = value; }
         }
     }
 }

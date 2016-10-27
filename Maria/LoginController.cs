@@ -1,4 +1,5 @@
 ﻿using Bacon;
+using UnityEngine;
 
 namespace Maria
 {
@@ -8,14 +9,21 @@ namespace Maria
         private string _username;
         private string _password;
 
+        private LoginActor _actor;
+
         public LoginController(Context ctx) : base(ctx)
         {
+            _actor = new LoginActor(_ctx, this);
+
+            EventListenerCmd listener1 = new EventListenerCmd(EventCmd.EVENT_LOGIN, Login);
+            _ctx.EventDispatcher.AddCmdEventListener(listener1);
         }
 
         public override void Enter()
         {
             base.Enter();
-            LoadScene("login");
+            SMActor actor = ((AppContext)_ctx).SMActor;
+            actor.LoadScene("login");
         }
 
         public override void Exit()
@@ -23,17 +31,12 @@ namespace Maria
             base.Exit();
         }
 
-        public override void Run()
-        {
-            _ctx.Push("login");
-        }
-
         public override void AuthGateCB(int code)
         {
             base.AuthGateCB(code);
             if (code == 200)
             {
-                RunGame();
+                _ctx.Push("game");
             }
         }
 
@@ -51,11 +54,15 @@ namespace Maria
             _ctx.AuthLogin(server, username, password, null);
         }
 
-        private void RunGame()
-        {
-            GameController ctr = _ctx.GetController<GameController>("game") as GameController;
-            ctr.Run();
+        public void Login(EventCmd e) {
+            string str = "login controller login.";
+            Debug.Log(str);
+            
+            Message msg = e.Msg;
+            string server = msg["server"].ToString();
+            string username = msg["username"].ToString();
+            string password = msg["password"].ToString();
+            Auth(server, username, password);
         }
-
     }
 }

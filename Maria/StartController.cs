@@ -4,30 +4,20 @@ namespace Maria
 {
     public class StartController : Controller
     {
+        private StartActor _actor = null;
 
         public StartController(Context ctx) : base(ctx)
         {
+            _actor = new StartActor(_ctx, this);
+            
         }
 
         public override void Enter()
         {
-            _ctx.Countdown("startcontroller", 2, CountdownCb);
         }
 
         public override void Exit()
         {
-        }
-
-        public void CountdownCb()
-        {
-            Debug.Log("hello word.");
-            _ctx.Push("login");
-        }
-
-        public override void Run()
-        {
-            base.Run();
-            _ctx.Push("start");
         }
     }
 }

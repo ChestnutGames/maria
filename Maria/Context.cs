@@ -6,12 +6,9 @@ using System;
 using Sproto;
 using System.Text;
 
-namespace Maria
-{
-    public class Context
-    {
-        private class Timer
-        {
+namespace Maria {
+    public class Context {
+        private class Timer {
             public string Name { get; set; }
             public float CD { get; set; }
             public CountdownCb CB { get; set; }
@@ -19,8 +16,10 @@ namespace Maria
 
         public delegate void CountdownCb();
 
-        protected Thread _worker = null;
-        protected Queue<Message> _queue = new Queue<Message>();
+        protected global::App _app;
+        protected Application _application;
+
+        protected EventDispatcher _dispatcher = null;
         protected Dictionary<string, Controller> _hash = new Dictionary<string, Controller>();
         protected Stack<Controller> _stack = new Stack<Controller>();
         protected ClientLogin _login = null;
@@ -28,21 +27,20 @@ namespace Maria
         protected Gate _gate = null;
         protected User _user = new User();
         private ClientSocket.CB _authcb;
-        protected readonly global::App _app;
         private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
         protected bool _authtcp = false;
         protected bool _authudp = false;
         protected Config _config = null;
         protected TimeSync _ts = null;
 
-        public Context(global::App app)
-        {
+        public Context(global::App app, Maria.Application application) {
             _app = app;
-            var go = GameObject.Find("/Assets");
-            Assets = go;
+            _application = application;
 
-            _worker = new Thread(new ThreadStart(Worker));
-            _worker.Start();
+            //var go = GameObject.Find("/Assets");
+            //Assets = go;
+
+            _dispatcher = new EventDispatcher(this);
 
             _gate = new Gate(this);
 
@@ -52,58 +50,53 @@ namespace Maria
             _hash["start"] = new StartController(this);
             _hash["login"] = new LoginController(this);
 
-            _hash["start"].Run();
+            //_hash["start"].Run();
 
             _config = new Config();
             _ts = new TimeSync();
+
         }
 
         // Use this for initialization
-        public void Start()
-        {
+        public void Start() {
         }
 
         // Update is called once per frame
-        public virtual void Update(float delta)
-        {
+        public virtual void Update(float delta) {
             _login.Update();
             _client.Update();
 
-            foreach (var item in _timer)
-            {
+            foreach (var item in _timer) {
                 Timer tm = item.Value as Timer;
-                if (tm != null)
-                {
-                    if (tm.CD > 0)
-                    {
-                        Debug.Log(tm.CD);
+                if (tm != null) {
+                    if (tm.CD > 0) {
+                        //Debug.Log(tm.CD);
                         tm.CD -= delta;
-                        if (tm.CD < 0)
-                        {
+                        if (tm.CD < 0) {
                             tm.CB();
+
                             //_timer.Remove()
                             //_timer.Remove(tm.Name);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         //_timer.Remove(tm.Name);
                     }
                 }
             }
 
-            Controller controller = Top();
-            if (controller != null)
-            {
-                controller.Update(delta);
+            if (_stack.Count > 0) {
+                Controller controller = Top();
+                if (controller != null) {
+                    controller.Update(delta);
+                }
             }
         }
+
+        public EventDispatcher EventDispatcher { get { return _dispatcher; } set { _dispatcher = value; } }
 
         public Config Config { get { return _config; } set { _config = value; } }
 
         public TimeSync TiSync { get { return _ts; } set { _ts = value; } }
-
-        public global::App App { get { return _app; } }
 
         public GameObject Assets { get; set; }
 
@@ -111,52 +104,26 @@ namespace Maria
 
         public long Session { get; set; }
 
-        public Controller GetController<T>(string name)
-        {
-            Controller controller = _hash[name];
-            return controller;
-        }
-
-        public void Enqueue(Message msg)
-        {
-            lock (_queue)
-            {
-                _queue.Enqueue(msg);
+        public T GetController<T>(string name) where T : Controller {
+            try {
+                if (_hash.ContainsKey(name)) {
+                    Controller controller = _hash[name];
+                    return controller as T;
+                } else {
+                    Debug.LogError(string.Format("{0} no't exitstence", name));
+                    return null;
+                }
+            } catch (KeyNotFoundException ex) {
+                Debug.LogError(ex.Message);
+                return null;
             }
         }
 
-        private void Worker()
-        {
-            while (true)
-            {
-                _gate.Run();
-
-                Message msg = null;
-                lock (_queue)
-                {
-                    if (_queue.Count > 0)
-                    {
-                        msg = _queue.Dequeue();
-                    }
-                }
-                if (msg != null)
-                {
-                    msg.execute();
-                }
-                else
-                {
-                    Thread.Sleep(1000);
-                }
-            }
-        }
-
-        public void SendReq<T>(String callback, SprotoTypeBase obj)
-        {
+        public void SendReq<T>(String callback, SprotoTypeBase obj) {
             _client.SendReq<T>(callback, obj);
         }
 
-        public void AuthLogin(string s, string u, string pwd, ClientSocket.CB cb)
-        {
+        public void AuthLogin(string s, string u, string pwd, ClientSocket.CB cb) {
             _authtcp = false;
             _authcb = cb;
 
@@ -168,10 +135,8 @@ namespace Maria
             _login.Auth(ip, port, s, u, pwd, AuthLoginCb);
         }
 
-        public void AuthLoginCb(bool ok, byte[] secret, string dummy)
-        {
-            if (ok)
-            {
+        public void AuthLoginCb(bool ok, byte[] secret, string dummy) {
+            if (ok) {
                 int _1 = dummy.IndexOf('#');
                 int _2 = dummy.IndexOf('@', _1);
                 int _3 = dummy.IndexOf(':', _2);
@@ -189,76 +154,64 @@ namespace Maria
                 _user.Subid = sid;
 
                 _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
-            }
-            else
-            {
+            } else {
             }
         }
 
-        public void AuthGate(ClientSocket.CB cb)
-        {
+        public void AuthGate(ClientSocket.CB cb) {
             _authcb = cb;
             _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
         }
 
-        public void AuthGateCB(int ok)
-        {
-            if (ok == 200)
-            {
+        public void AuthGateCB(int ok) {
+            if (ok == 200) {
                 _authtcp = true;
                 string dummy = string.Empty;
-                foreach (var item in _hash)
-                {
+                foreach (var item in _hash) {
                     item.Value.AuthGateCB(ok);
                 }
-            }
-            else if (ok == 403)
-            {
+            } else if (ok == 403) {
                 AuthLogin(_user.Server, _user.Username, _user.Password, _authcb);
             }
         }
 
-        public void AuthUdp(ClientSocket.CB cb)
-        {
-            _client.AuthUdp(cb);
+        public void AuthUdp(ClientSocket.CB cb) {
+            if (!_authudp) {
+                _client.AuthUdp(cb);
+            }
         }
 
-        public void SendUdp(byte[] data)
-        {
-            _client.SendUdp(data);
+        public void SendUdp(byte[] data) {
+            if (_authudp) {
+                _client.SendUdp(data);
+            }
         }
 
-        public void AuthUdpCb(long session, string ip, int port)
-        {
+        public void AuthUdpCb(long session, string ip, int port) {
+            _authudp = true;
             this.Session = session;
             _client.AuthUdpCb(session, ip, port);
-            _authudp = true;
-            foreach (var item in _hash)
-            {
+            foreach (var item in _hash) {
                 item.Value.AuthUdpCb(true);
             }
         }
 
-        public Controller Top()
-        {
+        public Controller Top() {
             return _stack.Peek();
         }
 
-        public void Push(string name)
-        {
+        public void Push(string name) {
             var ctr = _hash[name];
             Debug.Assert(ctr != null);
             _stack.Push(ctr);
             ctr.Enter();
         }
 
-        public void Pop()
-        {
+        public void Pop() {
             _stack.Pop();
         }
 
-        public void Countdown(string name, float cd, CountdownCb cb)
-        {
+        public void Countdown(string name, float cd, CountdownCb cb) {
             var tm = new Timer();
             tm.Name = name;
             tm.CD = cd;
@@ -266,6 +219,9 @@ namespace Maria
             _timer[name] = tm;
         }
 
+        public void EnqueueRenderQueue(Actor.RenderHandler handler) {
+            _app.EnqueueRenderQueue(handler);
+        }
     }
 }
 

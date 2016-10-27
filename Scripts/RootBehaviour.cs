@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Maria;
 
 public class RootBehaviour : MonoBehaviour
 {
     private App _app = null;
-    private Context _ctx = null;
-    private Controller _controller = null;
+    private Maria.Application _application = null;
 
     // Use this for initialization
     void Start()
@@ -21,19 +19,18 @@ public class RootBehaviour : MonoBehaviour
 
     }
 
-    public void OnEnter(Context ctx, Controller ctr)
-    {
-        _ctx = ctx;
-        _controller = ctr;
-    }
-
     protected App InitApp()
     {
         if (_app == null)
         {
             _app = GameObject.Find("App").GetComponent<App>();
-            Debug.Assert(_app != null);
-            return _app;
+            if (_app == null) {
+                Debug.Assert(false, "why ");
+                return null;
+            } else {
+                _application = _app.Application;
+                return _app;
+            }
         }
         else
         {
@@ -61,35 +58,17 @@ public class RootBehaviour : MonoBehaviour
         }
     }
 
-    public Context Context
-    {
-        get
-        {
-            if (_ctx == null)
-            {
-                App app = InitApp();
-                return app.AppContext;
+    public Maria.Application Application {
+        get {
+            if (_application != null) {
+                return _application;
+            } else {
+                InitApp();
+                return _application;
             }
-            else
-            {
-                return _ctx;
-            }
-        }
-    }
-
-    public Controller Controller
-    {
-        get
-        {
-            
-            if (_controller == null)
-            {
-                return this.Context.Top();
-            }
-            else
-            {
-                return _controller;
-            }
+        } 
+        set {
+            InitApp();
         }
     }
 }

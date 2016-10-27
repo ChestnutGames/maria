@@ -31,6 +31,12 @@ namespace Maria.Network
             return (ulong)(dt.Ticks / 10 / 1000 / 10);
         }
 
+        public ulong GetTimeMs() {
+            ulong t = 0;
+            DateTime dt = DateTime.Now;
+            return (ulong)(dt.Ticks / 10 / 1000);
+        }
+
         public int LocalTime()
         {
             ulong ct = GetTime();
