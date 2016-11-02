@@ -7,46 +7,52 @@ namespace Maria {
     public class EventDispatcher {
 
         protected Context _ctx;
-        protected List<EventListener> _listers;
-        protected Dictionary<string, EventListenerCustom> _dic;
-        protected Dictionary<uint, EventListenerCmd> _cmdDic;
+        protected Dictionary<string, EventListenerCustom> _custom;
+        protected Dictionary<uint, EventListenerCmd> _cmd;
 
         public EventDispatcher(Context ctx) {
             _ctx = ctx;
-            _listers = new List<EventListener>();
-            _cmdDic = new Dictionary<uint, EventListenerCmd>();
-        }
-
-        public void AddEventListener(EventListener listener) {
-
+            _custom = new Dictionary<string, EventListenerCustom>();
+            _cmd = new Dictionary<uint, EventListenerCmd>();
         }
 
         public void AddCmdEventListener(EventListenerCmd listener) {
             uint cmd = listener.Cmd;
-            _cmdDic[cmd] = listener;
+            _cmd[cmd] = listener;
         }
 
         public EventListenerCustom AddCustomEventListener(string eventName, EventListenerCustom.OnEventCustomHandler callback) {
             EventListenerCustom listener = new EventListenerCustom(eventName, callback);
-            _dic[eventName] = listener;
+            _custom[eventName] = listener;
             return listener;
         }
 
         public void DispatchCmdEvent(Command cmd) {
             EventCmd e = new EventCmd(cmd.Cmd, cmd.Orgin, cmd.Msg);
-            if (_cmdDic.ContainsKey(cmd.Cmd)) {
-                EventListenerCmd listener = _cmdDic[cmd.Cmd];
-                if (listener != null) {
+            if (_cmd.ContainsKey(cmd.Cmd)) {
+                EventListenerCmd listener = _cmd[cmd.Cmd];
+                if (listener.Enable) {
                     listener.Handler(e);
                 }
+            } else {
+                throw new KeyNotFoundException(string.Format("cmd not contains {0}", cmd.Cmd));
             }
         }
 
-        public void DispatchEvent(Event e) {
+        public void DispatchCustomEvent(string eventName, object ud) {
+            EventCustom e = new EventCustom(eventName, ud);
+            if (_custom.ContainsKey(eventName)) {
+                EventListenerCustom listener = _custom[eventName];
+                if (listener.Enable) {
+                    listener.Handler(e);
+                }
+            } else {
+                throw new KeyNotFoundException(string.Format("custom not contains {0}", eventName));
+            }
         }
 
-        public void DispatchCustomEvent(string eventName, object o) {
+        public void FireCustomEvent(string eventName, object ud) {
+            DispatchCustomEvent(eventName, ud);
         }
-
     }
 }

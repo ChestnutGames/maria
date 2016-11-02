@@ -6,14 +6,13 @@ using System.Text;
 namespace Maria {
     public class EventListener {
 
-        public bool _enable;
-        
+        protected bool _enable;
+
         public EventListener() {
-            _enable = false;
+            _enable = true;
         }
          
         public bool Enable { get { return _enable; } set { _enable = value; } }
-
 
     }
 }

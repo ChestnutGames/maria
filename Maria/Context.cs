@@ -24,9 +24,8 @@ namespace Maria {
         protected Stack<Controller> _stack = new Stack<Controller>();
         protected ClientLogin _login = null;
         protected ClientSocket _client = null;
-        protected Gate _gate = null;
         protected User _user = new User();
-        private ClientSocket.CB _authcb;
+        
         private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
         protected bool _authtcp = false;
         protected bool _authudp = false;
@@ -42,15 +41,13 @@ namespace Maria {
 
             _dispatcher = new EventDispatcher(this);
 
-            _gate = new Gate(this);
-
             _login = new ClientLogin(this);
             _client = new ClientSocket(this);
 
             _hash["start"] = new StartController(this);
             _hash["login"] = new LoginController(this);
 
-            //_hash["start"].Run();
+            Push("start");
 
             _config = new Config();
             _ts = new TimeSync();
@@ -102,8 +99,6 @@ namespace Maria {
 
         public User U { get { return _user; } }
 
-        public long Session { get; set; }
-
         public T GetController<T>(string name) where T : Controller {
             try {
                 if (_hash.ContainsKey(name)) {
@@ -124,10 +119,9 @@ namespace Maria {
             _client.SendReq<T>(tag, obj);
         }
 
-        public void AuthLogin(string s, string u, string pwd, ClientSocket.CB cb) {
+        public void AuthLogin(string s, string u, string pwd) {
             _authtcp = false;
-            _authcb = cb;
-
+            
             _user.Server = s;
             _user.Username = u;
             _user.Password = pwd;
@@ -160,11 +154,9 @@ namespace Maria {
         }
 
         public virtual void AuthLoginOnDisconnect() {
-
         }
 
         public void AuthGate(ClientSocket.CB cb) {
-            _authcb = cb;
             _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
         }
 
@@ -176,7 +168,7 @@ namespace Maria {
                     item.Value.AuthGateCB(ok);
                 }
             } else if (ok == 403) {
-                AuthLogin(_user.Server, _user.Username, _user.Password, _authcb);
+                AuthLogin(_user.Server, _user.Username, _user.Password);
             }
         }
 
@@ -196,17 +188,12 @@ namespace Maria {
 
         public void AuthUdp(ClientSocket.CB cb) {
             if (!_authudp) {
-                _client.AuthUdp(cb);
+                _client.AuthUdp();
             }
         }
 
-        public void AuthUdpCb(long session, string ip, int port) {
+        public void AuthUdpCb(uint session) {
             _authudp = true;
-            this.Session = session;
-            _client.AuthUdpCb(session, ip, port);
-            foreach (var item in _hash) {
-                item.Value.AuthUdpCb(true);
-            }
         }
 
         public Controller Top() {
@@ -237,6 +224,10 @@ namespace Maria {
 
         public void EnqueueRenderQueue(Actor.RenderHandler handler) {
             _app.EnqueueRenderQueue(handler);
+        }
+
+        public void FireCustomEvent(string eventName, object ud) {
+            _dispatcher.FireCustomEvent(eventName, ud);
         }
     }
 }

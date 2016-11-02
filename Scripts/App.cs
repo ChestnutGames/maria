@@ -5,8 +5,7 @@ using System.Collections.Generic;
 
 public class App : MonoBehaviour {
 
-    public GameObject _root = null;
-    public GameObject _actors = null;
+    public RootBehaviour _root = null;
     private Maria.Application _app = null;
     private Queue<Actor.RenderHandler> _renderQueue = new Queue<Actor.RenderHandler>();
 
@@ -15,7 +14,7 @@ public class App : MonoBehaviour {
         DontDestroyOnLoad(this);
         _app = new Maria.Application(this);
         var com = _root.GetComponent<StartBehaviour>();
-        com.EnterStartScene();
+        com.SetupStartRoot();
     }
 
     // Update is called once per frame
@@ -41,17 +40,19 @@ public class App : MonoBehaviour {
     }
 
     void OnApplicationQuit() {
-        _app.OnApplicationQuit();
+        if (_app != null) {
+            _app.OnApplicationQuit();
+        }
     }
 
-    public Maria.Application Application { get { return _app; } }
+    public void Enqueue(Command cmd) {
+        _app.Enqueue(cmd);
+    }
 
     public void EnqueueRenderQueue(Actor.RenderHandler handler) {
         lock (_renderQueue) {
             _renderQueue.Enqueue(handler);
         }
     }
-
-
 
 }

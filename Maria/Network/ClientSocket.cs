@@ -64,7 +64,6 @@ namespace Maria.Network {
 
         // udp
         private PackageSocketUdp _udp = null;
-        private CB _udpauthcb = null;
         private long _udpsession = 0;
         private string _udpip = null;
         private int _udpport = 0;
@@ -294,13 +293,10 @@ namespace Maria.Network {
             _handshake = false;
         }
 
-        
-
         // UDP
-        public void AuthUdp(CB cb) {
+        public void AuthUdp() {
             _udpflag = false;
             _udp = null;
-            _udpauthcb = cb;
             C2sSprotoType.join.request requestObj = new C2sSprotoType.join.request();
             requestObj.room = 1;
             try {
@@ -317,26 +313,32 @@ namespace Maria.Network {
             _udpsession = session;
             _udpip = ip;
             _udpport = port;
-            if (_udp == null) {
-                TimeSync ts = _ctx.TiSync;
-                _udp = new PackageSocketUdp(_user.Secret, session, ts);
-                _udp.OnRecviveUdp = OnRecviveUdp;
-                Debug.Assert(_udp != null);
-                _udp.Connect(ip, port);
-                _udp.Sync();
-                _udpflag = true;
-            }
+
+            TimeSync ts = _ctx.TiSync;
+            _udp = new PackageSocketUdp(_user.Secret, (uint)session, ts);
+            _udp.OnRecv = OnRecvUdp;
+            _udp.OnSync = OnSyncUdp;
+            Debug.Assert(_udp != null);
+            _udp.Connect(ip, port);
+            _udp.Sync();
         }
 
-        void OnRecviveUdp(PackageSocketUdp.R r) {
-            Debug.Log(string.Format("eventtime: {0}, session: {1}", r.Eventtime, r.Session));
+        private void OnSyncUdp() {
+            _udpflag = true;
+            _ctx.AuthUdpCb((uint)_udpsession);
+            var controller = _ctx.Top();
+            controller.AuthUdpCb(true);
+        }
+
+        private void OnRecvUdp(PackageSocketUdp.R r) {
             Controller controller = _ctx.Top();
             controller.OnRecviveUdp(r);
         }
 
         public void SendUdp(byte[] data) {
-            Debug.Assert(_udpflag);
-            _udp.Send(data);
+            if (_udpflag) {
+                _udp.Send(data);
+            }
         }
     }
 }

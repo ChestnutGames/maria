@@ -8,18 +8,24 @@ namespace Maria {
     class StartActor : Actor {
 
         public StartActor(Context ctx, Controller controller) : base(ctx, controller) {
-            EventListenerCmd listener1 = new EventListenerCmd(Bacon.MyEventCmd.EVENT_STARTSCENE_ENTER, OnEnter);
+            EventListenerCmd listener1 = new EventListenerCmd(Bacon.MyEventCmd.EVENT_SETUP_STARTROOT, SetupStartRoot);
             _ctx.EventDispatcher.AddCmdEventListener(listener1);
         }
 
-        public void OnEnter(EventCmd e) {
+        private void SetupStartRoot(EventCmd e) {
             _go = e.Orgin;
             _ctx.Countdown("startcontroller", 2, CountdownCb);
+
+            //byte[] buffer = new byte[4] { 1, 2, 3, 4 };
+            
+            //Rudp.Rudp u = new Rudp.Rudp(1, 5);
+            //u.Send(buffer);
+            //u.Update(null, 1);
+
         }
 
-        public void CountdownCb() {
+        private void CountdownCb() {
             _ctx.Push("login");
         }
-
     }
 }

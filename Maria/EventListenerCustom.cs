@@ -16,6 +16,7 @@ namespace Maria {
             _callback = callback;
         }
 
+        public OnEventCustomHandler Handler { get { return _callback; } }
 
     }
 }

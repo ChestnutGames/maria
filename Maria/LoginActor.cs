@@ -27,7 +27,7 @@ namespace Maria {
             string username = msg["username"].ToString();
             string password = msg["password"].ToString();
             LoginController controller = _controller as LoginController;
-            controller.Auth(server, username, password);
+            controller.AuthLogin(server, username, password);
         }
 
         public void EnableCommitOk() {

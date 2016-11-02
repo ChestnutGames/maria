@@ -5,7 +5,12 @@ using System.Text;
 
 namespace Maria {
     public class Event {
+        protected enum Type {
+            NONE,
+            CMD,
+            CUSTOM,
+        }
 
-        //public static const uint EVENT_P
+        protected Type _type = Type.NONE;
     }
 }

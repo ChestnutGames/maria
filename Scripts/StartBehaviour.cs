@@ -14,8 +14,8 @@ public class StartBehaviour : MonoBehaviour {
 	
 	}
 
-    public void EnterStartScene() {
-        Maria.Command cmd = new Maria.Command(Bacon.MyEventCmd.EVENT_STARTSCENE_ENTER, gameObject);
-        _root.Application.Enqueue(cmd);
+    public void SetupStartRoot() {
+        Maria.Command cmd = new Maria.Command(Bacon.MyEventCmd.EVENT_SETUP_STARTROOT, gameObject);
+        _root.App.Enqueue(cmd);
     }
 }

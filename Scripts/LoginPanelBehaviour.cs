@@ -20,7 +20,7 @@ public class LoginPanelBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start () {
         Maria.Command cmd = new Command(EventCmd.EVENT_SETUP_LOGINPANEL, gameObject);
-        _root.App.Application.Enqueue(cmd);
+        _root.App.Enqueue(cmd);
     }
 	
 	// Update is called once per frame
@@ -63,7 +63,7 @@ public class LoginPanelBehaviour : MonoBehaviour {
             msg["server"] = _server;
 
             Maria.Command cmd = new Command(Bacon.MyEventCmd.EVENT_LOGIN, gameObject, msg);
-            _root.App.Application.Enqueue(cmd);
+            _root.App.Enqueue(cmd);
         }
     }
 

@@ -54,7 +54,8 @@ namespace Maria {
                     _lastTi = now;
                     _ctx.Update(((float)delta) / 100.0f);
                 } catch (Exception ex) {
-                    Debug.LogError(ex.Message);
+                    Debug.LogError(string.Format("ex message: {0}", ex.Message));
+                    Debug.LogError(ex.StackTrace);
                 }
 
                 //_tiSync.Sleep(10);

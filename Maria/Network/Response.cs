@@ -23,8 +23,10 @@ namespace Maria.Network {
             controller.Handshake(responseObj);
         }
 
-        // 进入房间这个协议
+        // 进入房间这个协议, authudp
         public void join(uint session, SprotoTypeBase responseObj) {
+            C2sSprotoType.join.response o = responseObj as C2sSprotoType.join.response;
+            _cs.AuthUdpCb(o.session, o.host, (int)o.port);
             GameController controller = _ctx.Top() as GameController;
             controller.Join(responseObj);
         }

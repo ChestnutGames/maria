@@ -23,6 +23,13 @@ namespace Maria {
             base.Exit();
         }
 
+        public void AuthLogin(string server, string username, string password) {
+            _server = server;
+            _username = username;
+            _password = password;
+            _ctx.AuthLogin(server, username, password);
+        }
+
         public override void AuthGateCB(int code) {
             base.AuthGateCB(code);
             if (code == 200) {
@@ -35,14 +42,6 @@ namespace Maria {
         public override void AuthGateOnDisconnect() {
             base.AuthGateOnDisconnect();
         }
-        
-        public void Auth(string server, string username, string password) {
-            _server = server;
-            _username = username;
-            _password = password;
-            _ctx.AuthLogin(server, username, password, null);
-        }
-
 
     }
 }
