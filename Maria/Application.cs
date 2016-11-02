@@ -32,8 +32,6 @@ namespace Maria {
             _worker.IsBackground = true;
             _worker.Start();
 
-            
-            //UnityEngine.Application.on
         }
 
         public void Dispose() {
@@ -43,26 +41,31 @@ namespace Maria {
         private void Worker() {
             while (true) {
                 _semaphore.WaitOne();
+                try {
+                    lock (_queue) {
+                        while (_queue.Count > 0) {
+                            Command command = _queue.Dequeue();
+                            _dispatcher.DispatchCmdEvent(command);
+                        }
+                    }
 
-                Command command = _queue.Dequeue();
-                if (command != null) {
-                    _dispatcher.DispatchCmdEvent(command);
-                } else {
+                    int now = _tiSync.LocalTime();
+                    int delta = now - _lastTi;
+                    _lastTi = now;
+                    _ctx.Update(((float)delta) / 100.0f);
+                } catch (Exception ex) {
+                    Debug.LogError(ex.Message);
                 }
 
-                int now = _tiSync.LocalTime();
-                int delta = now - _lastTi;
-                _lastTi = now;
-                _ctx.Update(((float)delta) / 100.0f);
-
                 //_tiSync.Sleep(10);
-
                 _semaphore.Release();
             }
         }
 
         public void Enqueue(Command cmd) {
-            _queue.Enqueue(cmd);
+            lock (_queue) {
+                _queue.Enqueue(cmd);
+            }
         }
 
         public void OnApplicationFocus(bool hasFocus) {

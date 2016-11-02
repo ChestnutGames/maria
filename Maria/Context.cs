@@ -119,8 +119,9 @@ namespace Maria {
             }
         }
 
-        public void SendReq<T>(String callback, SprotoTypeBase obj) {
-            _client.SendReq<T>(callback, obj);
+        // TCP
+        public void SendReq<T>(int tag, SprotoTypeBase obj) {
+            _client.SendReq<T>(tag, obj);
         }
 
         public void AuthLogin(string s, string u, string pwd, ClientSocket.CB cb) {
@@ -158,6 +159,10 @@ namespace Maria {
             }
         }
 
+        public virtual void AuthLoginOnDisconnect() {
+
+        }
+
         public void AuthGate(ClientSocket.CB cb) {
             _authcb = cb;
             _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
@@ -175,15 +180,23 @@ namespace Maria {
             }
         }
 
-        public void AuthUdp(ClientSocket.CB cb) {
-            if (!_authudp) {
-                _client.AuthUdp(cb);
+        public virtual void AuthGateOnDisconnect() {
+            var ctr = Top();
+            if (ctr != null) {
+                ctr.AuthGateOnDisconnect();
             }
         }
 
+        // UDP
         public void SendUdp(byte[] data) {
             if (_authudp) {
                 _client.SendUdp(data);
+            }
+        }
+
+        public void AuthUdp(ClientSocket.CB cb) {
+            if (!_authudp) {
+                _client.AuthUdp(cb);
             }
         }
 
@@ -197,7 +210,10 @@ namespace Maria {
         }
 
         public Controller Top() {
-            return _stack.Peek();
+            if (_stack.Count > 0) {
+                return _stack.Peek();
+            }
+            return null;
         }
 
         public void Push(string name) {

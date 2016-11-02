@@ -38,16 +38,24 @@ sysinfo.txt
 *.pdb
 *.user
 *.o
+*.sdf
 
 # 忽略指定文件
 /Plugins/crypt/crypt.sdf
 
 
 # 忽略指定文件夹
-Maria/Encrypt/Plugins/crypt/Debug
-Maria/Encrypt/Plugins/crypt/x64
-Maria/Encrypt/Plugins/crypt/libs
-Maria/Encrypt/Plugins/crypt/obj
+Maria/Plugins/crypt/Debug
+Maria/Plugins/crypt/x64
+Maria/Plugins/crypt/libs
+Maria/Plugins/crypt/obj
 
+Maria/Plugins/rudp/Debug
+Maria/Plugins/rudp/x64
+Maria/Plugins/rudp/libs
+Maria/Plugins/rudp/obj
+
+Maria/Debug
+Maria/x64
 
 

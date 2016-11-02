@@ -3,17 +3,15 @@ using Maria;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class App : MonoBehaviour
-{
-    
+public class App : MonoBehaviour {
+
     public GameObject _root = null;
     public GameObject _actors = null;
     private Maria.Application _app = null;
     private Queue<Actor.RenderHandler> _renderQueue = new Queue<Actor.RenderHandler>();
-    
+
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         DontDestroyOnLoad(this);
         _app = new Maria.Application(this);
         var com = _root.GetComponent<StartBehaviour>();
@@ -21,16 +19,11 @@ public class App : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         lock (_renderQueue) {
-            while (true) {
-                if (_renderQueue.Count > 0) {
-                    Actor.RenderHandler handler = _renderQueue.Dequeue();
-                    handler();
-                } else {
-                    break;
-                }
+            while (_renderQueue.Count > 0) {
+                Actor.RenderHandler handler = _renderQueue.Dequeue();
+                handler();
             }
         }
     }
@@ -58,6 +51,7 @@ public class App : MonoBehaviour
             _renderQueue.Enqueue(handler);
         }
     }
+
 
 
 }

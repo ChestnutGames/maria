@@ -12,7 +12,6 @@ namespace Maria.Network {
         public class R {
             public uint Eventtime { get; set; }
             public long Session { get; set; }
-            public uint Protocol { get; set; }
             public byte[] Data { get; set; }
         }
 
@@ -76,19 +75,27 @@ namespace Maria.Network {
 
         public void Send(byte[] data) {
             if (_connected) {
+                // 8 + 12 + 4 + data
+                //byte[] crypt_head = new byte[8];
+                byte[] head = new byte[12];
+                byte[] sz = new byte[4];
+                byte[] buffer = new byte[8 + 12 + 4 + data.Length];
+
                 int local = _timeSync.LocalTime();
                 int[] global = _timeSync.GlobalTime();
-                byte[] buffer = new byte[12 + data.Length];
-                NetPack.PacklI(buffer, 0, (uint)local);
-                NetPack.PacklI(buffer, 4, (uint)global[0]);
-                NetPack.PacklI(buffer, 8, (uint)_session);
-                Array.Copy(data, 0, buffer, 12, data.Length);
-                byte[] head = Crypt.hmac_hash(_secret, buffer);
-                byte[] send = new byte[8 + buffer.Length];
-                Array.Copy(head, send, 8);
-                Array.Copy(buffer, 0, send, 8, buffer.Length);
+                NetPack.PacklI(head, 0, (uint)local);
+                NetPack.PacklI(head, 4, (uint)global[0]);
+                NetPack.PacklI(head, 8, (uint)_session);
+                byte[] crypt_head = Crypt.hmac_hash(_secret, head);
+                NetPack.PackbI(sz, 0, (uint)data.Length);
+
+                Array.Copy(crypt_head, buffer, 8);
+                Array.Copy(head, 0, buffer, 8, 12);
+                Array.Copy(sz, 0, buffer, 20, 4);
+                Array.Copy(data, 0, buffer, 24, data.Length);
+
                 Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", local, global[0], _session));
-                _so.SendTo(send, _ep);
+                _so.SendTo(buffer, _ep);
             } else {
                 _sendBuffer.Add(data);
             }
@@ -122,30 +129,18 @@ namespace Maria.Network {
                         if (session == _session) {
                             _timeSync.Sync(localtime, globaltime);
                         }
-                        remaining = _tail - _head - 16;
-                        if (remaining > 0) {
+                        int datalen = NetUnpack.Unpackli(_buffer, _head + 16);
+                        if (datalen > 0) {
                             R r = new R();
                             r.Eventtime = eventtime;
                             r.Session = session;
-                            r.Protocol = NetUnpack.UnpacklI(_buffer, _head + 16);
-                            if (r.Protocol == 1) {
-                                int csz = NetUnpack.Unpackli(_buffer, _head + 20);
-                                if (csz > 0) {
-                                    Debug.Assert(remaining >= csz + 8);
-                                    byte[] buffer = new byte[csz];
-                                    Array.Copy(_buffer, _head + 24, buffer, 0, csz);
-                                    r.Data = buffer;
-                                    OnRecviveUdp(r);
-                                    _head += 16 + 4 + 4 + csz;
-                                } else {
-                                    _head += 16 + 4 + 4;
-                                }
-                            } else {
-                                Debug.Assert(false);
-                                _head += 16 + 4;
-                            }
+                            byte[] buffer = new byte[datalen];
+                            Array.Copy(_buffer, _head + 20, buffer, 0, datalen);
+                            r.Data = buffer;
+                            OnRecviveUdp(r);
+                            _head += 16 + 4 + datalen;
                         } else {
-                            _head += 16;
+                            _head += 16 + 4;
                         }
                         remaining = _tail - _head;
                     }

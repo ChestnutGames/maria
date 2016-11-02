@@ -39,13 +39,13 @@ namespace Maria {
             }
         }
 
-        public virtual void AuthUdpCb(bool ok) {
-            _authudp = ok;
-        }
-
-        public virtual void OnDisconnect() {
+        public virtual void AuthGateOnDisconnect() {
             _authtcp = false;
             _ctx.AuthGate(null);
+        }
+
+        public virtual void AuthUdpCb(bool ok) {
+            _authudp = ok;
         }
 
         public virtual void OnRecviveUdp(PackageSocketUdp.R r) {

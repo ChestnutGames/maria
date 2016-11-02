@@ -7,8 +7,15 @@ using UnityEngine;
 namespace Maria.Network {
     class Response {
         private Context _ctx;
-        public Response(Context ctx) {
+        private ClientSocket _cs;
+        public Response(Context ctx, ClientSocket cs) {
             _ctx = ctx;
+            _cs = cs;
+
+            _cs.RegisterResponse(C2sProtocol.handshake.Tag, handshake);
+            _cs.RegisterResponse(C2sProtocol.join.Tag, join);
+            _cs.RegisterResponse(C2sProtocol.born.Tag, born);
+            _cs.RegisterResponse(C2sProtocol.opcode.Tag, opcode);
         }
 
         public void handshake(uint session, SprotoTypeBase responseObj) {

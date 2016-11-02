@@ -1,0 +1,6 @@
+﻿  stdafx.c
+  rudp_aux.c
+  rudp.c
+  正在生成代码...
+    正在创建库 D:\git\origin\Assets\Maria\Plugins\x64\Debug\rudp.lib 和对象 D:\git\origin\Assets\Maria\Plugins\x64\Debug\rudp.exp
+  rudp.vcxproj -> D:\git\origin\Assets\Maria\Plugins\x64\Debug\rudp.dll

@@ -8,15 +8,12 @@ public class LSUIRootBehaviour : MonoBehaviour {
     public GameObject _loginPanel = null;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         _loginPanel.SetActive(true);
         _signupPanel.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	}
 
-    
-
+    // Update is called once per frame
+    void Update() {
+    }
 }

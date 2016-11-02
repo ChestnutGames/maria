@@ -8,6 +8,7 @@ namespace Maria {
     public class EventCmd : Event {
 
         public static uint EVENT_LOGIN = 1;
+        public static uint EVENT_SETUP_LOGINPANEL = 2;
 
         private uint _cmd;
         private GameObject _orgin;

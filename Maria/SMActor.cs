@@ -8,28 +8,32 @@ using UnityEngine.SceneManagement;
 namespace Maria {
     public class SMActor : Actor {
 
-        private string _name = string.Empty;
+        private Queue<string> _queue = new Queue<string>();
 
         public SMActor(Context ctx, Controller controller) : base(ctx, controller) {
         }
 
         public void LoadScene(string name) {
-            _name = name;
+            _queue.Enqueue(name);
             _ctx.EnqueueRenderQueue(RenderOnLoadScene);
         }
 
-        public void ActiveSceneChanged(Scene from, Scene to) {
-        }
-
-        public void SceneLoaded(Scene scene, LoadSceneMode sm) {
-        }
-
         public void RenderOnLoadScene() {
-            Debug.Assert(_name.Length > 0);
-            SceneManager.LoadSceneAsync(_name);
-            SceneManager.activeSceneChanged += ActiveSceneChanged;
-            SceneManager.sceneLoaded += SceneLoaded;
-            //_ctx.UnregisterActor(this);
+            if (_queue.Count > 0) {
+                string name = _queue.Dequeue();
+                Debug.Assert(name.Length > 0);
+                SceneManager.LoadSceneAsync(name);
+                SceneManager.activeSceneChanged += ActiveSceneChanged;
+                SceneManager.sceneLoaded += SceneLoaded;
+            } else {
+                Debug.LogError("no exits");
+            }
+        }
+
+        private void ActiveSceneChanged(Scene from, Scene to) {
+        }
+
+        private void SceneLoaded(Scene scene, LoadSceneMode sm) {
         }
     }
 }
