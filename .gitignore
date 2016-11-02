@@ -45,17 +45,17 @@ sysinfo.txt
 
 
 # 忽略指定文件夹
-Maria/Plugins/crypt/Debug
-Maria/Plugins/crypt/x64
-Maria/Plugins/crypt/libs
-Maria/Plugins/crypt/obj
+Plugins/crypt/Debug
+Plugins/crypt/x64
+Plugins/crypt/libs
+Plugins/crypt/obj
 
-Maria/Plugins/rudp/Debug
-Maria/Plugins/rudp/x64
-Maria/Plugins/rudp/libs
-Maria/Plugins/rudp/obj
+Plugins/rudp/Debug
+Plugins/rudp/x64
+Plugins/rudp/libs
+Plugins/rudp/obj
 
-Maria/Debug
-Maria/x64
+Plugins/Debug
+Plugins/x64
 
 
