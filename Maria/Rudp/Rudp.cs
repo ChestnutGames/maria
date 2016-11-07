@@ -3,65 +3,75 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Maria.Rudp {
     class Rudp : IDisposable {
+        public delegate void OnRecvHandler(byte[] buffer, int start, int len);
         private IntPtr _u;
+        private OnRecvHandler _recv;
+        private IntPtr _recvBuffer;
+        private int _recvBuffersz;
+        private byte[] _buffer;
 
         public Rudp(int send_delay, int expired_time) {
             _u = Rudp_CSharp.aux_new(send_delay, expired_time);
+            _recv = null;
+            _recvBuffer = Marshal.AllocHGlobal(10240);
+            _recvBuffersz = 10240;
+            _buffer = new byte[_recvBuffersz];
         }
 
         public void Dispose() {
+            _recv = null;
+            Marshal.FreeHGlobal(_recvBuffer);
             Rudp_CSharp.aux_delete(_u);
         }
 
-        public byte[] Recv(int cap) {
-            Rudp_CSharp.package pack = new Rudp_CSharp.package();
-            IntPtr buffer = Marshal.AllocHGlobal(cap);
-            pack.buffer = buffer;
-            pack.cap = cap;
-            pack.sz = 0;
+        public OnRecvHandler OnRecv { get { return _recv; } set { _recv = value; } }
 
-            int res = Rudp_CSharp.aux_recv(_u, pack);
-            if (res == 0) {
-                return null;
-            } else if (res == 1) {
-                byte[] r = new byte[pack.sz];
-                Marshal.Copy(r, 0, pack.buffer, pack.sz);
-                Marshal.FreeHGlobal(buffer);
-                return r;
-            } else if (res == 2) {
-                return null;
+        public int Recv() {
+            while (true) {
+                int res = Rudp_CSharp.aux_recv(_u, _recvBuffer, _recvBuffersz);
+                if (res == 0) {
+                    return 0;
+                } else if (res > 0) {
+                    Marshal.Copy(_recvBuffer, _buffer, 0, res);
+                    if (_recv != null) {
+                        _recv(_buffer, 0, res);
+                    }
+                } else if (res == -1) {
+                    return -1;
+                }
             }
-            return null;
         }
 
         public void Send(byte[] buf) {
+            Debug.Assert(buf.Length != 0);
             IntPtr buffer = Marshal.AllocHGlobal(buf.Length);
             Marshal.Copy(buf, 0, buffer, buf.Length);
-            Rudp_CSharp.package pack = new Rudp_CSharp.package();
-            pack.buffer = buffer;
-            pack.cap = buf.Length;
-            pack.sz = buf.Length;
-
-            Rudp_CSharp.aux_send(_u, pack);
+            Rudp_CSharp.aux_send(_u, buffer, buf.Length);
+            Marshal.FreeHGlobal(buffer);
         }
 
-        public byte[] Update(byte[] buf, int tick) {
-            IntPtr buffer = Marshal.AllocHGlobal(buf.Length);
-            Marshal.Copy(buf, 0, buffer, buf.Length);
-            Rudp_CSharp.package pack = new Rudp_CSharp.package();
-            pack.buffer = buffer;
-            pack.cap = buf.Length;
-            pack.sz = buf.Length;
-
-            Rudp_CSharp.package res = Rudp_CSharp.aux_update(_u, pack, tick);
-            byte[] r = new byte[res.sz];
-            Marshal.Copy(r, 0, res.buffer, res.sz);
-            Rudp_CSharp.aux_free_package(res);
-            Marshal.FreeHGlobal(buffer);
-            return r;
+        public List<byte[]> Update(byte[] buf, int start, int len, int tick) {
+            List<byte[]> result = new List<byte[]>();
+            IntPtr buffer = IntPtr.Zero;
+            int sz = 0;
+            if (buf != null && buf.Length > 0) {
+                buffer = Marshal.AllocHGlobal(buf.Length);
+                Marshal.Copy(buf, 0, buffer, buf.Length);
+                sz = buf.Length;
+            }
+            IntPtr res = Rudp_CSharp.aux_update(_u, buffer, sz, tick);
+            while (res != IntPtr.Zero) {
+                Rudp_CSharp.rudp_package pack = (Rudp_CSharp.rudp_package)Marshal.PtrToStructure(res, typeof(Rudp_CSharp.rudp_package));
+                byte[] d = new byte[pack.sz];
+                Marshal.Copy(pack.buffer, d, 0, pack.sz);
+                result.Add(d);
+                res = pack.next;
+            }
+            return result;
         }
     }
 }

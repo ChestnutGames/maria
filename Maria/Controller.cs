@@ -16,10 +16,6 @@ namespace Maria {
             _ctx = ctx;
         }
 
-        // Use this for initialization
-        internal void start() {
-        }
-
         // Update is called once per frame
         internal virtual void Update(float delta) {
             foreach (var item in _actors) {
@@ -33,18 +29,18 @@ namespace Maria {
         public virtual void Exit() {
         }
 
-        public virtual void AuthGateCB(int code) {
+        public virtual void GateAuthCb(int code) {
             if (code == 200) {
                 _authtcp = true;
             }
         }
 
-        public virtual void AuthGateOnDisconnect() {
+        public virtual void GateDisconnect() {
             _authtcp = false;
-            _ctx.AuthGate(null);
+            _ctx.GateAuth(null);
         }
 
-        public virtual void AuthUdpCb(bool ok) {
+        public virtual void UdpAuthCb(bool ok) {
             _authudp = ok;
         }
 

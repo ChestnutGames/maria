@@ -119,7 +119,7 @@ namespace Maria {
             _client.SendReq<T>(tag, obj);
         }
 
-        public void AuthLogin(string s, string u, string pwd) {
+        public void LoginAuth(string s, string u, string pwd) {
             _authtcp = false;
             
             _user.Server = s;
@@ -127,10 +127,10 @@ namespace Maria {
             _user.Password = pwd;
             string ip = Config.LoginIp;
             int port = Config.LoginPort;
-            _login.Auth(ip, port, s, u, pwd, AuthLoginCb);
+            _login.Auth(ip, port, s, u, pwd, LoginAuthCb);
         }
 
-        public void AuthLoginCb(bool ok, byte[] secret, string dummy) {
+        public void LoginAuthCb(bool ok, byte[] secret, string dummy) {
             if (ok) {
                 int _1 = dummy.IndexOf('#');
                 int _2 = dummy.IndexOf('@', _1);
@@ -148,19 +148,19 @@ namespace Maria {
                 _user.Uid = uid;
                 _user.Subid = sid;
 
-                _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
+                _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthCB);
             } else {
             }
         }
 
-        public virtual void AuthLoginOnDisconnect() {
+        public virtual void LoginDisconnect() {
         }
 
-        public void AuthGate(ClientSocket.CB cb) {
+        public void GateAuth(ClientSocket.CB cb) {
             _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
         }
 
-        public void AuthGateCB(int ok) {
+        public void GateAuthCB(int ok) {
             if (ok == 200) {
                 _authtcp = true;
                 string dummy = string.Empty;
@@ -168,11 +168,11 @@ namespace Maria {
                     item.Value.AuthGateCB(ok);
                 }
             } else if (ok == 403) {
-                AuthLogin(_user.Server, _user.Username, _user.Password);
+                LoginAuth(_user.Server, _user.Username, _user.Password);
             }
         }
 
-        public virtual void AuthGateOnDisconnect() {
+        public virtual void GateDisconnect() {
             var ctr = Top();
             if (ctr != null) {
                 ctr.AuthGateOnDisconnect();
@@ -186,13 +186,13 @@ namespace Maria {
             }
         }
 
-        public void AuthUdp(ClientSocket.CB cb) {
+        public void UdpAuth(ClientSocket.CB cb) {
             if (!_authudp) {
                 _client.AuthUdp();
             }
         }
 
-        public void AuthUdpCb(uint session) {
+        public void UdpAuthCb(uint session) {
             _authudp = true;
         }
 

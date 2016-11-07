@@ -8,11 +8,18 @@ namespace Maria.Rudp {
     class Rudp_CSharp {
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct package {
+        public struct rudp_package {
+            public IntPtr next;
             public IntPtr buffer;
-            public int    sz;
-            public int    cap;
+            public int sz;
         }
+
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct package {
+        //    public IntPtr buffer;
+        //    public int sz;
+        //    public int cap;
+        //}
 
         [DllImport("rudp", EntryPoint = "aux_new", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
         public static extern IntPtr aux_new(int send_delay, int expired_time);
@@ -21,15 +28,15 @@ namespace Maria.Rudp {
         public static extern void aux_delete(IntPtr U);
 
         [DllImport("rudp", EntryPoint = "aux_recv", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
-        public static extern int aux_recv(IntPtr U, package pack);
+        public static extern int aux_recv(IntPtr U, IntPtr buffer, int sz);
 
         [DllImport("rudp", EntryPoint = "aux_send", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
-        public static extern void aux_send(IntPtr U, package pack);
+        public static extern void aux_send(IntPtr U, IntPtr buffer, int sz);
 
         [DllImport("rudp", EntryPoint = "aux_update", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
-        public static extern package aux_update(IntPtr U, package pack, int tick);
+        public static extern IntPtr aux_update(IntPtr U, IntPtr buffer, int sz, int tick);
 
-        [DllImport("rudp", EntryPoint = "aux_free_package", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
-        public static extern void aux_free_package(package pack);
+        //[DllImport("rudp", EntryPoint = "aux_free_package", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
+        //public static extern void aux_free_package(package pack);
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Maria {
@@ -16,16 +13,32 @@ namespace Maria {
             _go = e.Orgin;
             _ctx.Countdown("startcontroller", 2, CountdownCb);
 
-            //byte[] buffer = new byte[4] { 1, 2, 3, 4 };
-            
-            //Rudp.Rudp u = new Rudp.Rudp(1, 5);
-            //u.Send(buffer);
-            //u.Update(null, 1);
+            //byte[] buffer1 = new byte[4] { 1, 2, 3, 4 };
+            //byte[] buffer2 = new byte[4] { 5, 6, 7, 8 };
+
+            //Rudp.Rudp S = new Rudp.Rudp(1, 5);
+            //S.OnRecv = OnRecv;
+
+            //Rudp.Rudp C = new Rudp.Rudp(1, 5);
+            //C.Send(buffer1);
+            //C.Send(buffer2);
+
+            //List<byte[]> res = C.Update(null, 0, 0, 1);
+            //foreach (var item in res) {
+            //    S.Update(item, 0, 0, 1);
+            //    S.Recv();
+            //}
 
         }
 
         private void CountdownCb() {
             _ctx.Push("login");
+        }
+
+        private void OnRecv(byte[] buffer, int start, int len) {
+            for (int i = 0; i < len; i++) {
+                Debug.Log(string.Format("{0}", buffer[i]));
+            }
         }
     }
 }

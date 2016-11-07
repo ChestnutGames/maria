@@ -23,25 +23,20 @@ namespace Maria {
             base.Exit();
         }
 
-        public void AuthLogin(string server, string username, string password) {
+        public void LoginAuth(string server, string username, string password) {
             _server = server;
             _username = username;
             _password = password;
-            _ctx.AuthLogin(server, username, password);
+            _ctx.LoginAuth(server, username, password);
         }
 
-        public override void AuthGateCB(int code) {
-            base.AuthGateCB(code);
+        public override void GateAuthCb(int code) {
+            base.GateAuthCb(code);
             if (code == 200) {
                 _ctx.Push("game");
             } else {
                 _loginActor.EnableCommitOk();
             }
         }
-
-        public override void AuthGateOnDisconnect() {
-            base.AuthGateOnDisconnect();
-        }
-
     }
 }

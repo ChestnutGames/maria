@@ -20,7 +20,7 @@ namespace Maria.Network
         Header,
     }
 
-    public class PackageSocket
+    public class PackageSocket : IDisposable
     {
         enum State
         {
@@ -70,6 +70,10 @@ namespace Maria.Network
             SendQueue = new Queue<byte[]>();
             RecvBuffer = new byte[(int)ushort.MaxValue + 2];
             Reset();
+        }
+
+        public void Dispose() {
+            throw new NotImplementedException();
         }
 
         public void Connect(string server, int port)
