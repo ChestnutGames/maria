@@ -47,6 +47,10 @@ sysinfo.txt
 # 忽略指定文件夹
 Maria/bin
 Maria/obj
+
+Maria/Network/Request.cs
+Maria/Network/Response.cs
+
 Plugins/crypt/Debug
 Plugins/crypt/x64
 Plugins/crypt/libs
