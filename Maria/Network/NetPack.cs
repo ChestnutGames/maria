@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace Maria.Network {
-    class NetPack {
+   public class NetPack {
         public static void Packlh(byte[] buffer, int start, short n) {
             int len = 2;
             Debug.Assert(start + len <= buffer.Length);

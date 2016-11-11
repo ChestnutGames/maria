@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using System.Text;
 using Sproto;
-using S2cSprotoType;
 using System.Net.Sockets;
 using Maria.Encrypt;
 
@@ -67,10 +66,10 @@ namespace Maria.Network {
         private int _udpport = 0;
         private bool _udpflag = false;
 
-        public ClientSocket(Context ctx) {
+        public ClientSocket(Context ctx, ProtocolBase s2c, ProtocolBase c2s) {
             _ctx = ctx;
-            _host = new SprotoRpc(S2cProtocol.Instance);
-            _sendRequest = _host.Attach(C2sProtocol.Instance);
+            _host = new SprotoRpc(s2c);
+            _sendRequest = _host.Attach(c2s);
         }
 
         // Use this for initialization
@@ -185,7 +184,7 @@ namespace Maria.Network {
             _tcpflag = false;
             _tcp = null;
 
-            _ctx.AuthGateOnDisconnect();
+            _ctx.GateDisconnect();
         }
 
         private byte[] WriteToken() {
@@ -292,14 +291,14 @@ namespace Maria.Network {
         public void AuthUdp() {
             _udpflag = false;
             _udp = null;
-            C2sSprotoType.join.request requestObj = new C2sSprotoType.join.request();
-            requestObj.room = 1;
-            try {
-                SendReq<C2sProtocol.join>(C2sProtocol.join.Tag, requestObj);
-            } catch (KeyNotFoundException ex) {
-                Debug.LogError(ex.Message);
-                throw;
-            }
+            //C2sSprotoType.join.request requestObj = new C2sSprotoType.join.request();
+            //requestObj.room = 1;
+            //try {
+            //    SendReq<C2sProtocol.join>(C2sProtocol.join.Tag, requestObj);
+            //} catch (KeyNotFoundException ex) {
+            //    Debug.LogError(ex.Message);
+            //    throw;
+            //}
         }
 
         public void AuthUdpCb(long session, string ip, int port) {
@@ -320,9 +319,9 @@ namespace Maria.Network {
 
         private void OnSyncUdp() {
             _udpflag = true;
-            _ctx.AuthUdpCb((uint)_udpsession);
+            _ctx.UdpAuthCb((uint)_udpsession);
             var controller = _ctx.Top();
-            controller.AuthUdpCb(true);
+            controller.UdpAuthCb(true);
         }
 
         private void OnRecvUdp(PackageSocketUdp.R r) {

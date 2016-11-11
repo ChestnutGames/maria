@@ -7,8 +7,7 @@ public class App : MonoBehaviour {
 
     public RootBehaviour _root = null;
     private Maria.Application _app = null;
-    private Queue<Actor.RenderHandler> _renderQueue = new Queue<Actor.RenderHandler>();
-
+    
     // Use this for initialization
     void Start() {
         DontDestroyOnLoad(this);
@@ -19,12 +18,8 @@ public class App : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        lock (_renderQueue) {
-            while (_renderQueue.Count > 0) {
-                Actor.RenderHandler handler = _renderQueue.Dequeue();
-                handler();
-            }
-        }
+
+        _app.Update();
     }
 
     void OnApplicationFocus(bool isFocus) {
@@ -47,12 +42,6 @@ public class App : MonoBehaviour {
 
     public void Enqueue(Command cmd) {
         _app.Enqueue(cmd);
-    }
-
-    public void EnqueueRenderQueue(Actor.RenderHandler handler) {
-        lock (_renderQueue) {
-            _renderQueue.Enqueue(handler);
-        }
     }
 
 }

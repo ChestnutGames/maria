@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 
 namespace Maria.Network {
-    class NetUnpack {
+    public class NetUnpack {
         public static int Unpackbi(byte[] buffer, int offset) {
             int res = 0;
             res |= buffer[offset] << (3 * 8);

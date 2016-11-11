@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sproto;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,5 +24,8 @@ namespace Maria
         public int LoginPort { get { return _loginPort; } }
         public string GateIp { get { return _gateIp; } }
         public int GatePort { get { return _gatePort; } }
+
+        public ProtocolBase c2s { get; set; }
+        public ProtocolBase s2c { get; set; }
     }
 }

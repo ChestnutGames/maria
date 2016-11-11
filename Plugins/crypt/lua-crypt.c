@@ -2,7 +2,7 @@
 //#include <lauxlib.h>
 
 
-#include "stdafx.h"
+#include "crypt_aux.h"
 #include <time.h>
 #include <stdint.h>
 #include <string.h>

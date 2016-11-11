@@ -16,9 +16,7 @@ namespace Maria {
 
         public delegate void CountdownCb();
 
-        protected global::App _app;
         protected Application _application;
-
         protected EventDispatcher _dispatcher = null;
         protected Dictionary<string, Controller> _hash = new Dictionary<string, Controller>();
         protected Stack<Controller> _stack = new Stack<Controller>();
@@ -32,8 +30,8 @@ namespace Maria {
         protected Config _config = null;
         protected TimeSync _ts = null;
 
-        public Context(global::App app, Maria.Application application) {
-            _app = app;
+        public Context(Application application, Config config) {
+       
             _application = application;
 
             //var go = GameObject.Find("/Assets");
@@ -42,14 +40,14 @@ namespace Maria {
             _dispatcher = new EventDispatcher(this);
 
             _login = new ClientLogin(this);
-            _client = new ClientSocket(this);
+            _client = new ClientSocket(this, _config.s2c, _config.c2s);
 
             _hash["start"] = new StartController(this);
-            _hash["login"] = new LoginController(this);
+            //_hash["login"] = new LoginController(this);
 
             Push("start");
 
-            _config = new Config();
+            _config = config;
             _ts = new TimeSync();
 
         }
@@ -157,17 +155,17 @@ namespace Maria {
         }
 
         public void GateAuth(ClientSocket.CB cb) {
-            _client.Auth(Config.GateIp, Config.GatePort, _user, AuthGateCB);
+            _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthCB);
         }
 
-        public void GateAuthCB(int ok) {
-            if (ok == 200) {
+        public void GateAuthCB(int code) {
+            if (code == 200) {
                 _authtcp = true;
                 string dummy = string.Empty;
                 foreach (var item in _hash) {
-                    item.Value.AuthGateCB(ok);
+                    item.Value.GateAuthCb(code);
                 }
-            } else if (ok == 403) {
+            } else if (code == 403) {
                 LoginAuth(_user.Server, _user.Username, _user.Password);
             }
         }
@@ -175,7 +173,7 @@ namespace Maria {
         public virtual void GateDisconnect() {
             var ctr = Top();
             if (ctr != null) {
-                ctr.AuthGateOnDisconnect();
+                ctr.GateDisconnect();
             }
         }
 
@@ -223,7 +221,7 @@ namespace Maria {
         }
 
         public void EnqueueRenderQueue(Actor.RenderHandler handler) {
-            _app.EnqueueRenderQueue(handler);
+            _application.EnqueueRenderQueue(handler);
         }
 
         public void FireCustomEvent(string eventName, object ud) {

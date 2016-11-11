@@ -17,7 +17,7 @@ namespace Maria {
         }
 
         // Update is called once per frame
-        internal virtual void Update(float delta) {
+        public virtual void Update(float delta) {
             foreach (var item in _actors) {
                 item.Update(delta);
             }

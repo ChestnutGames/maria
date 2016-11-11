@@ -1,7 +1,6 @@
 ﻿using Maria.Network;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using UnityEngine;
@@ -9,20 +8,18 @@ using UnityEngine;
 namespace Maria {
     public class Application : IDisposable {
 
-        protected global::App _app;
         protected CommandQueue _queue = new CommandQueue();
+        protected Queue<Actor.RenderHandler> _renderQueue = new Queue<Actor.RenderHandler>();
         protected Semaphore _semaphore = null;
         protected Thread _worker = null;
-        protected Context _ctx = null;
-        protected EventDispatcher _dispatcher = null;
         protected TimeSync _tiSync = null;
         protected int _lastTi;
 
-        public Application(App app) {
-            _app = app;
-            _ctx = new Bacon.AppContext(_app, this);
-            _dispatcher = _ctx.EventDispatcher;
+        protected Context _ctx = null;
+        protected EventDispatcher _dispatcher = null;
 
+        public Application() {
+            
             _tiSync = new TimeSync();
             _tiSync.LocalTime();
             _lastTi = _tiSync.LocalTime();
@@ -66,6 +63,27 @@ namespace Maria {
         public void Enqueue(Command cmd) {
             lock (_queue) {
                 _queue.Enqueue(cmd);
+            }
+        }
+
+        public void EnqueueRenderQueue(Actor.RenderHandler handler)
+        {
+            lock (_renderQueue)
+            {
+                _renderQueue.Enqueue(handler);
+            }
+        }
+
+        // Update is called once per frame
+        public void Update()
+        {
+            lock (_renderQueue)
+            {
+                while (_renderQueue.Count > 0)
+                {
+                    Actor.RenderHandler handler = _renderQueue.Dequeue();
+                    handler();
+                }
             }
         }
 

@@ -52,7 +52,7 @@ namespace Maria.Network {
         }
 
         public void Dispose() {
-            _so.Dispose();
+            //_so.Dispose(true);
             _u.Dispose();
         }
 
