@@ -52,8 +52,6 @@ namespace Maria.Network {
         private const int s2c_req_tag = 1 << 2;
         private const int s2c_resp_tag = 1 << 3;
 
-        private Request _request = null;
-        private Response _response = null;
         private Dictionary<int, ReqCb> _req = new Dictionary<int, ReqCb>();
         private Dictionary<int, RspCb> _rsp = new Dictionary<int, RspCb>();
 
@@ -73,9 +71,6 @@ namespace Maria.Network {
             _ctx = ctx;
             _host = new SprotoRpc(S2cProtocol.Instance);
             _sendRequest = _host.Attach(C2sProtocol.Instance);
-
-            _request = new Request(_ctx, this);
-            _response = new Response(_ctx, this);
         }
 
         // Use this for initialization
