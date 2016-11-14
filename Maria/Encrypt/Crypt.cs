@@ -2,32 +2,24 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Maria.Encrypt
-{
-    public class Crypt
-    {
-        public static byte[] randomkey()
-        {
-            try
-            {
+namespace Maria.Encrypt {
+    public class Crypt {
+        public static byte[] randomkey() {
+            try {
                 Crypt_CSharp.PACKAGE res = Crypt_CSharp.randomkey();
                 byte[] buffer = new byte[res.len];
                 Marshal.Copy(res.src, buffer, 0, res.len);
                 pfree(res);
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] desencode(byte[] key, byte[] src)
-        {
+        public static byte[] desencode(byte[] key, byte[] src) {
             Debug.Assert(key.Length > 0);
             Debug.Assert(src.Length > 0);
-            try
-            {
+            try {
                 IntPtr keyptr = Marshal.AllocHGlobal(key.Length);
                 Marshal.Copy(key, 0, keyptr, key.Length);
                 Crypt_CSharp.PACKAGE pgkey;
@@ -44,22 +36,18 @@ namespace Maria.Encrypt
                 byte[] buffer = new byte[res.len];
                 Marshal.Copy(res.src, buffer, 0, res.len);
                 pfree(res);
-                
+
                 Marshal.FreeHGlobal(keyptr);
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception ex)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] desdecode(byte[] key, byte[] encrypted)
-        {
+        public static byte[] desdecode(byte[] key, byte[] encrypted) {
             Debug.Assert(key.Length == 8);
-            try
-            {
+            try {
                 IntPtr keyptr = Marshal.AllocHGlobal(key.Length);
                 Marshal.Copy(key, 0, keyptr, key.Length);
                 Crypt_CSharp.PACKAGE pgkey;
@@ -80,17 +68,13 @@ namespace Maria.Encrypt
                 Marshal.FreeHGlobal(keyptr);
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception ex)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] hashkey(byte[] src)
-        {
-            try
-            {
+        public static byte[] hashkey(byte[] src) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(src.Length);
                 Marshal.Copy(src, 0, ptr, src.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -103,17 +87,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception ex)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] hexencode(byte[] src)
-        {
-            try
-            {
+        public static byte[] hexencode(byte[] src) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(src.Length);
                 Marshal.Copy(src, 0, ptr, src.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -127,17 +107,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception ex)
-            {
-                return null;
+            } catch (Exception ex) {
+                throw;
             }
         }
 
-        public static byte[] hexdecode(byte[] encrypted)
-        {
-            try
-            {
+        public static byte[] hexdecode(byte[] encrypted) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(encrypted.Length);
                 Marshal.Copy(encrypted, 0, ptr, encrypted.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -151,17 +127,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] base64encode(byte[] src)
-        {
-            try
-            {
+        public static byte[] base64encode(byte[] src) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(src.Length);
                 Marshal.Copy(src, 0, ptr, src.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -175,17 +147,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] base64decode(byte[] encrypted)
-        {
-            try
-            {
+        public static byte[] base64decode(byte[] encrypted) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(encrypted.Length);
                 Marshal.Copy(encrypted, 0, ptr, encrypted.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -199,17 +167,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] dhsecret(byte[] key, byte[] src)
-        {
-            try
-            {
+        public static byte[] dhsecret(byte[] key, byte[] src) {
+            try {
                 IntPtr keyptr = Marshal.AllocHGlobal(key.Length);
                 Marshal.Copy(key, 0, keyptr, key.Length);
                 Crypt_CSharp.PACKAGE pgkey;
@@ -230,17 +194,13 @@ namespace Maria.Encrypt
                 Marshal.FreeHGlobal(keyptr);
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] dhexchange(byte[] src)
-        {
-            try
-            {
+        public static byte[] dhexchange(byte[] src) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(src.Length);
                 Marshal.Copy(src, 0, ptr, src.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -254,17 +214,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception ex)
-            {
-                return null;
+            } catch (Exception ex) {
+                throw;
             }
         }
 
-        public static byte[] hmac64(byte[] key1, byte[] key2)
-        {
-            try
-            {
+        public static byte[] hmac64(byte[] key1, byte[] key2) {
+            try {
                 IntPtr keyptr1 = Marshal.AllocHGlobal(key1.Length);
                 Marshal.Copy(key1, 0, keyptr1, key1.Length);
                 Crypt_CSharp.PACKAGE pgkey1;
@@ -280,22 +236,18 @@ namespace Maria.Encrypt
                 byte[] buffer = new byte[res.len];
                 Marshal.Copy(res.src, buffer, 0, res.len);
                 pfree(res);
-                
+
                 Marshal.FreeHGlobal(keyptr1);
                 Marshal.FreeHGlobal(keyptr2);
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
 
         }
 
-        public static byte[] sha1(byte[] src)
-        {
-            try
-            {
+        public static byte[] sha1(byte[] src) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(src.Length);
                 Marshal.Copy(src, 0, ptr, src.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -309,17 +261,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception ex)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] hmac_sha1(byte[] src)
-        {
-            try
-            {
+        public static byte[] hmac_sha1(byte[] src) {
+            try {
                 IntPtr ptr = Marshal.AllocHGlobal(src.Length);
                 Marshal.Copy(src, 0, ptr, src.Length);
                 Crypt_CSharp.PACKAGE pg;
@@ -333,17 +281,13 @@ namespace Maria.Encrypt
 
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception)
-            {
-                return null;
+            } catch (Exception) {
+                throw;
             }
         }
 
-        public static byte[] hmac_hash(byte[] key, byte[] data)
-        {
-            try
-            {
+        public static byte[] hmac_hash(byte[] key, byte[] data) {
+            try {
                 Debug.Assert(key.Length == 8);
                 IntPtr keyptr = Marshal.AllocHGlobal(key.Length);
                 Marshal.Copy(key, 0, keyptr, key.Length);
@@ -365,22 +309,15 @@ namespace Maria.Encrypt
                 Marshal.FreeHGlobal(keyptr);
                 Marshal.FreeHGlobal(ptr);
                 return buffer;
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 throw;
             }
         }
 
-        public static void pfree(Crypt_CSharp.PACKAGE data)
-        {
-            try
-            {
+        public static void pfree(Crypt_CSharp.PACKAGE data) {
+            try {
                 Crypt_CSharp.pfree(data);
-            }
-            catch (Exception)
-            {
-
+            } catch (Exception) {
                 throw;
             }
         }
