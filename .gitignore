@@ -61,6 +61,12 @@ Plugins/rudp/x64
 Plugins/rudp/libs
 Plugins/rudp/obj
 
+Plugins/play/Debug
+Plugins/play/x64
+
+Plugins/play_test/Debug
+Plugins/play_test/x64
+
 Plugins/Debug
 Plugins/x64
 
