@@ -1,18 +1,9 @@
 #include "stdafx.h"
 #include "App.h"
+
 #include <iostream>
-<<<<<<< HEAD
-#include <foundation/Px.h>
-#include <common/PxTolerancesScale.h>
-#include <extensions/PxExtensionsAPI.h>
-=======
 #include <cstdlib>
 #include <cstdarg>
->>>>>>> 8fce370289c602dbdf76579b5736f5a4a846cb9f
-
-struct data {
-	int dummy;
-};
 
 App::App()
 	: _exit(false) {
