@@ -150,11 +150,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Context.h" />
+    <ClInclude Include="play.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerMgr.h" />
+    <ClInclude Include="Role.h" />
+    <ClInclude Include="RoleMgr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Context.cpp" />
+    <ClCompile Include="play.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerMgr.cpp" />
+    <ClCompile Include="Role.cpp" />
+    <ClCompile Include="RoleMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

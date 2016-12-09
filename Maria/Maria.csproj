@@ -67,6 +67,8 @@
     <Compile Include="Network\PackageSocket.cs" />
     <Compile Include="Network\PackageSocketUdp.cs" />
     <Compile Include="Network\TimeSync.cs" />
+    <Compile Include="Play\Play.cs" />
+    <Compile Include="Play\Play_CSharp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuadTree.cs" />
     <Compile Include="Rudp\Rudp.cs" />
