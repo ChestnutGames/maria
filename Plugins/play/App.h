@@ -2,6 +2,8 @@
 #define __APP_H_
 
 #include "stdafx.h"
+#include "Context.h"
+
 #include <extensions/PxDefaultErrorCallback.h>
 #include <extensions/PxDefaultAllocator.h>
 #include <extensions/PxDefaultCpuDispatcher.h>
@@ -16,6 +18,7 @@
 #include <PxRigidStatic.h>
 #include <PxMaterial.h>
 
+#include <map>
 
 class PLAY_API App {
 public:
@@ -23,25 +26,14 @@ public:
 	~App();
 
 	void run();
-	void update();
+
+	void updata();
+	int join(void *ud);
+	void leave(int id);
 
 private:
-	bool _exit;
-	bool                      _recordMem;
-	physx::PxDefaultAllocator _allocator;
-	physx::PxDefaultErrorCallback _error;
-	physx::PxFoundation   *_foundation;
-
-	physx::PxProfileZoneManager *_profileZoneManager;
-
-	physx::PxPhysics      *_physics;
-	physx::PxCooking      *_cooking;
-
-	physx::PxDefaultCpuDispatcher *_dispatcher;
-
-	physx::PxScene        *_scene;
-	physx::PxRigidStatic     *_plane;
-	physx::PxRigidDynamic    *_a;
+	bool                      _exit;
+	Context                   _ctx;
 
 };
 
