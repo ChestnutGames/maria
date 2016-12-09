@@ -2,13 +2,13 @@
 #define __APP_H_
 
 #include "stdafx.h"
-#include <extensions\PxDefaultErrorCallback.h>
-#include <extensions\PxDefaultAllocator.h>
-#include <extensions\PxDefaultCpuDispatcher.h>
-#include <foundation\PxAllocatorCallback.h>
-#include <foundation\PxFoundation.h>
-#include <physxprofilesdk\PxProfileZoneManager.h>
-#include <cooking\PxCooking.h>
+#include <extensions/PxDefaultErrorCallback.h>
+#include <extensions/PxDefaultAllocator.h>
+#include <extensions/PxDefaultCpuDispatcher.h>
+#include <foundation/PxAllocatorCallback.h>
+#include <foundation/PxFoundation.h>
+#include <physxprofilesdk/PxProfileZoneManager.h>
+#include <cooking/PxCooking.h>
 #include <PxPhysics.h>
 #include <PxScene.h>
 #include <PxActor.h>

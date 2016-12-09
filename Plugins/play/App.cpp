@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "App.h"
 #include <iostream>
-#include <foundation\Px.h>
-#include <common\PxTolerancesScale.h>
-#include <extensions\PxExtensionsAPI.h>
+#include <foundation/Px.h>
+#include <common/PxTolerancesScale.h>
+#include <extensions/PxExtensionsAPI.h>
 
 using namespace physx;
 
