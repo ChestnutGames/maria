@@ -8,7 +8,6 @@ namespace Maria {
         protected Queue<Command> _queue = new Queue<Command>();
 
         public CommandQueue() {
-
         }
 
         public int Count { get { return _queue.Count; } }

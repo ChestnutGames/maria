@@ -8,7 +8,9 @@ using Maria.Encrypt;
 
 namespace Maria.Network {
     public class ClientSocket {
-        public delegate void CB(int ok);
+
+        public delegate void AuthedCb(int ok);
+        public delegate void DisconnectedCb();
 
         public delegate void RspCb(uint session, SprotoTypeBase responseObj);
         public delegate SprotoTypeBase ReqCb(uint session, SprotoTypeBase requestObj);
@@ -34,22 +36,18 @@ namespace Maria.Network {
         private PackageSocket _tcp = null;
         private User _user = new User();
 
-        private string _ip = String.Empty;
-        private int _port = 0;
-        private int _step = 0;
-        private bool _handshake = false;
-        private CB _callback = null;
+        private string       _ip = String.Empty;
+        private int          _port = 0;
+        private int          _step = 0;
+        private bool         _handshake = false;
+        private AuthedCb       _authed  = null;
+        private DisconnectedCb _disconnected = null;
 
         private int _index = 0;
         private int _version = 0;
         private uint _session = 0;
         private SprotoRpc _host = null;
         private SprotoRpc.RpcRequest _sendRequest = null;
-
-        private const int c2s_req_tag = 1 << 0;
-        private const int c2s_resp_tag = 1 << 1;
-        private const int s2c_req_tag = 1 << 2;
-        private const int s2c_resp_tag = 1 << 3;
 
         private Dictionary<int, ReqCb> _req = new Dictionary<int, ReqCb>();
         private Dictionary<int, RspCb> _rsp = new Dictionary<int, RspCb>();
@@ -61,19 +59,16 @@ namespace Maria.Network {
 
         // udp
         private PackageSocketUdp _udp = null;
-        private long _udpsession = 0;
-        private string _udpip = null;
-        private int _udpport = 0;
-        private bool _udpflag = false;
+        private long             _udpsession = 0;
+        private string           _udpip = null;
+        private int              _udpport = 0;
+        private bool             _udpflag = false;
+        private AuthedCb         _udpAuthed = null;
 
         public ClientSocket(Context ctx, ProtocolBase s2c, ProtocolBase c2s) {
             _ctx = ctx;
             _host = new SprotoRpc(s2c);
             _sendRequest = _host.Attach(c2s);
-        }
-
-        // Use this for initialization
-        public void Start() {
         }
 
         // Update is called once per frame
@@ -110,7 +105,7 @@ namespace Maria.Network {
                 if (_handshake)
                     DoAuth();
             } else {
-                Auth(_ip, _port, _user, null);
+                Auth(_ip, _port, _user, _authed, _disconnected);
             }
         }
 
@@ -131,22 +126,22 @@ namespace Maria.Network {
                         _tcp.SetEnabledPing(true);
                         _tcp.SendPing();
                         Debug.Log(string.Format("{0},{1}", code, msg));
-                        if (_callback != null) {
-                            _callback(code);
+                        if (_authed != null) {
+                            _authed(code);
                         }
                     } else if (code == 403) {
                         _step = 0;
                         _handshake = false;
-                        if (_callback != null) {
-                            _callback(code);
+                        if (_authed != null) {
+                            _authed(code);
                         }
                     } else {
                         Debug.Assert(false);
                         _step = 0;
                         DoAuth();
                         Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
-                        if (_callback != null) {
-                            _callback(code);
+                        if (_authed != null) {
+                            _authed(code);
                         }
                     }
                 }
@@ -183,8 +178,7 @@ namespace Maria.Network {
         void OnDisconnect(SocketError socketError, PackageSocketError packageSocketError) {
             _tcpflag = false;
             _tcp = null;
-
-            _ctx.GateDisconnect();
+            _disconnected();
         }
 
         private byte[] WriteToken() {
@@ -260,15 +254,17 @@ namespace Maria.Network {
             return Encoding.ASCII.GetString(tmp);
         }
 
-        public void Auth(string ipstr, int pt, User u, CB cb) {
+        public void Auth(string ipstr, int pt, User u, AuthedCb authed, DisconnectedCb disconnected) {
             _step = 0;
             _index++;   // index increment.
             _ip = ipstr;
             _port = pt;
             _user = u;
-            _callback = cb;
             _handshake = true;
 
+            _authed = authed;
+            _disconnected = disconnected;
+            
             // TODO:
             // 这里可能需要修改下
             _tcp = new PackageSocket();
@@ -283,48 +279,39 @@ namespace Maria.Network {
         public void Reset() {
             _user = null;
             _step = 0;
-            _callback = null;
             _handshake = false;
+            _authed = null;
+            _disconnected = null;
         }
 
         // UDP
-        public void AuthUdp() {
-            _udpflag = false;
-            _udp = null;
-            //C2sSprotoType.join.request requestObj = new C2sSprotoType.join.request();
-            //requestObj.room = 1;
-            //try {
-            //    SendReq<C2sProtocol.join>(C2sProtocol.join.Tag, requestObj);
-            //} catch (KeyNotFoundException ex) {
-            //    Debug.LogError(ex.Message);
-            //    throw;
-            //}
-        }
-
-        public void AuthUdpCb(long session, string ip, int port) {
+        public void UdpAuth(long session, string ip, int port, AuthedCb authed) {
             Debug.Assert(_udpflag == false);
             Debug.Assert(_udp == null);
             _udpsession = session;
             _udpip = ip;
             _udpport = port;
+            _udpAuthed = authed;
 
             TimeSync ts = _ctx.TiSync;
             _udp = new PackageSocketUdp(_user.Secret, (uint)session, ts);
-            _udp.OnRecv = OnRecvUdp;
-            _udp.OnSync = OnSyncUdp;
+            _udp.OnRecv = OnUdpRecv;
+            _udp.OnSync = OnUdpSync;
             Debug.Assert(_udp != null);
             _udp.Connect(ip, port);
             _udp.Sync();
         }
 
-        private void OnSyncUdp() {
+        private void OnUdpSync() {
             _udpflag = true;
-            _ctx.UdpAuthCb((uint)_udpsession);
-            var controller = _ctx.Top();
-            controller.UdpAuthCb(true);
+            _udpAuthed(10001);
+
+            //_ctx.UdpAuthCb((uint)_udpsession);
+            //var controller = _ctx.Top();
+            //controller.UdpAuthCb(true);
         }
 
-        private void OnRecvUdp(PackageSocketUdp.R r) {
+        private void OnUdpRecv(PackageSocketUdp.R r) {
             Controller controller = _ctx.Top();
             controller.OnRecviveUdp(r);
         }

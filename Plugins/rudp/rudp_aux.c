@@ -5,19 +5,13 @@
 #include <memory.h>
 #include <assert.h>
 
-//struct package {
-//	char *buffer;
-//	int sz;
-//	int cap;
-//};
-
 struct rudp_aux {
 	struct rudp *u;
 	char buffer[MAX_PACKAGE];
 };
 
 RUDP_API struct rudp_aux *
-aux_new(int send_delay, int expired_time) {
+aux_alloc(int send_delay, int expired_time) {
 	struct rudp_aux *aux = malloc(sizeof(*aux));
 	memset(aux->buffer, 0, MAX_PACKAGE);
 	aux->u = NULL;
@@ -27,7 +21,7 @@ aux_new(int send_delay, int expired_time) {
 }
 
 RUDP_API void
-aux_delete(struct rudp_aux *aux) {
+aux_free(struct rudp_aux *aux) {
 	rudp_delete(aux->u);
 	free(aux);
 }
@@ -56,8 +50,3 @@ aux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 	struct rudp_package *res = rudp_update(aux->u, buffer, sz, tick);
 	return res;
 }
-
-//RUDP_API void
-//aux_free_package(struct package pack) {
-//	free(pack.buffer);
-//}

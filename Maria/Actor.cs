@@ -4,12 +4,12 @@ using System.Text;
 using UnityEngine;
 
 namespace Maria {
-    public class Actor : IDisposable {
+    public class Actor : DisposeObject {
         public delegate void RenderHandler();
 
-        protected Context _ctx;
-        protected Controller _controller;
-        protected GameObject _go;
+        protected Context    _ctx = null;
+        protected Controller _controller = null;
+        protected GameObject _go = null;
 
         public Actor(Context ctx, Controller controller)
             : this(ctx, controller, null) {
@@ -19,11 +19,6 @@ namespace Maria {
             _ctx = ctx;
             _controller = controller;
             _go = go;
-            _controller.Add(this);
-        }
-
-        public void Dispose() {
-            _controller.Remove(this);
         }
 
         public GameObject Go { get { return _go; } set { _go = value; } }

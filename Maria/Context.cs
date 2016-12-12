@@ -31,9 +31,7 @@ namespace Maria {
         protected TimeSync _ts = null;
 
         public Context(Application application, Config config) {
-       
             _application = application;
-
             //var go = GameObject.Find("/Assets");
             //Assets = go;
 
@@ -42,10 +40,10 @@ namespace Maria {
             _login = new ClientLogin(this);
             _client = new ClientSocket(this, _config.s2c, _config.c2s);
 
-            _hash["start"] = new StartController(this);
+            //_hash["start"] = new StartController(this);
             //_hash["login"] = new LoginController(this);
 
-            Push("start");
+            //Push("start");
 
             _config = config;
             _ts = new TimeSync();
@@ -146,7 +144,7 @@ namespace Maria {
                 _user.Uid = uid;
                 _user.Subid = sid;
 
-                _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthCB);
+                GateAuth();
             } else {
             }
         }
@@ -154,11 +152,11 @@ namespace Maria {
         public virtual void LoginDisconnect() {
         }
 
-        public void GateAuth(ClientSocket.CB cb) {
-            _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthCB);
+        public void GateAuth() {
+            _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthCB, GateDisconnect);
         }
 
-        public void GateAuthCB(int code) {
+        public void GateAuthed(int code) {
             if (code == 200) {
                 _authtcp = true;
                 string dummy = string.Empty;
@@ -170,7 +168,7 @@ namespace Maria {
             }
         }
 
-        public virtual void GateDisconnect() {
+        public virtual void GateDisconnected() {
             var ctr = Top();
             if (ctr != null) {
                 ctr.GateDisconnect();
@@ -186,11 +184,11 @@ namespace Maria {
 
         public void UdpAuth(ClientSocket.CB cb) {
             if (!_authudp) {
-                _client.AuthUdp();
+                _client.u();
             }
         }
 
-        public void UdpAuthCb(uint session) {
+        public void UdpAuthed(uint session) {
             _authudp = true;
         }
 

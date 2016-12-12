@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Maria.Rudp {
-    class Rudp : IDisposable {
+    public class Rudp : DisposeObject {
         public delegate void OnRecvHandler(byte[] buffer, int start, int len);
         private IntPtr _u;
         private OnRecvHandler _recv;
@@ -21,12 +21,19 @@ namespace Maria.Rudp {
             _buffer = new byte[_recvBuffersz];
         }
 
-        public void Dispose() {
-            _recv = null;
+        protected override void Dispose(bool disposing) {
+            if (_disposed) {
+                return;
+            }
+            if (disposing) {
+                // 清理托管资源，调用自己管理的对象的Dispose方法
+            }
+            // 清理非托管资源
             Marshal.FreeHGlobal(_recvBuffer);
             Rudp_CSharp.aux_delete(_u);
+            _disposed = true;
         }
-
+        
         public OnRecvHandler OnRecv { get { return _recv; } set { _recv = value; } }
 
         public int Recv() {

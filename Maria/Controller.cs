@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Maria.Network;
+using System;
 
-namespace Maria {
-    public class Controller {
+namespace Maria  {
+    public class Controller : INetwork {
         protected Context _ctx = null;
         protected bool _authtcp = false;
         protected bool _authudp = false;
@@ -23,36 +24,33 @@ namespace Maria {
             }
         }
 
-        public virtual void Enter() {
-        }
-
-        public virtual void Exit() {
-        }
-
-        public virtual void GateAuthCb(int code) {
-            if (code == 200) {
-                _authtcp = true;
-            }
-        }
-
-        public virtual void GateDisconnect() {
-            _authtcp = false;
-            _ctx.GateAuth(null);
-        }
-
-        public virtual void UdpAuthCb(bool ok) {
-            _authudp = ok;
-        }
-
-        public virtual void OnRecviveUdp(PackageSocketUdp.R r) {
-        }
-
         public void Add(Actor item) {
             _actors.Add(item);
         }
 
         public bool Remove(Actor item) {
             return _actors.Remove(item);
+        }
+
+        public virtual void Enter() {
+        }
+
+        public virtual void Exit() {
+        }
+
+        public void GateAuthed(int code) {
+            if (code == 200) {
+                _authtcp = true;
+            }
+        }
+
+        public void GateDisconnected() {
+            _authtcp = false;
+        }
+
+        public void UdpAuthed(uint session) {
+            _authudp = true;
+            throw new NotImplementedException();
         }
     }
 }

@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace Maria
-{
-    class QuadTree
-    {
-        public class QuadNode
-        {
-            public QuadNode()
-            {
+namespace Maria {
+    public class QuadTree {
+        public class QuadNode {
+            public QuadNode() {
                 UL = new Vector4(0, 0, 0, 1);
                 UR = new Vector4(1, 0, 0, 1);
                 TL = new Vector4(0, 1, 0, 1);
@@ -28,19 +24,16 @@ namespace Maria
             public QuadNode TRChild { get; set; }
         }
 
-        public QuadTree()
-        {
+        public QuadTree() {
             _depth = 7;
             _root = new QuadNode();
             Init(_root, 6);
         }
 
 
-        public void Init(QuadNode parent, int depth)
-        {
+        public void Init(QuadNode parent, int depth) {
             depth--;
-            if (depth == 0)
-            {
+            if (depth == 0) {
                 return;
             }
             Vector4 lc = (parent.UL + parent.TL) / 2;
