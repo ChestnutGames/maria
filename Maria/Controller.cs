@@ -38,19 +38,22 @@ namespace Maria  {
         public virtual void Exit() {
         }
 
-        public void GateAuthed(int code) {
+        public virtual void GateAuthed(int code) {
             if (code == 200) {
                 _authtcp = true;
             }
         }
 
-        public void GateDisconnected() {
+        public virtual void GateDisconnected() {
             _authtcp = false;
         }
 
-        public void UdpAuthed(uint session) {
+        public virtual void UdpAuthed(uint session) {
             _authudp = true;
             throw new NotImplementedException();
+        }
+
+        public virtual void OnUdpRecv(PackageSocketUdp.R r) {
         }
     }
 }

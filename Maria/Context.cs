@@ -20,15 +20,16 @@ namespace Maria {
         protected EventDispatcher _dispatcher = null;
         protected Dictionary<string, Controller> _hash = new Dictionary<string, Controller>();
         protected Stack<Controller> _stack = new Stack<Controller>();
-        protected ClientLogin _login = null;
+        protected ClientLogin  _login = null;
         protected ClientSocket _client = null;
         protected User _user = new User();
-        
-        private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
+
         protected bool _authtcp = false;
         protected bool _authudp = false;
         protected Config _config = null;
         protected TimeSync _ts = null;
+
+        private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
 
         public Context(Application application, Config config) {
             _application = application;
@@ -40,18 +41,8 @@ namespace Maria {
             _login = new ClientLogin(this);
             _client = new ClientSocket(this, _config.s2c, _config.c2s);
 
-            //_hash["start"] = new StartController(this);
-            //_hash["login"] = new LoginController(this);
-
-            //Push("start");
-
             _config = config;
             _ts = new TimeSync();
-
-        }
-
-        // Use this for initialization
-        public void Start() {
         }
 
         // Update is called once per frame
@@ -63,11 +54,9 @@ namespace Maria {
                 Timer tm = item.Value as Timer;
                 if (tm != null) {
                     if (tm.CD > 0) {
-                        //Debug.Log(tm.CD);
                         tm.CD -= delta;
                         if (tm.CD < 0) {
                             tm.CB();
-
                             //_timer.Remove()
                             //_timer.Remove(tm.Name);
                         }
@@ -117,7 +106,7 @@ namespace Maria {
 
         public void LoginAuth(string s, string u, string pwd) {
             _authtcp = false;
-            
+
             _user.Server = s;
             _user.Username = u;
             _user.Password = pwd;
@@ -153,26 +142,23 @@ namespace Maria {
         }
 
         public void GateAuth() {
-            _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthCB, GateDisconnect);
+            _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthed, GateDisconnected);
         }
 
         public void GateAuthed(int code) {
             if (code == 200) {
                 _authtcp = true;
                 string dummy = string.Empty;
-                foreach (var item in _hash) {
-                    item.Value.GateAuthCb(code);
-                }
+                Controller controller = Top();
+                controller.GateAuthed(code);
             } else if (code == 403) {
                 LoginAuth(_user.Server, _user.Username, _user.Password);
             }
         }
 
         public virtual void GateDisconnected() {
-            var ctr = Top();
-            if (ctr != null) {
-                ctr.GateDisconnect();
-            }
+            var controller = Top();
+            controller.GateDisconnected();
         }
 
         // UDP
@@ -182,10 +168,10 @@ namespace Maria {
             }
         }
 
-        public void UdpAuth(ClientSocket.CB cb) {
-            if (!_authudp) {
-                _client.u();
-            }
+        public void UdpAuth(uint session) {
+            //if (!_authudp) {
+            //    _client.u();
+            //}
         }
 
         public void UdpAuthed(uint session) {
@@ -211,11 +197,17 @@ namespace Maria {
         }
 
         public void Countdown(string name, float cd, CountdownCb cb) {
-            var tm = new Timer();
-            tm.Name = name;
-            tm.CD = cd;
-            tm.CB = cb;
-            _timer[name] = tm;
+            Timer tm = null;
+            if (_timer.ContainsKey(name)) {
+                tm = _timer[name];
+                tm.CD = cd;
+                tm.CB = cb;
+            } else {
+                tm = new Timer();
+                tm.Name = name;
+                tm.CD = cd;
+                tm.CB = cb;
+            }
         }
 
         public void EnqueueRenderQueue(Actor.RenderHandler handler) {

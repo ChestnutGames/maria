@@ -313,7 +313,7 @@ namespace Maria.Network {
 
         private void OnUdpRecv(PackageSocketUdp.R r) {
             Controller controller = _ctx.Top();
-            controller.OnRecviveUdp(r);
+            //controller.OnRecviveUdp(r);
         }
 
         public void SendUdp(byte[] data) {
