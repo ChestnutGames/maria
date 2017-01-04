@@ -3,16 +3,19 @@
 
 #include "Player.h"
 
+#include <map>
+
 class Context;
 class PlayerMgr {
 public:
 	PlayerMgr(Context *ctx);
 	~PlayerMgr();
 
+	Player * getPlayer(int id);
+private:
 	Player * createPlayer(void *ud);
 	void releasePlayer(Player **self);
 
-private:
 	Context *_ctx;
 
 	Player *_slots;

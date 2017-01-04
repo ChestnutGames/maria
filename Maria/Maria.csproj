@@ -71,6 +71,7 @@
     <Compile Include="Network\PackageSocketUdp.cs" />
     <Compile Include="Network\TimeSync.cs" />
     <Compile Include="OBB.cs" />
+    <Compile Include="Package.cs" />
     <Compile Include="Play\Play.cs" />
     <Compile Include="Play\Play_CSharp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
