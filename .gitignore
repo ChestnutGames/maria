@@ -48,18 +48,11 @@ sysinfo.txt
 Maria/bin
 Maria/obj
 
-Maria/Network/Request.cs
-Maria/Network/Response.cs
-
 Plugins/crypt/Debug
 Plugins/crypt/x64
-Plugins/crypt/libs
-Plugins/crypt/obj
 
 Plugins/rudp/Debug
 Plugins/rudp/x64
-Plugins/rudp/libs
-Plugins/rudp/obj
 
 Plugins/play/Debug
 Plugins/play/x64
@@ -67,11 +60,9 @@ Plugins/play/x64
 Plugins/play_test/Debug
 Plugins/play_test/x64
 
-Plugins/Debug
-Plugins/x64
-
 ipch
 Debug
+x64
 
 
 
