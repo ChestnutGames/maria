@@ -6,7 +6,8 @@ using Maria.Encrypt;
 
 namespace Maria.Network {
     public class ClientLogin {
-        public delegate void CB(bool ok, byte[] _secret, string dummy);
+        public delegate void OnLoginedCB(int code, byte[] secret, string dummy);
+        public delegate void OnDisconnectCB();
 
         private Context _ctx;
         private PackageSocket _sock = new PackageSocket();
@@ -19,8 +20,6 @@ namespace Maria.Network {
         private byte[] _clientkey = null;
         private byte[] _secret = null;
         private int _step = 0;
-        private bool _handshake = false;
-        private CB _callback = null;
 
         public ClientLogin(Context ctx) {
             _ctx = ctx;
@@ -31,8 +30,17 @@ namespace Maria.Network {
             _sock.SetPackageSocketType(PackageSocketType.Line);
         }
 
-        // Use this for initialization
-        void Start() {
+        public OnLoginedCB OnLogined { get; set; }
+        public OnDisconnectCB OnDisconnected { get; set; }
+
+        public void Auth(string ipstr, int pt, string s, string u, string pwd) {
+            _ip = ipstr;
+            _port = pt;
+            _server = s;
+            _user = u;
+            _password = pwd;
+            _step = 0;
+            _sock.Connect(_ip, _port);
         }
 
         // Update is called once per frame
@@ -40,12 +48,13 @@ namespace Maria.Network {
             _sock.Update();
         }
 
-        void OnConnect(bool connected) {
-            if (_handshake)
+        private void OnConnect(bool connected) {
+            if (connected) {
                 _step++;
+            }
         }
 
-        void OnRecvive(byte[] data, int start, int length) {
+        private void OnRecvive(byte[] data, int start, int length) {
             byte[] buffer = new byte[length];
             Array.Copy(data, start, buffer, 0, length);
             if (_step == 1) {
@@ -64,7 +73,6 @@ namespace Maria.Network {
                 WriteToke(_server, _user, _password);
                 _step++;
             } else if (_step == 3) {
-                _handshake = false;
                 _sock.Close();
 
                 string str = Encoding.ASCII.GetString(buffer);
@@ -74,25 +82,29 @@ namespace Maria.Network {
                     byte[] buf = Encoding.ASCII.GetBytes(msg);
                     buf = Crypt.base64decode(buf);
                     string pg = Encoding.ASCII.GetString(buf);
-                    _callback(true, _secret, pg);
-
+                    if (OnLogined != null) {
+                        OnLogined(code, _secret, pg);
+                    }
                 } else if (code == 403) {
-                    _callback(false, _secret, msg);
+                    if (OnLogined != null) {
+                        OnLogined(code, _secret, msg);
+                    }
                 } else {
-                    _callback(false, _secret, msg);
+                    if (OnLogined != null) {
+                        OnLogined(code, _secret, msg);
+                    }
                 }
                 Reset();
             }
         }
 
-        void OnDisconnect(SocketError _socketError, PackageSocketError packageSocketError) {
-            if (_handshake) {
-                _callback(false, _secret, string.Empty);
-                Reset();
+        private void OnDisconnect(SocketError _socketError, PackageSocketError packageSocketError) {
+            if (OnDisconnected != null) {
+                OnDisconnected();
             }
         }
 
-        protected void WriteToke(string _server, string _user, string _password) {
+        private void WriteToke(string _server, string _user, string _password) {
             string str = String.Format("{0}@{1}:{2}", Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(_user))),
                 Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(_server))),
                 Encoding.ASCII.GetString(Crypt.base64encode(Encoding.ASCII.GetBytes(_password))));
@@ -111,20 +123,8 @@ namespace Maria.Network {
             _clientkey = null;
             _secret = null;
             _step = 0;
-            _handshake = false;
-            _callback = null;
         }
 
-        public void Auth(string ipstr, int pt, string s, string u, string pwd, CB cb) {
-            _ip = ipstr;
-            _port = pt;
-            _server = s;
-            _user = u;
-            _password = pwd;
-            _callback = cb;
-            _handshake = true;
-            _sock.Connect(_ip, _port);
-        }
     }
 
 }

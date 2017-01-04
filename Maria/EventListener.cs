@@ -10,7 +10,7 @@ namespace Maria {
         public EventListener() {
             _enable = true;
         }
-         
+
         public bool Enable { get { return _enable; } set { _enable = value; } }
 
     }

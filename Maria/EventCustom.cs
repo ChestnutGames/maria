@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Maria {
     public class EventCustom : Event {
+        public static string OnDisconnected = "OnDisconnected";
+        public static string OnAuthed = "OnAuthed";
+
         private string _name = string.Empty;
         private object _ud = null;
 

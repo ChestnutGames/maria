@@ -11,7 +11,7 @@ namespace Maria.Network {
 
         public delegate void AuthedCb(int ok);
         public delegate void DisconnectedCb();
-
+        
         public delegate void RspCb(uint session, SprotoTypeBase responseObj);
         public delegate SprotoTypeBase ReqCb(uint session, SprotoTypeBase requestObj);
 
@@ -40,9 +40,7 @@ namespace Maria.Network {
         private int          _port = 0;
         private int          _step = 0;
         private bool         _handshake = false;
-        private AuthedCb       _authed  = null;
-        private DisconnectedCb _disconnected = null;
-
+        
         private int _index = 0;
         private int _version = 0;
         private uint _session = 0;
@@ -71,6 +69,11 @@ namespace Maria.Network {
             _sendRequest = _host.Attach(c2s);
         }
 
+        public AuthedCb OnAuthed { get; set; }
+        public DisconnectedCb OnDisconnected { get; set; }
+        public PackageSocketUdp.RecvCB OnRecvUdp { get; set; }
+        public PackageSocketUdp.SyncCB OnSyncUdp { get; set; }
+
         // Update is called once per frame
         public void Update() {
             if (_tcp != null) {
@@ -89,6 +92,31 @@ namespace Maria.Network {
             _req[tag] = cb;
         }
 
+        public void SendReq<T>(int tag, SprotoTypeBase obj) {
+            uint id = genSession();
+            byte[] d = _sendRequest.Invoke<T>(obj, id);
+            Debug.Assert(d != null);
+
+            RspPg pg = new RspPg();
+            pg.Session = id;
+            pg.Buffer = d;
+            pg.Index = _index;
+            pg.Tag = tag;
+            pg.Version = _version;
+            string key = idToHex(id);
+            _rspPg[key] = pg;
+
+            if (_tcpflag) {
+                while (_sendBuffer.Count > 0) {
+                    byte[] b = _sendBuffer.Dequeue();
+                    _tcp.Send(b, 0, b.Length);
+                }
+                _tcp.Send(d, 0, d.Length);
+            } else {
+                _sendBuffer.Enqueue(d);
+            }
+        }
+
         private void DoAuth() {
             byte[] token = WriteToken();
             byte[] hmac = Crypt.base64encode(Crypt.hmac64(Crypt.hashkey(token), _user.Secret));
@@ -100,16 +128,16 @@ namespace Maria.Network {
             _step++;
         }
 
-        public void OnConnect(bool connected) {
+        private void OnConnect(bool connected) {
             if (connected) {
                 if (_handshake)
                     DoAuth();
             } else {
-                Auth(_ip, _port, _user, _authed, _disconnected);
+                Auth(_ip, _port, _user);
             }
         }
 
-        void OnRecvive(byte[] data, int start, int length) {
+        private void OnRecvive(byte[] data, int start, int length) {
             if (length <= 0)
                 return;
             if (_handshake) {
@@ -126,22 +154,22 @@ namespace Maria.Network {
                         _tcp.SetEnabledPing(true);
                         _tcp.SendPing();
                         Debug.Log(string.Format("{0},{1}", code, msg));
-                        if (_authed != null) {
-                            _authed(code);
+                        if (OnAuthed != null) {
+                            OnAuthed(code);
                         }
                     } else if (code == 403) {
                         _step = 0;
                         _handshake = false;
-                        if (_authed != null) {
-                            _authed(code);
+                        if (OnAuthed != null) {
+                            OnAuthed(code);
                         }
                     } else {
                         Debug.Assert(false);
                         _step = 0;
                         DoAuth();
                         Debug.LogError(string.Format("error code : {0}, {1}", code, msg));
-                        if (_authed != null) {
-                            _authed(code);
+                        if (OnAuthed != null) {
+                            OnAuthed(code);
                         }
                     }
                 }
@@ -175,10 +203,12 @@ namespace Maria.Network {
             }
         }
 
-        void OnDisconnect(SocketError socketError, PackageSocketError packageSocketError) {
+        private void OnDisconnect(SocketError socketError, PackageSocketError packageSocketError) {
             _tcpflag = false;
             _tcp = null;
-            _disconnected();
+            if (OnDisconnected != null) {
+                OnDisconnected();
+            }
         }
 
         private byte[] WriteToken() {
@@ -212,31 +242,6 @@ namespace Maria.Network {
             _tcp.Send(tmp, 0, l);
         }
 
-        public void SendReq<T>(int tag, SprotoTypeBase obj) {
-            uint id = genSession();
-            byte[] d = _sendRequest.Invoke<T>(obj, id);
-            Debug.Assert(d != null);
-
-            RspPg pg = new RspPg();
-            pg.Session = id;
-            pg.Buffer = d;
-            pg.Index = _index;
-            pg.Tag = tag;
-            pg.Version = _version;
-            string key = idToHex(id);
-            _rspPg[key] = pg;
-
-            if (_tcpflag) {
-                while (_sendBuffer.Count > 0) {
-                    byte[] b = _sendBuffer.Dequeue();
-                    _tcp.Send(b, 0, b.Length);
-                }
-                _tcp.Send(d, 0, d.Length);
-            } else {
-                _sendBuffer.Enqueue(d);
-            }
-        }
-
         private uint genSession() {
             ++_session;
             if (_session == 0)
@@ -254,7 +259,7 @@ namespace Maria.Network {
             return Encoding.ASCII.GetString(tmp);
         }
 
-        public void Auth(string ipstr, int pt, User u, AuthedCb authed, DisconnectedCb disconnected) {
+        public void Auth(string ipstr, int pt, User u) {
             _step = 0;
             _index++;   // index increment.
             _ip = ipstr;
@@ -262,9 +267,6 @@ namespace Maria.Network {
             _user = u;
             _handshake = true;
 
-            _authed = authed;
-            _disconnected = disconnected;
-            
             // TODO:
             // 这里可能需要修改下
             _tcp = new PackageSocket();
@@ -280,8 +282,6 @@ namespace Maria.Network {
             _user = null;
             _step = 0;
             _handshake = false;
-            _authed = null;
-            _disconnected = null;
         }
 
         // UDP
@@ -295,25 +295,24 @@ namespace Maria.Network {
 
             TimeSync ts = _ctx.TiSync;
             _udp = new PackageSocketUdp(_user.Secret, (uint)session, ts);
-            _udp.OnRecv = OnUdpRecv;
-            _udp.OnSync = OnUdpSync;
+            _udp.OnRecv = UdpRecv;
+            _udp.OnSync = UdpSync;
             Debug.Assert(_udp != null);
             _udp.Connect(ip, port);
             _udp.Sync();
         }
 
-        private void OnUdpSync() {
+        private void UdpSync() {
             _udpflag = true;
-            _udpAuthed(10001);
-
-            //_ctx.UdpAuthCb((uint)_udpsession);
-            //var controller = _ctx.Top();
-            //controller.UdpAuthCb(true);
+            if (OnSyncUdp != null) {
+                OnSyncUdp();
+            }
         }
 
-        private void OnUdpRecv(PackageSocketUdp.R r) {
-            Controller controller = _ctx.Top();
-            //controller.OnRecviveUdp(r);
+        private void UdpRecv(PackageSocketUdp.R r) {
+            if (OnRecvUdp != null) {
+                OnRecvUdp(r);
+            }
         }
 
         public void SendUdp(byte[] data) {

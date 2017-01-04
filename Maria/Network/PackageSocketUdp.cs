@@ -7,9 +7,9 @@ using Maria.Encrypt;
 using Maria.Rudp;
 
 namespace Maria.Network {
-    public class PackageSocketUdp : IDisposable {
-        public class R {
+    public class PackageSocketUdp : DisposeObject {
 
+        public class R {
             public uint Globaltime { get; set; }
             public uint Localtime { get; set; }
             public uint Eventtime { get; set; }
@@ -23,12 +23,9 @@ namespace Maria.Network {
         private Socket _so = null;
         private string _host = String.Empty;
         private int _port = 0;
-        private IPEndPoint _ep = null;
+        private IPEndPoint _remoteEP = null;
 
         private byte[] _buffer = new byte[3072];
-        private int _head = 0;
-        private int _tail = 0;
-        private int _cap = 3072;
 
         private byte[] _secret;
         private uint _session;
@@ -48,12 +45,19 @@ namespace Maria.Network {
             _session = session;
             _timeSync = ts;
             _u = new Rudp.Rudp(1, 5);
-            _u.OnRecv = OnRecvRudp;
+            _u.OnRecv = Recv;
         }
 
-        public void Dispose() {
-            //_so.Dispose(true);
-            _u.Dispose();
+        protected override void Dispose(bool disposing) {
+            base.Dispose(disposing);
+            if (_disposed) {
+                return;
+            }
+            if (disposing) {
+                _u.Dispose();
+            }
+            // 清理非托管资源
+            _disposed = true;
         }
 
         public RecvCB OnRecv { get { return _recvCb; } set { _recvCb = value; } }
@@ -61,11 +65,9 @@ namespace Maria.Network {
 
         public void Connect(string host, int port) {
             _host = host;
-            _host = "192.168.199.239";
             _port = port;
-            IPAddress ipadd = IPAddress.Parse(_host);
-            _ep = new IPEndPoint(ipadd, _port);
-            //_so.Connect(host, port);
+            IPAddress addr = IPAddress.Parse(_host);
+            _remoteEP = new IPEndPoint(addr, _port);
             _connected = false;
         }
 
@@ -81,9 +83,6 @@ namespace Maria.Network {
             Array.Copy(buffer, 0, data, 8, buffer.Length);
 
             _u.Send(data);
-
-            //_so.SendTo(data, _ep);
-            _connected = true;
         }
 
         public void Send(byte[] data) {
@@ -105,13 +104,9 @@ namespace Maria.Network {
                 Array.Copy(data, 0, buffer, 20, data.Length);
 
                 Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", local, global[0], _session));
-
                 _u.Send(data);
-
-                //_so.SendTo(buffer, _ep);
             } else {
                 Debug.Assert(false);
-                //_sendBuffer.Add(data);
             }
         }
 
@@ -120,47 +115,40 @@ namespace Maria.Network {
             if (_tick == Int32.MaxValue) {
                 _tick = 0;
             }
-            if (!_connected) {
-                return;
-            }
-            while (_so.Poll(0, SelectMode.SelectWrite)) {
-                List<byte[]> res = _u.Update(null, 0, 0, _tick);
-                if (res != null && res.Count > 0) {
-                    foreach (var item in res) {
-                        _so.SendTo(item, _ep);
-                    }
+            if (_so.Poll(0, SelectMode.SelectRead)) {
+                EndPoint ep = _remoteEP as EndPoint;
+                int sz = _so.ReceiveFrom(_buffer, 3072, SocketFlags.None, ref ep);
+                List<byte[]> res = _u.Update(_buffer, 0, sz, 1);
+                foreach (var item in res) {
+                    _so.SendTo(item, _remoteEP);
                 }
-            }
-            while (_so.Poll(0, SelectMode.SelectRead)) {
-                EndPoint ep = _ep as EndPoint;
-                int sz = _so.ReceiveFrom(_buffer, _head, _cap, SocketFlags.None, ref ep);
-                _tail += sz;
-                List<byte[]> res = _u.Update(_buffer, _head, sz, _tick);
-                if (res != null && res.Count > 0) {
-                    foreach (var item in res) {
-                        _so.SendTo(item, _ep);
-                    }
-                }
-                int n = 0;
                 while (_u.Recv() > 0) {
                 }
-                _head = 0;
-                _tail = 0;
+            } else {
+                List<byte[]> res = _u.Update(null, 0, 0, 1);
+                foreach (var item in res) {
+                    _so.SendTo(item, _remoteEP);
+                }
             }
         }
 
-        public void OnRecvRudp(byte[] buffer, int start, int len) {
-            int remaining = 0;
+        private void Recv(byte[] buffer, int start, int len) {
+            int remaining = len;
+            int head = start;
             do {
-                uint globaltime = NetUnpack.UnpacklI(_buffer, start);
-                uint localtime = NetUnpack.UnpacklI(_buffer, start + 4);
-                uint eventtime = NetUnpack.UnpacklI(_buffer, start + 8);
-                uint session = NetUnpack.UnpacklI(_buffer, start + 12);
+                Debug.Assert(len >= 12);
+                uint globaltime = NetUnpack.UnpacklI(_buffer, head);
+                uint localtime = NetUnpack.UnpacklI(_buffer, head + 4);
+                uint eventtime = NetUnpack.UnpacklI(_buffer, head + 8);
+                uint session = NetUnpack.UnpacklI(_buffer, head + 12);
+                head += 12;
+                remaining -= 12;
                 Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", localtime, eventtime, session));
                 if (eventtime == 0xffffffff) {
                     if (session == _session) {
                         _timeSync.Sync((int)localtime, (int)globaltime);
                         if (_syncCb != null) {
+                            _connected = true;
                             _syncCb();
                         }
                     }
@@ -168,36 +156,24 @@ namespace Maria.Network {
                     if (session == _session) {
                         //_timeSync.Sync((int)localtime, (int)globaltime);
                     }
-                    int datalen = len - 16;
-                    if (datalen > 0) {
+                    if (remaining > 0) {
                         R r = new R();
                         r.Globaltime = globaltime;
                         r.Localtime = localtime;
                         r.Eventtime = eventtime;
                         r.Session = session;
-                        byte[] res = new byte[datalen];
-                        Array.Copy(buffer, start + 16, res, 0, datalen);
-                        r.Data = res;
+                        byte[] data = new byte[remaining];
+                        Array.Copy(_buffer, head, data, 0, remaining);
+                        r.Data = data;
                         if (_recvCb != null) {
                             _recvCb(r);
                         }
+                        head += remaining;
+                        remaining -= remaining;
                     }
                 }
             } while (remaining > 0);
+            Debug.Assert(remaining == 0);
         }
-
-        private int Rebase() {
-            if (_head == _tail) {
-                _head = 0;
-                _tail = 0;
-            } else {
-                Array.Copy(_buffer, 0, _buffer, _head, _tail - _head);
-                _head = 0;
-                _tail = _tail - _head;
-            }
-            return _cap - _tail;
-        }
-
-
     }
 }

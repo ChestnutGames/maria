@@ -5,10 +5,11 @@ using System.Text;
 
 namespace Maria.Network {
     public interface INetwork {
-        void GateAuthed(int code);
-        void GateDisconnected();
+        void OnGateAuthed(int code);
+        void OnGateDisconnected();
 
-        void UdpAuthed(uint session);
+        void OnUdpSync();
+        void OnUdpRecv(PackageSocketUdp.R r);
 
     }
 }

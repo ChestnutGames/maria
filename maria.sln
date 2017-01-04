@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maria", "Maria\Maria.csproj", "{CE533DD2-14C3-4A5A-A922-52B4EC314846}"
 EndProject
@@ -46,8 +46,8 @@ Global
 		{CE533DD2-14C3-4A5A-A922-52B4EC314846}.Release|x86.ActiveCfg = Release|Any CPU
 		{CE533DD2-14C3-4A5A-A922-52B4EC314846}.Release|x86.Build.0 = Release|Any CPU
 		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|Win32.ActiveCfg = Debug|Win32
 		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|Win32.Build.0 = Debug|Win32
 		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Debug|x64.ActiveCfg = Debug|x64
@@ -64,8 +64,8 @@ Global
 		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Release|x86.ActiveCfg = Release|Win32
 		{87FA22C5-9190-49F9-88A3-7BD13FBF2765}.Release|x86.Build.0 = Release|Win32
 		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|Win32.ActiveCfg = Debug|Win32
 		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|Win32.Build.0 = Debug|Win32
 		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Debug|x64.ActiveCfg = Debug|x64
@@ -82,8 +82,8 @@ Global
 		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Release|x86.ActiveCfg = Release|Win32
 		{5952D914-B3A0-416C-B24A-B0A8D0446722}.Release|x86.Build.0 = Release|Win32
 		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Win32.ActiveCfg = Debug|Win32
 		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Win32.Build.0 = Debug|Win32
 		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x64.ActiveCfg = Debug|x64
@@ -98,8 +98,8 @@ Global
 		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x86.ActiveCfg = Release|Win32
 		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x86.Build.0 = Release|Win32
 		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|Win32.Build.0 = Debug|Win32
 		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Debug|x64.ActiveCfg = Debug|x64

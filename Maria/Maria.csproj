@@ -61,7 +61,6 @@
     <Compile Include="EventListenerCmd.cs" />
     <Compile Include="EventListenerCustom.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="Network\ByteQueue.cs" />
     <Compile Include="Network\ClientLogin.cs" />
     <Compile Include="Network\ClientSocket.cs" />
     <Compile Include="Network\INetwork.cs" />
@@ -77,6 +76,7 @@
     <Compile Include="QuadTree.cs" />
     <Compile Include="Rudp\Rudp.cs" />
     <Compile Include="Rudp\Rudp_CSharp.cs" />
+    <Compile Include="Service.cs" />
     <Compile Include="Sproto\Package.cs" />
     <Compile Include="Sproto\ProtocolBase.cs" />
     <Compile Include="Sproto\ProtocolFunctionDictionary.cs" />

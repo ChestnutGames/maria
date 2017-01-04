@@ -38,7 +38,7 @@ namespace Maria {
             }
         }
 
-        public void DispatchCustomEvent(string eventName, object ud) {
+        private void DispatchCustomEvent(string eventName, object ud) {
             EventCustom e = new EventCustom(eventName, ud);
             if (_custom.ContainsKey(eventName)) {
                 EventListenerCustom listener = _custom[eventName];

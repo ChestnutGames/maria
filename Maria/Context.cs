@@ -7,7 +7,7 @@ using Sproto;
 using System.Text;
 
 namespace Maria {
-    public class Context {
+    public class Context : INetwork {
         private class Timer {
             public string Name { get; set; }
             public float CD { get; set; }
@@ -17,32 +17,39 @@ namespace Maria {
         public delegate void CountdownCb();
 
         protected Application _application;
+        protected Config _config = null;
+        protected TimeSync _ts = null;
+
         protected EventDispatcher _dispatcher = null;
         protected Dictionary<string, Controller> _hash = new Dictionary<string, Controller>();
         protected Stack<Controller> _stack = new Stack<Controller>();
-        protected ClientLogin  _login = null;
+
+        private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
+        private Dictionary<string, Service> _services = new Dictionary<string, Service>();
+
+        protected ClientLogin _login = null;
         protected ClientSocket _client = null;
         protected User _user = new User();
 
         protected bool _authtcp = false;
         protected bool _authudp = false;
-        protected Config _config = null;
-        protected TimeSync _ts = null;
 
-        private Dictionary<string, Timer> _timer = new Dictionary<string, Timer>();
-
-        public Context(Application application, Config config) {
+        public Context(Application application, Config config, TimeSync ts) {
             _application = application;
-            //var go = GameObject.Find("/Assets");
-            //Assets = go;
+            _config = config;
+            _ts = ts;
 
             _dispatcher = new EventDispatcher(this);
 
             _login = new ClientLogin(this);
-            _client = new ClientSocket(this, _config.s2c, _config.c2s);
+            _login.OnLogined = LoginAuthCb;
+            _login.OnDisconnected = LoginDisconnect;
 
-            _config = config;
-            _ts = new TimeSync();
+            _client = new ClientSocket(this, _config.s2c, _config.c2s);
+            _client.OnAuthed = OnGateAuthed;
+            _client.OnDisconnected = OnGateDisconnected;
+            _client.OnSyncUdp = OnUdpSync;
+            _client.OnRecvUdp = OnUdpRecv;
         }
 
         // Update is called once per frame
@@ -66,6 +73,10 @@ namespace Maria {
                 }
             }
 
+            foreach (var item in _services) {
+                item.Value.Update(delta);
+            }
+
             if (_stack.Count > 0) {
                 Controller controller = Top();
                 if (controller != null) {
@@ -79,8 +90,6 @@ namespace Maria {
         public Config Config { get { return _config; } set { _config = value; } }
 
         public TimeSync TiSync { get { return _ts; } set { _ts = value; } }
-
-        public GameObject Assets { get; set; }
 
         public User U { get { return _user; } }
 
@@ -99,11 +108,7 @@ namespace Maria {
             }
         }
 
-        // TCP
-        public void SendReq<T>(int tag, SprotoTypeBase obj) {
-            _client.SendReq<T>(tag, obj);
-        }
-
+        // login
         public void LoginAuth(string s, string u, string pwd) {
             _authtcp = false;
 
@@ -112,11 +117,11 @@ namespace Maria {
             _user.Password = pwd;
             string ip = Config.LoginIp;
             int port = Config.LoginPort;
-            _login.Auth(ip, port, s, u, pwd, LoginAuthCb);
+            _login.Auth(ip, port, s, u, pwd);
         }
 
-        public void LoginAuthCb(bool ok, byte[] secret, string dummy) {
-            if (ok) {
+        public void LoginAuthCb(int code, byte[] secret, string dummy) {
+            if (code == 200) {
                 int _1 = dummy.IndexOf('#');
                 int _2 = dummy.IndexOf('@', _1);
                 int _3 = dummy.IndexOf(':', _2);
@@ -141,24 +146,13 @@ namespace Maria {
         public virtual void LoginDisconnect() {
         }
 
+        // TCP
+        public void SendReq<T>(int tag, SprotoTypeBase obj) {
+            _client.SendReq<T>(tag, obj);
+        }
+
         public void GateAuth() {
-            _client.Auth(Config.GateIp, Config.GatePort, _user, GateAuthed, GateDisconnected);
-        }
-
-        public void GateAuthed(int code) {
-            if (code == 200) {
-                _authtcp = true;
-                string dummy = string.Empty;
-                Controller controller = Top();
-                controller.GateAuthed(code);
-            } else if (code == 403) {
-                LoginAuth(_user.Server, _user.Username, _user.Password);
-            }
-        }
-
-        public virtual void GateDisconnected() {
-            var controller = Top();
-            controller.GateDisconnected();
+            _client.Auth(Config.GateIp, Config.GatePort, _user);
         }
 
         // UDP
@@ -166,16 +160,6 @@ namespace Maria {
             if (_authudp) {
                 _client.SendUdp(data);
             }
-        }
-
-        public void UdpAuth(uint session) {
-            //if (!_authudp) {
-            //    _client.u();
-            //}
-        }
-
-        public void UdpAuthed(uint session) {
-            _authudp = true;
         }
 
         public Controller Top() {
@@ -207,7 +191,29 @@ namespace Maria {
                 tm.Name = name;
                 tm.CD = cd;
                 tm.CB = cb;
+                _timer[name] = tm;
             }
+        }
+
+        public void RegService(string name, Service s) {
+            if (_services.ContainsKey(name)) {
+                _services[name] = s;
+            } else {
+                _services[name] = s;
+            }
+        }
+
+        public void UnrService(string name, Service s) {
+            if (_services.ContainsKey(name)) {
+                _services.Remove(name);
+            }
+        }
+
+        public Service QueryService(string name) {
+            if (_services.ContainsKey(name)) {
+                return _services[name];
+            }
+            return null;
         }
 
         public void EnqueueRenderQueue(Actor.RenderHandler handler) {
@@ -216,6 +222,36 @@ namespace Maria {
 
         public void FireCustomEvent(string eventName, object ud) {
             _dispatcher.FireCustomEvent(eventName, ud);
+        }
+
+        public void OnGateAuthed(int code) {
+            if (code == 200) {
+                _authtcp = true;
+                string dummy = string.Empty;
+                //
+                EventDispatcher.FireCustomEvent(EventCustom.OnAuthed, null); 
+                //
+                Controller controller = Top();
+                controller.OnGateAuthed(code);
+            } else if (code == 403) {
+                //LoginAuth(_user.Server, _user.Username, _user.Password);
+            }
+        }
+
+        public void OnGateDisconnected() {
+            EventDispatcher.FireCustomEvent(EventCustom.OnDisconnected, null);
+            var controller = Top();
+            controller.OnGateDisconnected();
+        }
+
+        public void OnUdpSync() {
+            var controller = Top();
+            controller.OnUdpSync();
+        }
+
+        public void OnUdpRecv(PackageSocketUdp.R r) {
+            var controller = Top();
+            controller.OnUdpRecv(r);
         }
     }
 }
