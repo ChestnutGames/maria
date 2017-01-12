@@ -13,10 +13,9 @@ App::~App() {
 }
 
 void App::run() {
-	
 }
 
-void App::updata() {
+void App::updata(float delta) {
 	_ctx.update();
 }
 
@@ -32,4 +31,8 @@ void App::leave(int id) {
 	Player *p = _ctx.getPlayer(id);
 	_ctx.removePlayer(id);
 	playerMgr->releasePlayer(&p);
+}
+
+void App::opcode() {
+
 }

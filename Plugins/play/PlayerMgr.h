@@ -12,6 +12,11 @@ public:
 	~PlayerMgr();
 
 	Player * getPlayer(int id);
+
+	int addPlayer(Player *p);
+	void removePlayer(int id);
+	Player * getPlayer(int id);
+
 private:
 	Player * createPlayer(void *ud);
 	void releasePlayer(Player **self);
@@ -24,6 +29,8 @@ private:
 	int     _cap;
 
 	int     _idx;
+
+
 };
 
 #endif

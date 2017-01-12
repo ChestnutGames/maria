@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using System.Reflection;
-using System.IO;
 
 namespace Maria.Rudp {
     public class Rudp : DisposeObject {
-        private delegate int CSFunction(IntPtr buffer, int start, int len);
         public delegate void OnRecvHandler(byte[] buffer, int start, int len);
-
         private IntPtr _u;
         private OnRecvHandler _recv;
+        private IntPtr _recvBuffer;
         private int _recvBuffersz;
         private byte[] _buffer;
-
 
         public Rudp(int send_delay, int expired_time) {
             _u = Rudp_CSharp.aux_new(send_delay, expired_time);
@@ -64,7 +60,7 @@ namespace Maria.Rudp {
             Marshal.FreeHGlobal(buffer);
         }
 
-        public IntPtr Update(byte[] buf, int start, int len, int tick) {
+        public List<byte[]> Update(byte[] buf, int start, int len, int tick) {
             List<byte[]> result = new List<byte[]>();
             IntPtr buffer = IntPtr.Zero;
             int sz = 0;
@@ -82,12 +78,6 @@ namespace Maria.Rudp {
                 res = pack.next;
             }
             return result;
-        }
-
-        [MonoPInvockeCallback(typeof(CSFunction))]
-        private int OnRecvCpp(IntPtr buffer, int start, int len) {
-
-            return 0;
         }
     }
 }

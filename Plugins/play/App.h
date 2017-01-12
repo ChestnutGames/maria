@@ -19,6 +19,7 @@
 #include <PxMaterial.h>
 
 #include <map>
+#include <unordered_map>
 
 class PLAY_API App {
 public:
@@ -27,14 +28,15 @@ public:
 
 	void run();
 
-	void updata();
+	void updata(float delta);
 	int join(void *ud);
 	void leave(int id);
+	void opcode();
 
 private:
 	bool                      _exit;
 	Context                   _ctx;
-
+	std::map<int, Player *>   _players;
 };
 
 #endif

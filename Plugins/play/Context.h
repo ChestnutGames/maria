@@ -29,9 +29,7 @@ public:
 	inline PlayerMgr * getPlayerMgr() const { return _playerMgr; }
 	inline RoleMgr * getRoleMgr() const { return _roleMgr; }
 
-	int addPlayer(Player *p);
-	void removePlayer(int id);
-	Player * getPlayer(int id);
+	
 
 	void update();
 
@@ -40,7 +38,6 @@ public:
 private:
 	PlayerMgr              *_playerMgr;
 	RoleMgr                *_roleMgr;
-	std::map<int, Player *> _players;
 
 	bool                            _recordMem;
 	physx::PxDefaultAllocator       _allocator;
