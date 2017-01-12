@@ -17,5 +17,5 @@
 
 #define PLAY_API __declspec (dllexport)
 #else
-#define PLAY_API
+#define PLAY_API extern
 #endif

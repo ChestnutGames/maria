@@ -2,21 +2,8 @@
 #define __APP_H_
 
 #include "stdafx.h"
-#include "Context.h"
 
-#include <extensions/PxDefaultErrorCallback.h>
-#include <extensions/PxDefaultAllocator.h>
-#include <extensions/PxDefaultCpuDispatcher.h>
-#include <foundation/PxAllocatorCallback.h>
-#include <foundation/PxFoundation.h>
-#include <physxprofilesdk/PxProfileZoneManager.h>
-#include <cooking/PxCooking.h>
-#include <PxPhysics.h>
-#include <PxScene.h>
-#include <PxActor.h>
-#include <PxRigidDynamic.h>
-#include <PxRigidStatic.h>
-#include <PxMaterial.h>
+#include "Context.h"
 
 #include <map>
 #include <unordered_map>
@@ -28,15 +15,18 @@ public:
 
 	void run();
 
+	void start();
+	void close() {}
+	void kill() {}
+
 	void updata(float delta);
-	int join(void *ud);
-	void leave(int id);
+	bool join(int suid, int sid);
+	void leave(int suid, int sid);
 	void opcode();
 
 private:
 	bool                      _exit;
 	Context                   _ctx;
-	std::map<int, Player *>   _players;
 };
 
 #endif

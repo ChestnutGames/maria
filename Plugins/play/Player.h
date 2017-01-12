@@ -1,29 +1,36 @@
 #ifndef __PLAYER_H_
 #define __PLAYER_H_
 
-#include "Role.h"
-
+namespace physx {
+	class PxRigidDynamic;
+}
 class Context;
 class Player {
 public:
 	Player();
-	Player(Context *ctx, int id, void *ud);
+	Player(Context *ctx);
 	~Player();
 
-	inline Role *getRole() const { return _role; }
-	inline void setRole(Role *role) { _role = role; }
+	void setNext(Player *next) { _next = next; }
+	Player* getNext() const { return _next; }
 
-	inline void *getUd() const { return _ud; }
-	inline void setUd(void *ud) { _ud = ud; }
+	inline int getUid() const { return _uid; }
+	inline void setUid(int value) { _uid = value; }
+	inline int getSid() const { return _sid; }
+	inline void setSid(int value) { _sid = value; }
 
-	inline int getId() const { return _id; }
+	void createRigid();
+	void releaseRigid();
+
+	physx::PxRigidDynamic * getRigid() const { return _rigid; }
 
 private:
 	Context *_ctx;
+	Player  *_next;
 
-	int   _id;
-	Role *_role;
-	void *_ud;
+	int   _uid;
+	int   _sid;
+	physx::PxRigidDynamic *_rigid;
 };
 
 #endif

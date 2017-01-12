@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include <App.h>
-#include <play.h>
 
 #include <iostream>
 
@@ -13,16 +12,17 @@ struct data {
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	struct play *app = play_alloc();
+	App *app = new App();
+	app->start();
 	bool exit = false;
 	while (!exit) {
+		std::cout << std::endl;
 		std::cout << "please enter c:" << std::endl;
 		char c;
 		std::cin >> c;
 		switch (c) {
 		case 'c': {
-			struct data *ud = (struct data *)malloc(sizeof(*ud));
-			int id = play_join(app, ud);
+			int id = app->join(1, 0);
 		}
 				  break;
 		case 'n':
@@ -32,7 +32,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		default:
 			break;
 		}
-		play_update(app);
+		app->updata(1.0f / 20.0f); // fps
 	}
 
 	return 0;
