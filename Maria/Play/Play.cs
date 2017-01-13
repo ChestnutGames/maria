@@ -24,17 +24,18 @@ namespace Maria.Play {
         }
 
         public void update() {
-            Play_CSharp.play_update(_play);
+            //Play_CSharp.play_update(_play);
         }
 
         public int join(object ud) {
-            GCHandle handle = GCHandle.Alloc(ud);
-            IntPtr ptr = GCHandle.ToIntPtr(handle);
-            return Play_CSharp.play_join(_play, ptr);
+            //GCHandle handle = GCHandle.Alloc(ud);
+            //IntPtr ptr = GCHandle.ToIntPtr(handle);
+            //return Play_CSharp.play_join(_play, ptr);
+            return 0;
         }
 
         public void leave(int id) {
-            Play_CSharp.play_leave(_play, id);
+            //Play_CSharp.play_leave(_play, id);
         }
     }
 }

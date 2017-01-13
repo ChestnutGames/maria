@@ -12,7 +12,7 @@ public:
 	Map(Context *ctx, Scene *scene);
 	~Map();
 
-	void createFloor();
+	void createGrid();
 
 private:
 	Context *_ctx;

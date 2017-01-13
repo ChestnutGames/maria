@@ -3,34 +3,30 @@
 #include "Scene.h"
 
 #include <PxRigidStatic.h>
+#include <foundation/PxPlane.h>
+#include <extensions/PxSimpleFactory.h>
+
+using namespace physx;
 
 Map::Map(Context *ctx, Scene *scene)
 	: _ctx(ctx) 
 	, _scene(scene)
 {
-	createFloor();
+	createGrid();
 }
 
 
 Map::~Map() {
 }
 
-void Map::createFloor() {
+void Map::createGrid() {
 	physx::PxPhysics *physics = _ctx->getPhysics();
+	physx::PxMaterial *material = _ctx->getDefaultMaterial();
+	PxRigidStatic* plane = PxCreatePlane(*physics, PxPlane(PxVec3(0, 1, 0), 0), *material);
+	if (!plane)
+		printf("create plane failed!");
 
-	physx::PxTransform trans = physx::PxTransform::createIdentity();
-	trans.transform(physx::PxVec3(50, 0, 50));
-	physx::PxRigidStatic *floor = physics->createRigidStatic(trans);
-	_ctx->getScene()->getScene()->addActor(*floor);
-	_list.push_back(floor);
-
-	physx::PxBoxGeometry g(10, 10, 10);
-	physx::PxPlaneGeometry 
-	physx::PxMaterial *material = physics->createMaterial(0.5f, 0.5f, 0.1f);
-	floor->createShape()
-	/*physx::PxPlaneGeometry g()
+	//_scene->
+	_scene->getScene()->addActor(*plane);
 	
-	physx::PxShape *box = rigid->createShape(g, *m, physx::PxTransform::createIdentity());
-	_rigid->attachShape(*box);*/
-
 }

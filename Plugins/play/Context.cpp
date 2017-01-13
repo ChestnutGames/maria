@@ -30,6 +30,8 @@ Context::Context() {
 	params.meshWeldTolerance = 0.001f;
 	params.meshPreprocessParams = PxMeshPreprocessingFlags(PxMeshPreprocessingFlag::eWELD_VERTICES | PxMeshPreprocessingFlag::eREMOVE_UNREFERENCED_VERTICES | PxMeshPreprocessingFlag::eREMOVE_DUPLICATED_TRIANGLES);
 	_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *_foundation, params);
+
+	_material = _physics->createMaterial(0.5f, 0.5f, 0.1f);
 }
 
 Context::~Context() {

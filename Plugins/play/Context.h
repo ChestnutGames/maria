@@ -28,6 +28,8 @@ public:
 
 	inline Scene * getScene() const { return _scene; }
 
+	inline physx::PxMaterial * getDefaultMaterial() const { return _material; }
+
 private:
 	bool                            _recordMem;
 	physx::PxDefaultAllocator       _allocator;
@@ -36,6 +38,8 @@ private:
 	physx::PxProfileZoneManager    *_profileZoneManager;
 	physx::PxPhysics               *_physics;
 	physx::PxCooking               *_cooking;
+
+	physx::PxMaterial              *_material;
 
 	//physx::PxDefaultCpuDispatcher  *_dispatcher;
 	//physx::PxRigidStatic           *_plane;
