@@ -20,7 +20,7 @@ namespace Maria.Network
         Header,
     }
 
-    public class PackageSocket : IDisposable
+    public class PackageSocket
     {
         enum State
         {
@@ -72,10 +72,6 @@ namespace Maria.Network
             Reset();
         }
 
-        public void Dispose() {
-            throw new NotImplementedException();
-        }
-
         public void Connect(string server, int port)
         {
             Reset();
@@ -85,7 +81,8 @@ namespace Maria.Network
 
             try
             {
-                var ip = GetIPAddress(server);
+                //var ip = GetIPAddress(server);
+                var ip = server;
                 CurSocket.Connect(ip, port);
             }
             catch (SocketException e)

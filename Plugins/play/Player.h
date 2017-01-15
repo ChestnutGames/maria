@@ -1,7 +1,7 @@
 #ifndef __PLAYER_H_
 #define __PLAYER_H_
 
-#include <foundation/Px.h>
+#include <PxPhysicsAPI.h>
 
 namespace physx {
 	class PxRigidDynamic;
