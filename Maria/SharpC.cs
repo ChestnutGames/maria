@@ -33,12 +33,14 @@ namespace Maria {
             public Double f;
         }
 
+        public delegate int pfunc(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 32)] CSObject[] argv);
+
         const string DLL = "sharpc.dll";
 
-        private IntPtr _sharpc = IntPtr.Zero;
+        IntPtr _sharpc = IntPtr.Zero;
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr sharpc_alloc();
+        public static extern IntPtr sharpc_alloc(pfunc func);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void sharpc_free(IntPtr self);
@@ -48,8 +50,8 @@ namespace Maria {
 
         private static SharpObject _cache = new SharpObject();
 
-        public SharpC() {
-            _sharpc = sharpc_alloc();
+        public SharpC(pfunc func) {
+            _sharpc = sharpc_alloc(func);
         }
 
         protected virtual void Dispose(bool disposing) {
@@ -65,13 +67,20 @@ namespace Maria {
             _disposed = true;
         }
 
-        public static int CallCSharp(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 256)] CSObject[] argv) {
-
+        public static int CallCSharp(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 32)] CSObject[] argv) {
+            UnityEngine.Debug.Assert(argc > 0);
+            CSObject o = argv[argc];
+            if (o.type == CSType.SHARPFUNCTION) {
+                pfunc f = (pfunc)_cache.Get(o.v32);
+                f(argc, argv);
+            }
             return 0;
         }
 
-        public void CallC() {
-
+        void CacheFunc(pfunc func) {
+            CSObject o = new CSObject();
+            o.type = CSType.SHARPFUNCTION;
+            o.v32 = _cache.AddKey(func);
         }
     }
 }

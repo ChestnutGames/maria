@@ -32,29 +32,18 @@ typedef struct CSObject {
 
 typedef int(*c_callback)(int argc, struct CSObject *argv);
 
-typedef struct reg {
-	const char *name;
-	c_callback func;
-} reg;
-
-
-typedef int(*open_callback)(reg *args);
 
 struct sharpc {
+	c_callback cb;
 };
 
 struct sharpc*
-sharpc_alloc();
+sharpc_alloc(c_callback cb);
 
 void
 sharpc_free(struct sharpc *self);
 
 int
 sharpc_call(struct sharpc *self, int argc, struct CSObject *argv);
-
-int sharpc_regiseter_class(struct sharpc *self, open_callback);
-
-int
-sharpc_register_function(struct sharpc *self, const char *name, c_callback cb);
 
 #endif // !SHARPC_H

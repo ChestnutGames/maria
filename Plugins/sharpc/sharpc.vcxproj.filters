@@ -18,12 +18,90 @@
     <ClInclude Include="sharpc.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\rudp\rudp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rudp\rudp_aux.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\App.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\Context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\Map.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\pack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\play.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\Player.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\PlayerMgr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\Scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play\stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\crypt\crypt_aux.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sharpc.c">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rudp\rudp.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rudp\rudp_aux.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\App.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Context.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\pack.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\play.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Player.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\PlayerMgr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Scene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\crypt\crypt_aux.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\crypt\lsha1.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\crypt\lua-crypt.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

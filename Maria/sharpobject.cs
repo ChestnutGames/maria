@@ -8,7 +8,7 @@ namespace Maria {
         int freelist = 0;
         int cap = 0;
 
-        int AddKey(object obj) {
+        public int AddKey(object obj) {
             int id;
             if (freelist == 0) {
                 // full

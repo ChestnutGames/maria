@@ -100,11 +100,15 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;SHARPC_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;SHARPC_EXPORTS;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\PhysX-3.3\PhysXSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\PhysX-3.3\PhysXSDK\Lib\vc14win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PhysX3DEBUG_x64.lib;PhysX3CommonDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PhysXProfileSDKDEBUG.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -142,9 +146,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\crypt\crypt_aux.h" />
+    <ClInclude Include="..\play\App.h" />
+    <ClInclude Include="..\play\Context.h" />
+    <ClInclude Include="..\play\Map.h" />
+    <ClInclude Include="..\play\pack.h" />
+    <ClInclude Include="..\play\play.h" />
+    <ClInclude Include="..\play\Player.h" />
+    <ClInclude Include="..\play\PlayerMgr.h" />
+    <ClInclude Include="..\play\Scene.h" />
+    <ClInclude Include="..\play\stdafx.h" />
+    <ClInclude Include="..\rudp\rudp.h" />
+    <ClInclude Include="..\rudp\rudp_aux.h" />
     <ClInclude Include="sharpc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\crypt\crypt_aux.c" />
+    <ClCompile Include="..\crypt\lsha1.c" />
+    <ClCompile Include="..\crypt\lua-crypt.c" />
+    <ClCompile Include="..\play\App.cpp" />
+    <ClCompile Include="..\play\Context.cpp" />
+    <ClCompile Include="..\play\Map.cpp" />
+    <ClCompile Include="..\play\pack.cpp" />
+    <ClCompile Include="..\play\play.cpp" />
+    <ClCompile Include="..\play\Player.cpp" />
+    <ClCompile Include="..\play\PlayerMgr.cpp" />
+    <ClCompile Include="..\play\Scene.cpp" />
+    <ClCompile Include="..\play\stdafx.cpp" />
+    <ClCompile Include="..\rudp\rudp.c" />
+    <ClCompile Include="..\rudp\rudp_aux.c" />
     <ClCompile Include="sharpc.c" />
     <ClCompile Include="test.c" />
   </ItemGroup>

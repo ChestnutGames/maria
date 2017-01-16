@@ -7,10 +7,11 @@
 static struct sharpc *inst = NULL;
 
 struct sharpc*
-sharpc_alloc() {
+sharpc_alloc(c_callback cb) {
 	if (inst == NULL) {
 		inst = (struct sharpc *)malloc(sizeof(*inst));
 		memset(inst, 0, sizeof(inst));
+		inst->cb = cb;
 		return inst;
 	}
 	return inst;
@@ -25,12 +26,6 @@ sharpc_free(struct sharpc *self) {
 
 int
 sharpc_call(struct sharpc *self, int argc, struct CSObject *argv) {
-
-}
-
-int sharpc_regiseter_class() {
-}
-
-int
-sharpc_register_function(struct sharpc *self, const char *name, c_callback cb) {
+	self->cb(argc, argv);
+	return 0;
 }
