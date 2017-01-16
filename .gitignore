@@ -60,6 +60,9 @@ Plugins/play/x64
 Plugins/play_test/Debug
 Plugins/play_test/x64
 
+Plugins/sharpc/Debug
+Plugins/sharpc/x64
+
 ipch
 Debug
 x64
