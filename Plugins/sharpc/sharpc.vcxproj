@@ -158,6 +158,7 @@
     <ClInclude Include="..\play\stdafx.h" />
     <ClInclude Include="..\rudp\rudp.h" />
     <ClInclude Include="..\rudp\rudp_aux.h" />
+    <ClInclude Include="conf.h" />
     <ClInclude Include="sharpc.h" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +176,7 @@
     <ClCompile Include="..\play\stdafx.cpp" />
     <ClCompile Include="..\rudp\rudp.c" />
     <ClCompile Include="..\rudp\rudp_aux.c" />
+    <ClCompile Include="conf.cpp" />
     <ClCompile Include="sharpc.c" />
     <ClCompile Include="test.c" />
   </ItemGroup>

@@ -28,6 +28,7 @@ namespace Maria.Network {
 
         private byte[] _buffer = new byte[3072];
 
+        private Context _ctx;
         private byte[] _secret;
         private uint _session;
         private TimeSync _timeSync;
@@ -39,13 +40,15 @@ namespace Maria.Network {
         private int _last = 0;
 
 
-        public PackageSocketUdp(byte[] secret, uint session, TimeSync ts) {
-            Debug.Assert(ts != null);
+        public PackageSocketUdp(Context ctx, byte[] secret, uint session) {
+            _ctx = ctx;
+            _timeSync = _ctx.TiSync;
+
             _so = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             _secret = secret;
             _session = session;
-            _timeSync = ts;
-            _u = new Rudp.Rudp(1, 5);
+            
+            _u = new Rudp.Rudp(ctx, 1, 5);
             _u.OnRecv = RRecv;
             _u.OnSend = RSend;
         }

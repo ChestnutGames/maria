@@ -263,7 +263,7 @@ namespace Maria.Network {
             _udpAuthed = authed;
 
             TimeSync ts = _ctx.TiSync;
-            _udp = new PackageSocketUdp(_user.Secret, (uint)session, ts);
+            _udp = new PackageSocketUdp(_ctx, _user.Secret, (uint)session);
             _udp.OnRecv = UdpRecv;
             _udp.OnSync = UdpSync;
             Debug.Assert(_udp != null);

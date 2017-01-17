@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 namespace Maria {
-    class SharpObject {
+   public class SharpObject {
         object[] cache = new object[1024];  // default pool size 1024
         Dictionary<object, int> map = new Dictionary<object, int>();
         int freelist = 0;

@@ -1,6 +1,8 @@
 #ifndef SHARPC_H
 #define SHARPC_H
 
+#include "conf.h"
+
 #include <stdint.h>
 
 typedef enum CSType {
@@ -17,12 +19,8 @@ typedef enum CSType {
 } CSType;
 
 typedef struct CSObject {
-	//public CSObject() {
-	//}
-
-	//public CSType Type { get; set; }
 	//public WeakReference obj { get; set; }
-	//public object obj { get; set; }
+	
 	CSType  type;
 	void *  ptr;
 	int32_t v32; // len or key or d
@@ -30,20 +28,20 @@ typedef struct CSObject {
 	double  f;
 } CSObject;
 
-typedef int(*c_callback)(int argc, struct CSObject *argv);
 
+typedef int(*sharp_callback)(int argc, struct CSObject *argv, int args, int res);
 
 struct sharpc {
-	c_callback cb;
+	sharp_callback sharpcall;
 };
 
-struct sharpc*
-sharpc_alloc(c_callback cb);
+SHARPC_API struct sharpc*
+sharpc_alloc(sharp_callback cb);
 
-void
+SHARPC_API void
 sharpc_free(struct sharpc *self);
 
-int
-sharpc_call(struct sharpc *self, int argc, struct CSObject *argv);
+SHARPC_API int
+sharpc_call(struct sharpc *self, int argc, struct CSObject *argv, int args, int res);
 
 #endif // !SHARPC_H

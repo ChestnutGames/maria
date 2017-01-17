@@ -54,6 +54,9 @@
     <ClInclude Include="..\crypt\crypt_aux.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="conf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sharpc.c">
@@ -102,6 +105,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\crypt\lua-crypt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="conf.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

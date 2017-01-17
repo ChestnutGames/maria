@@ -10,7 +10,7 @@ namespace Maria.Rudp {
         public delegate void Callback(IntPtr buffer, int len);
 
         [DllImport("rudp", EntryPoint = "aux_new", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
-        public static extern IntPtr aux_new(int send_delay, int expired_time, Callback send, Callback recv);
+        public static extern IntPtr aux_new(int send_delay, int expired_time, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject send, [In, MarshalAs(UnmanagedType.Struct)] SharpC.CSObject recv);
 
         [DllImport("rudp", EntryPoint = "aux_delete", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Winapi)]
         public static extern void aux_delete(IntPtr U);

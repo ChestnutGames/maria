@@ -19,6 +19,7 @@ namespace Maria {
         protected Application _application;
         protected Config _config = null;
         protected TimeSync _ts = null;
+        protected SharpC _sharpc = null;
 
         protected EventDispatcher _dispatcher = null;
         protected Dictionary<string, Controller> _hash = new Dictionary<string, Controller>();
@@ -38,6 +39,7 @@ namespace Maria {
             _application = application;
             _config = config;
             _ts = ts;
+            _sharpc = new SharpC();
 
             _dispatcher = new EventDispatcher(this);
 
@@ -90,6 +92,8 @@ namespace Maria {
         public Config Config { get { return _config; } set { _config = value; } }
 
         public TimeSync TiSync { get { return _ts; } set { _ts = value; } }
+
+        public SharpC SharpC { get { return _sharpc; } }
 
         public User U { get { return _user; } }
 
