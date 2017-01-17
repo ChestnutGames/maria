@@ -4,21 +4,30 @@ using System.Runtime.InteropServices;
 namespace Maria.Play {
     class Play_CSharp
     {
-        private const string DLL = "play";
+        private const string DLL = "sharpc";
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr play_alloc();
+        public static extern IntPtr play_alloc([In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject ex, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject cb);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void play_free(IntPtr self);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void play_update(IntPtr self);
+        public static extern void play_start(IntPtr self);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int  play_join(IntPtr self, IntPtr ud);
+        public static extern void play_close(IntPtr self);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void play_leave(IntPtr self, int id);
+        public static extern void play_kill(IntPtr self);
+
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void play_update(IntPtr self, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject delta);
+
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int  play_join(IntPtr self, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject uid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject sid);
+
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void play_leave(IntPtr self, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject uid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject sid);
     }
 }

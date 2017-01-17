@@ -9,12 +9,16 @@
 
 struct play {
 	App *app;
+	struct CSObject ex;
+	struct CSObject fetch;
 };
 
-struct play* play_alloc() {
+struct play* play_alloc(struct CSObject ex, struct CSObject cb) {
 	struct play *inst = (struct play *)malloc(sizeof(*inst));
 	memset(inst, 0, sizeof(*inst));
 	inst->app = new App();
+	inst->ex = ex;
+	inst->fetch = cb;
 	return inst;
 }
 
@@ -39,18 +43,18 @@ void play_kill(struct play *self) {
 	self->app->kill();
 }
 
-void play_update(struct play *self, float delta) {
-	self->app->updata(delta);
+void play_update(struct play *self, struct CSObject delta) {
+	assert(delta.type == REAL);
+	self->app->updata((float)delta.f);
+
+	// 同步各个玩家数据
+
 }
 
-bool play_join(struct play *self, int uid, int sid) {
-	return self->app->join(uid, sid);
+bool play_join(struct play *self, struct CSObject uid, struct CSObject sid) {
+	return self->app->join(uid.v32, sid.v32);
 }
 
-void play_leave(struct play *self, int uid, int sid) {
-	self->app->leave(uid, sid);
-}
-
-void play_fetch(struct play *self, char *ptr) {
-	WriteInt32(ptr, 0, 3);
+void play_leave(struct play *self, struct CSObject uid, struct CSObject sid) {
+	self->app->leave(uid.v32, sid.v32);
 }

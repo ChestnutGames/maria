@@ -32,10 +32,10 @@ namespace Maria {
             public Double f;
         }
 
-        public delegate int pfunc(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 32)] CSObject[] argv);
+        public delegate int pfunc(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = maxArgs)] CSObject[] argv, int args, int res);
 
         public static SharpObject cache = new SharpObject();
-        public const int maxArgs = 32;
+        public const int maxArgs = 8;
         public const string DLL = "sharpc.dll";
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -44,16 +44,13 @@ namespace Maria {
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void sharpc_free(IntPtr self);
 
-        //[DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        //public static extern int sharpc_call(IntPtr self, int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = maxArgs)] CSObject[] argv);
-
         private IntPtr _sharpc = IntPtr.Zero;
 
         public SharpC() {
             _sharpc = sharpc_alloc(SharpC.CallCSharp);
         }
 
-        protected virtual void Dispose(bool disposing) {
+        protected override void Dispose(bool disposing) {
             if (_disposed) {
                 return;
             }
@@ -67,12 +64,12 @@ namespace Maria {
         }
 
         [MonoPInvokeCallback(typeof(pfunc))]
-        public static int CallCSharp(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = maxArgs)] CSObject[] argv) {
+        public static int CallCSharp(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = maxArgs)] CSObject[] argv, int args, int res) {
             UnityEngine.Debug.Assert(argc > 0);
-            CSObject o = argv[argc];
+            CSObject o = argv[0];
             if (o.type == CSType.SHARPFUNCTION) {
                 pfunc f = (pfunc)cache.Get(o.v32);
-                f(argc, argv);
+                return f(argc, argv, args, res);
             }
             return 0;
         }

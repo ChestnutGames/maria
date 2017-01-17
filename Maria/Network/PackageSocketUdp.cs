@@ -48,7 +48,7 @@ namespace Maria.Network {
             _secret = secret;
             _session = session;
             
-            _u = new Rudp.Rudp(ctx, 1, 5);
+            _u = new Rudp.Rudp(_ctx.SharpC, 1, 5);
             _u.OnRecv = RRecv;
             _u.OnSend = RSend;
         }
@@ -89,7 +89,7 @@ namespace Maria.Network {
             Array.Copy(head, data, 8);
             Array.Copy(buffer, 0, data, 8, buffer.Length);
 
-            _u.Send(data);
+            _u.Send(data, 0, data.Length);
         }
 
         public void Send(byte[] data) {
@@ -111,7 +111,7 @@ namespace Maria.Network {
                 Array.Copy(data, 0, buffer, 20, data.Length);
 
                 Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", local, global[0], _session));
-                _u.Send(data);
+                _u.Send(data, 0, data.Length);
             } else {
                 Debug.Assert(false);
             }
