@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using UnityEngine;
 
 namespace Maria {
     public class SharpC : DisposeObject {
@@ -44,10 +45,14 @@ namespace Maria {
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void sharpc_free(IntPtr self);
 
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void sharpc_log(IntPtr self, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 2)] CSObject[] xx);
+
         private IntPtr _sharpc = IntPtr.Zero;
 
         public SharpC() {
             _sharpc = sharpc_alloc(SharpC.CallCSharp);
+            CacheLog();
         }
 
         protected override void Dispose(bool disposing) {
@@ -86,6 +91,35 @@ namespace Maria {
             o.type = CSType.SHARPOBJECT;
             o.v32 = cache.AddKey(obj);
             return o;
+        }
+
+        public static int Log(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 8)] SharpC.CSObject[] argv, int args, int res) {
+            Debug.Assert(args + res + 1 <= 8);
+
+            Debug.Assert(argv[1].type == CSType.INT32);
+            Debug.Assert(argv[2].type == CSType.STRING);
+
+            string msg = Marshal.PtrToStringAnsi(argv[2].ptr);
+
+            if (argv[1].v32 == 1) {
+                Debug.Log(msg);
+            } else if (argv[1].v32 == 2) {
+                Debug.LogWarning(msg);
+            } else if (argv[1].v32 == 3) {
+                Debug.LogError(msg);
+            }
+            
+            return 0;
+        }
+
+        protected void CacheLog() {
+            CSObject[] args = new CSObject[2];
+            CSObject cso = CacheFunc(Log);
+            args[0] = cso;
+            args[1] = new CSObject();
+            args[1].type = CSType.NIL;
+
+            sharpc_log(_sharpc, args);
         }
 
     }

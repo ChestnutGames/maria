@@ -25,13 +25,13 @@ namespace Maria.Play {
         public static extern void play_update(IntPtr self, SharpC.CSObject delta);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int  play_join(IntPtr self, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject uid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject sid);
+        public static extern int  play_join(IntPtr self, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject uid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject sid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject session);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void play_leave(IntPtr self, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject uid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject sid);
+        public static extern void play_leave(IntPtr self, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject uid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject sid, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject session);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void play_fetch(IntPtr self, [In, Out, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject ptr, [In, Out, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject len);
+        public static extern int play_fetch(IntPtr self, [In, Out, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject ptr, [In, Out, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject len);
 
     }
 }
