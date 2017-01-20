@@ -21,6 +21,12 @@ public:
 	inline void                 setUid(int value) { _uid = value; }
 	inline int                  getSid() const { return _sid; }
 	inline void                 setSid(int value) { _sid = value; }
+	inline int                  getSession() const { return _session; }
+	inline void                 setSession(int value) { _session = value; }
+
+	float                       getX() const { return _rigid->getGlobalPose().p.x; }
+	float                       getY() const { return _rigid->getGlobalPose().p.y; }
+	float                       getZ() const { return _rigid->getGlobalPose().p.z; }
 
 	void                        createRigid();
 	void                        releaseRigid();
@@ -38,6 +44,7 @@ private:
 
 	int   _uid;
 	int   _sid;
+	int   _session;
 	physx::PxRigidDynamic *_rigid;
 };
 

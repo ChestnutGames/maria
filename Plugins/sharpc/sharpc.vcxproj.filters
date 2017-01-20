@@ -57,18 +57,12 @@
     <ClInclude Include="conf.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sharpc.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="test.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\rudp\rudp.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\rudp\rudp_aux.c">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\play\App.cpp">
@@ -108,6 +102,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="conf.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="sharpc.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rudp\rudp_aux.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rudp\rudp.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

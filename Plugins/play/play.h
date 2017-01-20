@@ -26,9 +26,12 @@ PLAY_API void play_kill(struct play *self);
 
 PLAY_API void play_update(struct play *self, struct CSObject delta);
 
-PLAY_API bool play_join(struct play *self, struct CSObject uid, struct CSObject sid);
+PLAY_API bool play_join(struct play *self, struct CSObject uid, struct CSObject sid, struct CSObject session);
 
-PLAY_API void play_leave(struct play *self, struct CSObject uid, struct CSObject sid);
+PLAY_API void play_leave(struct play *self, struct CSObject uid, struct CSObject sid, struct CSObject session);
+
+PLAY_API int play_fetch(struct play *self, struct CSObject ptr, struct CSObject len);
+
 
 #ifdef __cplusplus
 }

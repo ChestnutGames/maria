@@ -100,7 +100,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;SHARPC_EXPORTS;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;SHARPC_EXPORTS;WIN32;SHARPC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>D:\PhysX-3.3\PhysXSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -159,6 +159,7 @@
     <ClInclude Include="..\rudp\rudp.h" />
     <ClInclude Include="..\rudp\rudp_aux.h" />
     <ClInclude Include="conf.h" />
+    <ClInclude Include="log.h" />
     <ClInclude Include="sharpc.h" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +178,7 @@
     <ClCompile Include="..\rudp\rudp.c" />
     <ClCompile Include="..\rudp\rudp_aux.c" />
     <ClCompile Include="conf.cpp" />
+    <ClCompile Include="log.cpp" />
     <ClCompile Include="sharpc.c" />
     <ClCompile Include="test.c" />
   </ItemGroup>

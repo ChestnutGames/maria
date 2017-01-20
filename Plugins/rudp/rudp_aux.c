@@ -17,7 +17,7 @@ struct rudp_aux {
 
 RUDP_API struct rudp_aux *
 rudpaux_alloc(int send_delay, int expired_time, struct CSObject ex, struct CSObject send, struct CSObject recv) {
-	struct rudp_aux *aux = malloc(sizeof(*aux));
+	struct rudp_aux *aux = (struct rudp_aux *)malloc(sizeof(*aux));
 	memset(aux, 0, sizeof(aux));
 	aux->u = NULL;
 	aux->ex = ex;

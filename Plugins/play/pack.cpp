@@ -1,6 +1,15 @@
 #include "stdafx.h"
 #include "pack.h"
 
+union if32 {
+	int32_t i;
+	float   f;
+};
+
+union if64 {
+	int64_t i;
+	double  f;
+};
 
 void WriteByte(char *ptr, int ofs, uint8_t val) {
 	ptr[ofs] = val;
@@ -21,5 +30,21 @@ void WriteInt32(char *ptr, int ofs, int32_t val) {
 void WriteInt64(char *ptr, int ofs, int64_t val) {
 	for (size_t i = 0; i < 8; i++) {
 		ptr[0] = (val >> 8 * (1 - i)) & 0xff;
+	}
+}
+
+void WriteFnt32(char *ptr, int ofs, float val) {
+	union if32 x;
+	x.f = val;
+	for (size_t i = 0; i < 4; i++) {
+		ptr[0] = (x.i >> 8 * (1 - i)) & 0xff;
+	}
+}
+
+void WriteFnt64(char *ptr, int ofs, double val) {
+	union if64 x;
+	x.f = val;
+	for (size_t i = 0; i < 8; i++) {
+		ptr[0] = (x.i >> 8 * (1 - i)) & 0xff;
 	}
 }

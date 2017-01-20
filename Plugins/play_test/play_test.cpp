@@ -5,14 +5,30 @@
 #include "play.h"
 
 #include <iostream>
+#include <stdarg.h>
 
 struct data {
 	int dummy;
 };
 
+static void log(char *fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	char buffer[256] = { 0 };
+	
+	/*snprintf(buffer, 256, fmt, ##__);*/
+	va_end(ap);
+
+	printf(buffer);
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	struct play *play = play_alloc();
+	log("hello %d", 5);
+
+	struct CSObject nil;
+	nil.type = NIL;
+	struct play *play = play_alloc(nil, nil);
 	play_start(play);
 	bool exit = false;
 
@@ -23,7 +39,15 @@ int _tmain(int argc, _TCHAR* argv[])
 		std::cin >> c;
 		switch (c) {
 		case 'c': {
-			int id = play_join(play, 1, 0);
+			struct CSObject args[3];
+			args[0].type = INT32;
+			args[0].v32 = 1;
+			args[1].type = INT32;
+			args[1].v32 = 0;
+			args[2].type = INT32;
+			args[2].v32 = 1;
+
+			int id = play_join(play, args[0], args[1], args[2]);
 		}
 				  break;
 		case 'n':
@@ -33,7 +57,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		default:
 			break;
 		}
-		play_update(play, 1.0f / 20.0f);
+		struct CSObject delta;
+		delta.type = REAL;
+		delta.f = 1.0f / 20.f;
+		play_update(play, delta);
 	}
 
 	return 0;

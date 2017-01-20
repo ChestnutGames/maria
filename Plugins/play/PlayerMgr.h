@@ -22,6 +22,9 @@ public:
 	void addPlayerBySid(Player *p);
 	void removePlayerBySid(int sid);
 
+	void addPlayerBySession(Player *p);
+	void removePlayerBySession(int session);
+
 	void addPlayer(Player *p);
 	void removePlayer(Player *p);
 
@@ -43,6 +46,7 @@ private:
 	std::list<Player*>               _players;
 	std::unordered_map<int, Player*> _suplayers;
 	std::unordered_map<int, Player*> _splayers;
+	std::unordered_map<int, Player*> _seplayers;
 
 };
 

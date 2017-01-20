@@ -30,6 +30,8 @@ public:
 
 	inline physx::PxMaterial * getDefaultMaterial() const { return _material; }
 
+	void log(char *fmt, ...);
+
 private:
 	bool                            _recordMem;
 	physx::PxDefaultAllocator       _allocator;

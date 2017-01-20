@@ -80,8 +80,6 @@ void PlayerMgr::addPlayerByUid(Player *p) {
 
 void PlayerMgr::removePlayerByUid(int suid) {
 	if (_suplayers.find(suid) != _suplayers.end()) {
-		Player *p = _suplayers[suid];
-		releasePlayer(&p);
 		_suplayers.erase(suid);
 	}
 }
@@ -98,9 +96,18 @@ void PlayerMgr::addPlayerBySid(Player *p) {
 
 void PlayerMgr::removePlayerBySid(int sid) {
 	if (_splayers.find(sid) != _splayers.end()) {
-		Player *p = _suplayers[sid];
-		releasePlayer(&p);
 		_splayers.erase(sid);
+	}
+}
+
+void PlayerMgr::addPlayerBySession(Player *p) {
+	int session = p->getSession();
+	_seplayers[session] = p;
+}
+
+void PlayerMgr::removePlayerBySession(int session) {
+	if (_seplayers.find(session) != _seplayers.end()) {
+		_seplayers.erase(session);
 	}
 }
 

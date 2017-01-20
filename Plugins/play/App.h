@@ -20,9 +20,10 @@ public:
 	void kill() {}
 
 	void updata(float delta);
-	bool join(int suid, int sid);
-	void leave(int suid, int sid);
+	bool join(int suid, int sid, int session);
+	void leave(int suid, int sid, int session);
 	void opcode();
+	int fetch(char *ptr, int len);
 
 private:
 	bool                      _exit;

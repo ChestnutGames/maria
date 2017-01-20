@@ -3,12 +3,19 @@
 #include "PlayerMgr.h"
 #include "Scene.h"
 
+#if defined(SHARPC)
+#include "../sharpc/sharpc.h"
+#include "../sharpc/log.h"
+#endif
+
 #include <foundation/Px.h>
 #include <common/PxTolerancesScale.h>
 #include <extensions/PxExtensionsAPI.h>
 
 #include <cassert>
 #include <iostream>
+
+#include <stdarg.h>
 
 using namespace physx;
 
@@ -52,3 +59,25 @@ void Context::onInit() {
 void Context::update(float delta) {
 	_scene->update(delta);
 }
+
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+void Context::log(char *fmt, ...) {
+#if defined(SHARPC)
+
+	va_list ap;
+	va_start(ap, fmt);
+	char buffer[256] = { 0 };
+	sprintf(buffer, fmt, ap);
+	va_end(ap);
+
+	log_info(buffer);
+
+#endif
+}
+
+#ifdef __cplusplus
+}
+#endif
