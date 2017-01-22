@@ -75,7 +75,7 @@ void play_update(struct play *self, struct CSObject delta) {
 }
 
 bool play_join(struct play *self, struct CSObject uid, struct CSObject sid, struct CSObject session) {
-	log_info("play join uid: %d, sid:%d, session: %d", 1, 0, 1);
+	log_info("play join uid: %d, sid:%d, session: %d", uid.v32, sid.v32, session.v32);
 	return self->app->join(uid.v32, sid.v32, session.v32);
 }
 

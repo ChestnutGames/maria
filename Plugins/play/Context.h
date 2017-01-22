@@ -30,7 +30,9 @@ public:
 
 	inline physx::PxMaterial * getDefaultMaterial() const { return _material; }
 
-	void log(char *fmt, ...);
+	void info(char *fmt, ...);
+	void warning(char *fmt, ...);
+	void error(char *fmt, ...);
 
 private:
 	bool                            _recordMem;

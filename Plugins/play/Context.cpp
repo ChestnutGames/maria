@@ -64,17 +64,44 @@ void Context::update(float delta) {
 extern "C" {
 #endif // __cplusplus
 
-void Context::log(char *fmt, ...) {
+void Context::info(char *fmt, ...) {
 #if defined(SHARPC)
 
 	va_list ap;
 	va_start(ap, fmt);
 	char buffer[256] = { 0 };
-	sprintf(buffer, fmt, ap);
+	vsprintf(buffer, fmt, ap);
 	va_end(ap);
 
 	log_info(buffer);
 
+#endif
+}
+
+void Context::warning(char *fmt, ...) {
+#if defined(SHARPC)
+
+	va_list ap;
+	va_start(ap, fmt);
+	char buffer[256] = { 0 };
+	vsprintf(buffer, fmt, ap);
+	va_end(ap);
+
+	log_warning(buffer);
+
+#endif
+}
+
+void Context::error(char *fmt, ...) {
+#if defined(SHARPC)
+
+	va_list ap;
+	va_start(ap, fmt);
+	char buffer[256] = { 0 };
+	vsprintf(buffer, fmt, ap);
+	va_end(ap);
+
+	log_error(buffer);
 #endif
 }
 

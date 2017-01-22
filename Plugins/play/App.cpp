@@ -29,7 +29,7 @@ void App::start() {
 }
 
 bool App::join(int uid, int sid, int session) {
-	_ctx.log("app join uid:%d, sid:%d, session:%d", uid, sid, session);
+	_ctx.info("app join uid:%d, sid:%d, session:%d", uid, sid, session);
 	bool success = false;
 	try {
 		PlayerMgr *playerMgr = _ctx.getPlayerMgr();
@@ -73,8 +73,8 @@ bool App::join(int uid, int sid, int session) {
 		}
 		success = true;
 	} catch (const std::exception& ex) {
-		_ctx.log("uid %d found exception", uid);
-	} 
+		_ctx.info("uid %d found exception", uid);
+	}
 	return success;
 }
 
@@ -105,11 +105,14 @@ int App::fetch(char *ptr, int len) {
 	int idx = 0;
 	PlayerMgr *playerMgr = _ctx.getPlayerMgr();
 	playerMgr->foreach([&](Player *p) {
-		_ctx.log("session: %d", p->getSession());
+
 		WriteInt32(ptr, idx * 20 + 0, p->getSession());
 		WriteFnt32(ptr, idx * 20 + 4, p->getX());
 		WriteFnt32(ptr, idx * 20 + 8, p->getY());
 		WriteFnt32(ptr, idx * 20 + 16, p->getZ());
+
+		_ctx.info("session: %d %f", p->getSession(), p->getY());
+
 		idx++;
 	});
 
