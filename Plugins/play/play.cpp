@@ -56,7 +56,9 @@ void play_kill(struct play *self) {
 
 void play_update(struct play *self, struct CSObject delta) {
 	assert(delta.type == REAL);
+#if defined(SHARPC)
 	log_info("delta:%f", delta.f);
+#endif
 
 	self->app->updata((float)delta.f);
 
@@ -75,7 +77,10 @@ void play_update(struct play *self, struct CSObject delta) {
 }
 
 bool play_join(struct play *self, struct CSObject uid, struct CSObject sid, struct CSObject session) {
+#if defined(SHARPC)
 	log_info("play join uid: %d, sid:%d, session: %d", uid.v32, sid.v32, session.v32);
+#endif
+
 	return self->app->join(uid.v32, sid.v32, session.v32);
 }
 

@@ -1,20 +1,15 @@
 #ifndef __CONTEXT_H_
 #define __CONTEXT_H_
 
-#include <extensions/PxDefaultErrorCallback.h>
-#include <extensions/PxDefaultAllocator.h>
-#include <foundation/PxAllocatorCallback.h>
-#include <foundation/PxFoundation.h>
-#include <physxprofilesdk/PxProfileZoneManager.h>
-#include <cooking/PxCooking.h>
-#include <PxPhysics.h>
-#include <PxMaterial.h>
+#include <PxPhysicsAPI.h>
+#include <extensions/PxExtensionsAPI.h>
+#include <PxDeletionListener.h>
 
 #include <map>
 
 class Scene;
 class PlayerMgr;
-class Context {
+class Context : public physx::PxDeletionListener {
 public:
 	Context();
 	~Context();
@@ -22,8 +17,10 @@ public:
 	void onInit();
 	void update(float delta);
 
-	inline physx::PxPhysics * getPhysics() const { return _physics; }
-	
+	inline physx::PxFoundation * getFoundation() const { return _foundation; }
+	inline physx::PxPhysics    * getPhysics() const { return _physics; }
+	inline physx::PxCooking    * getCooking() const { return _cooking; }
+
 	inline PlayerMgr * getPlayerMgr() const { return _playerMgr; }
 
 	inline Scene * getScene() const { return _scene; }
@@ -34,16 +31,21 @@ public:
 	void warning(char *fmt, ...);
 	void error(char *fmt, ...);
 
+	virtual void onRelease(const physx::PxBase* observed, void* userData, physx::PxDeletionEventFlag::Enum deletionEvent);
+
 private:
 	bool                            _recordMem;
 	physx::PxDefaultAllocator       _allocator;
 	physx::PxDefaultErrorCallback   _error;
 	physx::PxFoundation            *_foundation;
-	physx::PxProfileZoneManager    *_profileZoneManager;
+	//physx::PxProfileZoneManager    *_profileZoneManager;
 	physx::PxPhysics               *_physics;
 	physx::PxCooking               *_cooking;
-
 	physx::PxMaterial              *_material;
+
+	physx::PxPvd*                    _pvd;
+	physx::PxPvdTransport*           _pvdTransport;
+	physx::PxPvdInstrumentationFlags _pvdFlags;
 
 	//physx::PxDefaultCpuDispatcher  *_dispatcher;
 	//physx::PxRigidStatic           *_plane;

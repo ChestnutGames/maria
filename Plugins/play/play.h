@@ -32,7 +32,6 @@ PLAY_API void play_leave(struct play *self, struct CSObject uid, struct CSObject
 
 PLAY_API int play_fetch(struct play *self, struct CSObject ptr, struct CSObject len);
 
-
 #ifdef __cplusplus
 }
 #endif // __cplusplus

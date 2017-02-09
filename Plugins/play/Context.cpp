@@ -8,37 +8,56 @@
 #include "../sharpc/log.h"
 #endif
 
-#include <foundation/Px.h>
-#include <common/PxTolerancesScale.h>
+#include <PxPhysicsAPI.h>
 #include <extensions/PxExtensionsAPI.h>
 
 #include <cassert>
 #include <iostream>
-
-#include <stdarg.h>
+#include <cstdarg>
 
 using namespace physx;
 
 Context::Context() {
-	physx::PxAllocatorCallback *allocator = &_allocator;
-	_foundation = PxCreateFoundation(PX_PHYSICS_VERSION, *allocator, _error);
-	if (!_foundation) {
-	}
-	_profileZoneManager = &physx::PxProfileZoneManager::createProfileZoneManager(_foundation);
-	if (!_profileZoneManager) {
-	}
-	physx::PxTolerancesScale scale;
-	_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, scale, _recordMem, _profileZoneManager);
+	bool recordMemoryAllocations = true;
+#ifdef ANDROID
+	const bool useCustomTrackingAllocator = false;
+#else
+	const bool useCustomTrackingAllocator = true;
+#endif // ANDROID
 
-	if (!PxInitExtensions(*_physics)) {
+	physx::PxAllocatorCallback *allocator = &_allocator;
+	if (useCustomTrackingAllocator) {
+	}
+
+	_foundation = PxCreateFoundation(PX_FOUNDATION_VERSION, *allocator, _error);
+	if (!_foundation) {
+		error("create foundation failture.");
+	}
+
+	physx::PxTolerancesScale scale;
+	_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *_foundation, scale, _recordMem, _pvd);
+
+	if (_physics) {
+		error("PxCreatePhysics failed.");
+	}
+
+	if (!PxInitExtensions(*_physics, _pvd)) {
+		error("PxInitExtensions failed.");
 	}
 
 	PxCookingParams params(scale);
 	params.meshWeldTolerance = 0.001f;
-	params.meshPreprocessParams = PxMeshPreprocessingFlags(PxMeshPreprocessingFlag::eWELD_VERTICES | PxMeshPreprocessingFlag::eREMOVE_UNREFERENCED_VERTICES | PxMeshPreprocessingFlag::eREMOVE_DUPLICATED_TRIANGLES);
+	params.meshPreprocessParams = PxMeshPreprocessingFlags(PxMeshPreprocessingFlag::eWELD_VERTICES);
+	params.buildGPUData = true;
+
 	_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *_foundation, params);
 
+	_physics->registerDeletionListener(*this, PxDeletionEventFlag::eUSER_RELEASE);
+
 	_material = _physics->createMaterial(0.5f, 0.5f, 0.1f);
+	if (!_material) {
+		error("create Material failed.");
+	}
 }
 
 Context::~Context() {
@@ -108,3 +127,6 @@ void Context::error(char *fmt, ...) {
 #ifdef __cplusplus
 }
 #endif
+
+void Context::onRelease(const PxBase* observed, void* userData, PxDeletionEventFlag::Enum deletionEvent) {
+}

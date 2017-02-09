@@ -89,21 +89,19 @@ void Scene::releasePlayer(Player *p) {
 }
 
 void Scene::onConstraintBreak(PxConstraintInfo* constraints, PxU32 count) {
-
 }
 
 void Scene::onWake(PxActor** actors, PxU32 count) {
-
 }
 
 void Scene::onSleep(PxActor** actors, PxU32 count) {
-
 }
 
 void Scene::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) {
-
 }
 
 void Scene::onTrigger(PxTriggerPair* pairs, PxU32 count) {
+}
 
+void Scene::onAdvance(const PxRigidBody*const* bodyBuffer, const PxTransform* poseBuffer, const PxU32 count) {
 }

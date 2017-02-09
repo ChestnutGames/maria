@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maria", "Maria\Maria.csproj", "{CE533DD2-14C3-4A5A-A922-52B4EC314846}"
 EndProject
@@ -116,8 +116,8 @@ Global
 		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Release|x86.ActiveCfg = Release|Win32
 		{8241A950-5265-4E16-8CA5-C422A7A69D6D}.Release|x86.Build.0 = Release|Win32
 		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|Win32.Build.0 = Debug|Win32
 		{74658FBB-DFBD-498C-9B3D-0E5DF79E9BFB}.Debug|x64.ActiveCfg = Debug|x64
