@@ -6,6 +6,7 @@
 #include <PxDeletionListener.h>
 
 #include <map>
+#include <string>
 
 class Scene;
 class PlayerMgr;
@@ -27,9 +28,9 @@ public:
 
 	inline physx::PxMaterial * getDefaultMaterial() const { return _material; }
 
-	void info(char *fmt, ...);
-	void warning(char *fmt, ...);
-	void error(char *fmt, ...);
+	void info(const char *fmt, ...);
+	void warning(const char *fmt, ...);
+	void error(const char *fmt, ...);
 
 	virtual void onRelease(const physx::PxBase* observed, void* userData, physx::PxDeletionEventFlag::Enum deletionEvent);
 

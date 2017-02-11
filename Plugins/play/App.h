@@ -2,7 +2,6 @@
 #define __APP_H_
 
 #include "stdafx.h"
-
 #include "Context.h"
 
 #include <map>
@@ -19,7 +18,7 @@ public:
 	void close() {}
 	void kill() {}
 
-	void updata(float delta);
+	void update(float delta);
 	bool join(int suid, int sid, int session);
 	void leave(int suid, int sid, int session);
 	void opcode();

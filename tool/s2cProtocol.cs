@@ -6,149 +6,21 @@ using System.Collections.Generic;
 public class S2cProtocol : ProtocolBase {
 	public static  S2cProtocol Instance = new S2cProtocol();
 	private S2cProtocol() {
-		Protocol.SetProtocol<buffgenerate> (buffgenerate.Tag);
-		Protocol.SetRequest<S2cSprotoType.buffgenerate.request> (buffgenerate.Tag);
-		Protocol.SetResponse<S2cSprotoType.buffgenerate.response> (buffgenerate.Tag);
+		Protocol.SetProtocol<handshake> (handshake.Tag);
+		Protocol.SetResponse<S2cSprotoType.handshake.response> (handshake.Tag);
 
-		Protocol.SetProtocol<change_ai> (change_ai.Tag);
-		Protocol.SetRequest<S2cSprotoType.change_ai.request> (change_ai.Tag);
-		Protocol.SetResponse<S2cSprotoType.change_ai.response> (change_ai.Tag);
-
-		Protocol.SetProtocol<createbuff> (createbuff.Tag);
-		Protocol.SetRequest<S2cSprotoType.createbuff.request> (createbuff.Tag);
-		Protocol.SetResponse<S2cSprotoType.createbuff.response> (createbuff.Tag);
-
-		Protocol.SetProtocol<cur_info> (cur_info.Tag);
-		Protocol.SetRequest<S2cSprotoType.cur_info.request> (cur_info.Tag);
-		Protocol.SetResponse<S2cSprotoType.cur_info.response> (cur_info.Tag);
-
-		Protocol.SetProtocol<dealbuffvalue> (dealbuffvalue.Tag);
-		Protocol.SetRequest<S2cSprotoType.dealbuffvalue.request> (dealbuffvalue.Tag);
-		Protocol.SetResponse<S2cSprotoType.dealbuffvalue.response> (dealbuffvalue.Tag);
-
-		Protocol.SetProtocol<deletebloodentity> (deletebloodentity.Tag);
-		Protocol.SetRequest<S2cSprotoType.deletebloodentity.request> (deletebloodentity.Tag);
-		Protocol.SetResponse<S2cSprotoType.deletebloodentity.response> (deletebloodentity.Tag);
-
-		Protocol.SetProtocol<deletebuff> (deletebuff.Tag);
-		Protocol.SetRequest<S2cSprotoType.deletebuff.request> (deletebuff.Tag);
-		Protocol.SetResponse<S2cSprotoType.deletebuff.response> (deletebuff.Tag);
-
-		Protocol.SetProtocol<deletebuffgenerate> (deletebuffgenerate.Tag);
-		Protocol.SetRequest<S2cSprotoType.deletebuffgenerate.request> (deletebuffgenerate.Tag);
-		Protocol.SetResponse<S2cSprotoType.deletebuffgenerate.response> (deletebuffgenerate.Tag);
-
-		Protocol.SetProtocol<die> (die.Tag);
-		Protocol.SetRequest<S2cSprotoType.die.request> (die.Tag);
-		Protocol.SetResponse<S2cSprotoType.die.response> (die.Tag);
-
-		Protocol.SetProtocol<enter_room> (enter_room.Tag);
-		Protocol.SetRequest<S2cSprotoType.enter_room.request> (enter_room.Tag);
-		Protocol.SetResponse<S2cSprotoType.enter_room.response> (enter_room.Tag);
-
-		Protocol.SetProtocol<exitroom> (exitroom.Tag);
-		Protocol.SetRequest<S2cSprotoType.exitroom.request> (exitroom.Tag);
-		Protocol.SetResponse<S2cSprotoType.exitroom.response> (exitroom.Tag);
-
-		Protocol.SetProtocol<generatebloodentity> (generatebloodentity.Tag);
-		Protocol.SetRequest<S2cSprotoType.generatebloodentity.request> (generatebloodentity.Tag);
-		Protocol.SetResponse<S2cSprotoType.generatebloodentity.response> (generatebloodentity.Tag);
-
-		Protocol.SetProtocol<joinroom> (joinroom.Tag);
-		Protocol.SetRequest<S2cSprotoType.joinroom.request> (joinroom.Tag);
-		Protocol.SetResponse<S2cSprotoType.joinroom.response> (joinroom.Tag);
-
-		Protocol.SetProtocol<limit_close> (limit_close.Tag);
-		Protocol.SetRequest<S2cSprotoType.limit_close.request> (limit_close.Tag);
-		Protocol.SetResponse<S2cSprotoType.limit_close.response> (limit_close.Tag);
-
-		Protocol.SetProtocol<limit_start> (limit_start.Tag);
-		Protocol.SetRequest<S2cSprotoType.limit_start.request> (limit_start.Tag);
-		Protocol.SetResponse<S2cSprotoType.limit_start.response> (limit_start.Tag);
-
-		Protocol.SetProtocol<ping> (ping.Tag);
-		Protocol.SetResponse<S2cSprotoType.ping.response> (ping.Tag);
-
-		Protocol.SetProtocol<rank> (rank.Tag);
-		Protocol.SetRequest<S2cSprotoType.rank.request> (rank.Tag);
-		Protocol.SetResponse<S2cSprotoType.rank.response> (rank.Tag);
-
-		Protocol.SetProtocol<updateblood> (updateblood.Tag);
-		Protocol.SetRequest<S2cSprotoType.updateblood.request> (updateblood.Tag);
-		Protocol.SetResponse<S2cSprotoType.updateblood.response> (updateblood.Tag);
+		Protocol.SetProtocol<match> (match.Tag);
+		Protocol.SetRequest<S2cSprotoType.match.request> (match.Tag);
+		Protocol.SetResponse<S2cSprotoType.match.response> (match.Tag);
 
 	}
 
-	public class buffgenerate {
-		public const int Tag = 3;
-	}
-
-	public class change_ai {
-		public const int Tag = 17;
-	}
-
-	public class createbuff {
-		public const int Tag = 7;
-	}
-
-	public class cur_info {
-		public const int Tag = 18;
-	}
-
-	public class dealbuffvalue {
-		public const int Tag = 6;
-	}
-
-	public class deletebloodentity {
-		public const int Tag = 11;
-	}
-
-	public class deletebuff {
-		public const int Tag = 5;
-	}
-
-	public class deletebuffgenerate {
-		public const int Tag = 4;
-	}
-
-	public class die {
-		public const int Tag = 12;
-	}
-
-	public class enter_room {
-		public const int Tag = 13;
-	}
-
-	public class exitroom {
-		public const int Tag = 9;
-	}
-
-	public class generatebloodentity {
-		public const int Tag = 10;
-	}
-
-	public class joinroom {
+	public class handshake {
 		public const int Tag = 1;
 	}
 
-	public class limit_close {
-		public const int Tag = 16;
-	}
-
-	public class limit_start {
-		public const int Tag = 15;
-	}
-
-	public class ping {
+	public class match {
 		public const int Tag = 2;
-	}
-
-	public class rank {
-		public const int Tag = 14;
-	}
-
-	public class updateblood {
-		public const int Tag = 8;
 	}
 
 }

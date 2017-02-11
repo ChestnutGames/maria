@@ -6,6 +6,8 @@
 #if defined(SHARPC)
 #include "../sharpc/sharpc.h"
 #include "../sharpc/log.h"
+#else
+#include "skynet.h"
 #endif
 
 #include <PxPhysicsAPI.h>
@@ -83,44 +85,45 @@ void Context::update(float delta) {
 extern "C" {
 #endif // __cplusplus
 
-void Context::info(char *fmt, ...) {
-#if defined(SHARPC)
-
+void Context::info(const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 	char buffer[256] = { 0 };
 	vsprintf(buffer, fmt, ap);
 	va_end(ap);
 
+#if defined(SHARPC)
 	log_info(buffer);
-
+#else
+	// skynet_error(buffer)
 #endif
 }
 
-void Context::warning(char *fmt, ...) {
-#if defined(SHARPC)
-
+void Context::warning(const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 	char buffer[256] = { 0 };
 	vsprintf(buffer, fmt, ap);
 	va_end(ap);
 
+#if defined(SHARPC)
 	log_warning(buffer);
-
+#else
+	// skynet_error(buffer);
 #endif
 }
 
-void Context::error(char *fmt, ...) {
-#if defined(SHARPC)
-
+void Context::error(const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 	char buffer[256] = { 0 };
 	vsprintf(buffer, fmt, ap);
 	va_end(ap);
 
+#if defined(SHARPC)
 	log_error(buffer);
+#else
+	// skynet_error(buffer);
 #endif
 }
 

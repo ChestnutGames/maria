@@ -21,7 +21,7 @@ if false then
 	fd:write(s2c)
 	fd:close()
 else 
-	local c2s = "./../../../module/car/proto/proto.c2s.sproto"
+	local c2s = "./../../../module/ball/proto/proto.c2s.sproto"
 	local fd = io.open(c2s)
 	local buffer = fd:read("a")
 	fd:close()
@@ -29,7 +29,7 @@ else
 	fd:write(buffer)
 	fd:close()
 
-	local s2c = "./../../../module/car/proto/proto.s2c.sproto"
+	local s2c = "./../../../module/ball/proto/proto.s2c.sproto"
 	local fd = io.open(s2c)
 	local buffer = fd:read("a")
 	fd:close()

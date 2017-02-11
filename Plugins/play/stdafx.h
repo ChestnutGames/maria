@@ -4,11 +4,14 @@
 //
 
 #pragma once
-
+#ifndef STDAFX_H
+#define STDAFX_H
 
 // TODO: reference additional headers your program requires here
 #ifdef WIN32
 #define PLAY_API __declspec (dllexport)
 #else
-#define PLAY_API extern
+#define PLAY_API
+#endif
+
 #endif

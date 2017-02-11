@@ -6,6 +6,7 @@
 #include "pack.h"
 
 #include <iostream>
+#include <string>
 #include <cstdlib>
 #include <cstdarg>
 #include <cassert>
@@ -20,7 +21,7 @@ App::~App() {
 void App::run() {
 }
 
-void App::updata(float delta) {
+void App::update(float delta) {
 	_ctx.update(delta);
 }
 
