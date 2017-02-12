@@ -64,11 +64,20 @@ battle_debug_common_cflags  += -m64
 # battle_debug_common_cflags  += -fexceptions
 battle_debug_common_cflags  += -g -Wall
 
-libplayc.so: $(battle_cppfiles)
-	g++ -std=c++11 $(SHARED) $(battle_debug_common_cflags) $^ -o $@ $(addprefix -L, $(battle_debug_lpaths)) -Wl,-Bdynamic $(addprefix -l, $(battle_debug_libraries))
+OBJS := $(battle_cppfiles:.cpp=.o)
+DEPS := $(battle_cppfiles:.cpp=.d)
 
-test: main.c
-	gcc $(CFLAGS) -o $@ $^ -L./ -lplayc $(addprefix -L, $(battle_debug_lpaths)) -Wl,-Bdynamic $(addprefix -l, $(battle_debug_libraries))
+all: libplay.so libplay.a
+	rm -f $(OBJS) $(DEPS)
 
+$(OBJS):%.o:%.cpp
+	g++ -std=c++11 -c -fPIC $(battle_debug_common_cflags) $^ -o $@ 
+
+libplay.a: $(OBJS)
+	ar crv $@ $^
+
+libplay.so: $(OBJS)
+	g++ -std=c++11 $(SHARED) $(battle_debug_common_cflags) -o $@ $^ $(addprefix -L, $(battle_debug_lpaths)) -Wl,-Bdynamic $(addprefix -l, $(battle_debug_libraries))
+	
 clean:
-	rm -f libplayc.so test
+	rm -f $(OBJS) libplayc.so libplay.a
