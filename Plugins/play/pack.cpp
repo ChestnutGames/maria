@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "pack.h"
 
+#include <stdlib.h>
+
 union if32 {
 	int32_t i;
 	float   f;

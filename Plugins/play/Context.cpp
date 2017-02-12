@@ -7,7 +7,7 @@
 #include "../sharpc/sharpc.h"
 #include "../sharpc/log.h"
 #else
-#include "skynet.h"
+// #include "skynet.h"
 #endif
 
 #include <PxPhysicsAPI.h>
