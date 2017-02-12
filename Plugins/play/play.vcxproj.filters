@@ -42,10 +42,10 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="play.h">
+    <ClInclude Include="pack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pack.h">
+    <ClInclude Include="playc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,10 +71,10 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="play.cpp">
+    <ClCompile Include="pack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pack.cpp">
+    <ClCompile Include="playc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

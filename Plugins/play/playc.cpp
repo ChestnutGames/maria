@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "playc.h"
 #include "App.h"
 

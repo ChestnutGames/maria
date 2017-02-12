@@ -151,7 +151,6 @@
     <ClInclude Include="..\play\Context.h" />
     <ClInclude Include="..\play\Map.h" />
     <ClInclude Include="..\play\pack.h" />
-    <ClInclude Include="..\play\play.h" />
     <ClInclude Include="..\play\Player.h" />
     <ClInclude Include="..\play\PlayerMgr.h" />
     <ClInclude Include="..\play\Scene.h" />
@@ -160,6 +159,7 @@
     <ClInclude Include="..\rudp\rudp_aux.h" />
     <ClInclude Include="conf.h" />
     <ClInclude Include="log.h" />
+    <ClInclude Include="play.h" />
     <ClInclude Include="sharpc.h" />
   </ItemGroup>
   <ItemGroup>
@@ -170,7 +170,6 @@
     <ClCompile Include="..\play\Context.cpp" />
     <ClCompile Include="..\play\Map.cpp" />
     <ClCompile Include="..\play\pack.cpp" />
-    <ClCompile Include="..\play\play.cpp" />
     <ClCompile Include="..\play\Player.cpp" />
     <ClCompile Include="..\play\PlayerMgr.cpp" />
     <ClCompile Include="..\play\Scene.cpp" />
@@ -179,6 +178,7 @@
     <ClCompile Include="..\rudp\rudp_aux.c" />
     <ClCompile Include="conf.cpp" />
     <ClCompile Include="log.cpp" />
+    <ClCompile Include="play.cpp" />
     <ClCompile Include="sharpc.c" />
     <ClCompile Include="test.c" />
   </ItemGroup>

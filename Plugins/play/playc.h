@@ -5,10 +5,10 @@
 extern "C" {
 #endif // __cplusplus
 
+#include "stdafx.h"
+
 #include <stdbool.h>
 #include <stdint.h>
-
-#define PLAY_API
 
 struct play;
 PLAY_API struct play* play_alloc(int ex, int cb);

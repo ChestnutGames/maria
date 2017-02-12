@@ -39,6 +39,8 @@ sysinfo.txt
 *.user
 *.o
 *.sdf
+*.d
+*.so
 
 # 忽略指定文件
 /Plugins/crypt/crypt.sdf
@@ -57,8 +59,11 @@ Plugins/rudp/x64
 Plugins/play/Debug
 Plugins/play/x64
 
-Plugins/play_test/Debug
-Plugins/play_test/x64
+Plugins/cpptest/Debug
+Plugins/cpptest/x64
+
+Plugins/ctest/Debug
+Plugins/ctest/x64
 
 Plugins/sharpc/Debug
 Plugins/sharpc/x64

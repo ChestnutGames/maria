@@ -99,7 +99,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PLAY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PLAY_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>D:\Ember\Documents\github\PhysX-3.4\PhysX_3.4\Include;D:\Ember\Documents\github\PhysX-3.4\PxShared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -153,7 +153,7 @@
     <ClInclude Include="Context.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="pack.h" />
-    <ClInclude Include="play.h" />
+    <ClInclude Include="playc.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerMgr.h" />
     <ClInclude Include="Scene.h" />
@@ -165,7 +165,7 @@
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="pack.cpp" />
-    <ClCompile Include="play.cpp" />
+    <ClCompile Include="playc.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerMgr.cpp" />
     <ClCompile Include="Scene.cpp" />
