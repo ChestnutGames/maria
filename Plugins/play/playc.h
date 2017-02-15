@@ -10,26 +10,26 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-struct play;
-PLAY_API struct play* play_alloc(int ex, int cb);
+struct playc;
+PLAY_API struct playc* playc_alloc(int ex, int cb);
 
-PLAY_API void play_free(struct play *self);
+PLAY_API void playc_free(struct playc *self);
 
-PLAY_API void play_start(struct play *self);
+PLAY_API void playc_start(struct playc *self);
 
-PLAY_API void play_close(struct play *self);
+PLAY_API void playc_close(struct playc *self);
 
-PLAY_API void play_kill(struct play *self);
+PLAY_API void playc_kill(struct playc *self);
 
-PLAY_API void play_update(struct play *self, float delta);
+PLAY_API void playc_update(struct playc *self, float delta);
 
-PLAY_API bool play_join(struct play *self, int uid, int sid, int session);
+PLAY_API bool playc_join(struct playc *self, int uid, int sid, int session);
 
-PLAY_API void play_leave(struct play *self, int uid, int sid, int session);
+PLAY_API void playc_leave(struct playc *self, int uid, int sid, int session);
 
-PLAY_API void play_opcode(struct play *self);
+PLAY_API void playc_opcode(struct playc *self);
 
-PLAY_API int play_fetch(struct play *self, char *ptr, int len);
+PLAY_API int playc_fetch(struct playc *self, char *ptr, int len);
 
 #ifdef __cplusplus
 }

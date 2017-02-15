@@ -39,14 +39,14 @@ struct sharpc {
 };
 
 SHARPC_API struct sharpc*
-	sharpc_alloc(sharp_callback cb);
+sharpc_alloc(sharp_callback cb);
 
 SHARPC_API void
 sharpc_free(struct sharpc *self);
 
 /*
-	* @return 0 正确， 1 以后错误，代码
-*/
+ * @return 0 正确， 1 以后错误，代码
+ */
 SHARPC_API int
 sharpc_call(struct sharpc *self, int argc, struct CSObject *argv, int args, int res);
 

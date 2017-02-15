@@ -4,54 +4,54 @@
 
 #include <stdlib.h>
 
-struct play {
+struct playc {
 	App	*app;
 };
 
-struct play* play_alloc(int ex, int cb) {
-	struct play *inst = (struct play *)malloc(sizeof(*inst));
+struct playc* playc_alloc(int ex, int cb) {
+	struct playc *inst = (struct playc *)malloc(sizeof(*inst));
 	memset(inst, 0, sizeof(*inst));
 	inst->app = new App();
 	return inst;
 }
 
-void play_free(struct play *self) {
+void playc_free(struct playc *self) {
 	if (self->app) {
 		delete self->app;
 	}
 	free(self);
 }
 
-void play_start(struct play *self) {
+void playc_start(struct playc *self) {
 	self->app->start();
 }
 
-void play_close(struct play *self) {
+void playc_close(struct playc *self) {
 	self->app->close();
 }
 
-void play_kill(struct play *self) {
+void playc_kill(struct playc *self) {
 	self->app->kill();
 }
 
-void play_update(struct play *self, float delta) {
+void playc_update(struct playc *self, float delta) {
 	self->app->update(delta);
 }
 
-bool play_join(struct play *self, int uid, int sid, int session) {
+bool playc_join(struct playc *self, int uid, int sid, int session) {
 	self->app->join(uid, sid, session);
 	return true;
 }
 
-void play_leave(struct play *self, int uid, int sid, int session) {
+void playc_leave(struct playc *self, int uid, int sid, int session) {
 	self->app->leave(uid, sid, session);
 }
 
-void play_opcode(struct play *self)  {
+void playc_opcode(struct playc *self)  {
 	self->app->opcode();
 }
 
-int play_fetch(struct play *self, char *ptr, int len) {
+int playc_fetch(struct playc *self, char *ptr, int len) {
 	self->app->fetch(ptr, len);
 	return 0;
 }

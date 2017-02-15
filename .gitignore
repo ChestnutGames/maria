@@ -68,6 +68,9 @@ Plugins/ctest/x64
 Plugins/sharpc/Debug
 Plugins/sharpc/x64
 
+Plugins/sharpcc
+Plugins/test
+
 ipch
 Debug
 x64

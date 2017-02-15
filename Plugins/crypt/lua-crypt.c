@@ -337,7 +337,7 @@ des_crypt(const uint32_t SK[32], const uint8_t input[8], uint8_t output[8]) {
 	PUT_UINT32(X, output, 4);
 }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 randomkey() {
 	char tmp[8];
 	int i;
@@ -370,7 +370,7 @@ des_key(uint32_t SK[32], PACKAGE key1) {
 	des_main_ks(SK, key);
 }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 desencode(PACKAGE key, PACKAGE data) {
 	uint32_t SK[32];
 	des_key(SK, key);
@@ -410,7 +410,7 @@ desencode(PACKAGE key, PACKAGE data) {
 	return rt;
 }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 desdecode(PACKAGE key, PACKAGE data) {
 	uint32_t ESK[32];
 	des_key(ESK, key);
@@ -494,7 +494,7 @@ Hash(const char * str, int sz, uint8_t key[8]) {
 	key[7] = (js_hash >> 24) & 0xff;
 }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 hashkey(PACKAGE data) {
 	size_t sz = data.len;
 	const char * key = data.src;
@@ -508,7 +508,7 @@ hashkey(PACKAGE data) {
 	return rt;
 }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 tohex(PACKAGE data) {
 	static char hex[] = "0123456789abcdef";
 	size_t sz = data.len;
@@ -533,7 +533,7 @@ tohex(PACKAGE data) {
 
 #define HEX(v,c) { char tmp = (char) c; if (tmp >= '0' && tmp <= '9') { v = tmp-'0'; } else { v = tmp - 'a' + 10; } }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 fromhex(PACKAGE data) {
 	size_t sz = data.len;
 	const char * text = data.src;
@@ -686,7 +686,7 @@ pushqword(uint32_t result[2]) {
 	return rt;
 }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 hmac64(PACKAGE key1, PACKAGE key2) {
 	uint32_t x[2], y[2];
 	read64(key1, key2, x, y);
@@ -699,7 +699,7 @@ hmac64(PACKAGE key1, PACKAGE key2) {
 	8bytes key
 	string text
 	*/
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 hmac_hash(PACKAGE key1, PACKAGE data) {
 	uint32_t key[2];
 	size_t sz = key1.len;
@@ -796,7 +796,7 @@ push64(uint64_t r) {
 	return rt;
 }
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 dhsecret(PACKAGE key, PACKAGE data) {
 	uint32_t x[2], y[2];
 	read64(key, data, x, y);
@@ -817,7 +817,7 @@ dhsecret(PACKAGE key, PACKAGE data) {
 
 #define G 5
 
-CRYPT_API  PACKAGE __stdcall
+CRYPT_API  PACKAGE
 dhexchange(PACKAGE data) {
 	size_t sz = data.len;
 	const uint8_t *x = data.src;
@@ -849,7 +849,7 @@ dhexchange(PACKAGE data) {
 
 // base64
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 b64encode(PACKAGE data) {
 	static const char* encoding = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	size_t sz = data.len;
@@ -910,7 +910,7 @@ b64index(uint8_t c) {
 }
 
 
-CRYPT_API PACKAGE __stdcall
+CRYPT_API PACKAGE
 b64decode(PACKAGE data) {
 	size_t sz = data.len;
 	assert(sz > 0);
@@ -996,7 +996,7 @@ b64decode(PACKAGE data) {
 	return rt;
 }
 
-CRYPT_API void __stdcall
+CRYPT_API void
 pfree(PACKAGE data) {
 	if (data.src != NULL && data.len > 0) {
 		free(data.src);

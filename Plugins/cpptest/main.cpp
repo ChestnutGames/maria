@@ -1,7 +1,5 @@
 // play_test.cpp : Defines the entry point for the console application.
 //
-
-//#include "playc.h"
 #include "play.h"
 
 #include <stdarg.h>
@@ -10,10 +8,6 @@
 #include <iostream>
 #include <string>
 
-struct data {
-	int dummy;
-};
-
 static void log(char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
@@ -21,12 +15,10 @@ static void log(char *fmt, ...) {
 
 	/*snprintf(buffer, 256, fmt, ##__);*/
 	va_end(ap);
-
 	printf(buffer);
 }
 
 int main(int argc, char* argv[]) {
-	log("hello %d", 5);
 
 	struct CSObject nil;
 	nil.type = NIL;
@@ -35,10 +27,10 @@ int main(int argc, char* argv[]) {
 	bool exit = false;
 
 	while (!exit) {
-		std::cout << std::endl;
 		std::cout << "please enter c:" << std::endl;
 		char c;
 		std::cin >> c;
+		std::cout << std::endl;
 		switch (c) {
 		case 'c': {
 			struct CSObject args[3];

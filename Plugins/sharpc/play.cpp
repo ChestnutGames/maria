@@ -3,7 +3,6 @@
 
 #include "../play/App.h"
 
-#include <new>
 #include <assert.h>
 #include <string.h>
 #include <stdarg.h>

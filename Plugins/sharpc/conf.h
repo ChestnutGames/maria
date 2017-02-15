@@ -1,7 +1,7 @@
 #ifndef CONF_H
 #define CONF_H
 
-#ifdef WIN32
+#if defined(WIN32) && defined(SHARPC_EXPORTS)
 #define SHARPC_API __declspec (dllexport)
 #else
 #define SHARPC_API

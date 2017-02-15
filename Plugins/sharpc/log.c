@@ -18,7 +18,7 @@ void log_info(char *fmt, ...) {
 
 	struct CSObject args[2];
 	args[0].type = INT32;
-	args[0].v32 = log_level::info;
+	args[0].v32 = info;
 	args[1].type = STRING;
 	args[1].ptr = buffer;
 
@@ -38,7 +38,7 @@ void log_warning(char *fmt, ...) {
 
 	struct CSObject args[2];
 	args[0].type = INT32;
-	args[0].v32 = log_level::warning;
+	args[0].v32 = warning;
 	args[1].type = STRING;
 	args[1].ptr = buffer;
 
@@ -58,7 +58,7 @@ void log_error(char *fmt, ...) {
 
 	struct CSObject args[2];
 	args[0].type = INT32;
-	args[0].v32 = log_level::error;
+	args[0].v32 = error;
 	args[1].type = STRING;
 	args[1].ptr = buffer;
 

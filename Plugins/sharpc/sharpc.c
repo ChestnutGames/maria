@@ -22,7 +22,7 @@ sharpc_alloc(sharp_callback cb) {
 
 void
 sharpc_free(struct sharpc *self) {
-	if (inst == NULL) {
+	if (inst != NULL) {
 		free(inst);
 		inst = NULL;
 	}

@@ -4,7 +4,7 @@
 #ifdef WIN32
 #define CRYPT_API __declspec (dllexport)
 #else
-#define CRYPT_API extern
+#define CRYPT_API 
 #endif
 
 #include <stdlib.h>
