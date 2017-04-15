@@ -60,12 +60,12 @@ rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 
 		struct sharpc *sc = sharpc_alloc(NULL);
 		struct CSObject args[4];
-		args[0] = aux->send;
+		args[0] = aux->recv;
 		args[1] = aux->ex;
 		args[2].type = INTPTR;
-		args[2].ptr = res->buffer;
+		args[2].ptr = aux->buffer;
 		args[3].type = INT32;
-		args[3].v32 = res->sz;
+		args[3].v32 = size;
 		sharpc_call(sc, 4, args, 3, 0);
 
 		size = rudp_recv(aux->u, aux->buffer);

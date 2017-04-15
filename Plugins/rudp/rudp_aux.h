@@ -2,7 +2,6 @@
 #define __RUDP_AUX_H
 
 #include <stdio.h>
-#include <tchar.h>
 
 #ifdef WIN32
 #define RUDP_API __declspec (dllexport)
