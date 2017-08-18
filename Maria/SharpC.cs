@@ -37,7 +37,7 @@ namespace Maria {
 
         public static SharpObject cache = new SharpObject();
         public const int maxArgs = 8;
-        public const string DLL = "sharpc.dll";
+        public const string DLL = "sharpc";
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr sharpc_alloc(pfunc func);
@@ -48,11 +48,18 @@ namespace Maria {
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void sharpc_log(IntPtr self, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 2)] CSObject[] xx);
 
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void test();
+
         private IntPtr _sharpc = IntPtr.Zero;
 
         public SharpC() {
-            _sharpc = sharpc_alloc(SharpC.CallCSharp);
-            CacheLog();
+            try {
+                _sharpc = sharpc_alloc(SharpC.CallCSharp);
+                CacheLog();
+            } catch (DllNotFoundException ex) {
+                UnityEngine.Debug.LogException(ex);
+            }
         }
 
         protected override void Dispose(bool disposing) {
@@ -94,19 +101,19 @@ namespace Maria {
         }
 
         public static int Log(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 8)] SharpC.CSObject[] argv, int args, int res) {
-            Debug.Assert(args + res + 1 <= 8);
+            UnityEngine.Debug.Assert(args + res + 1 <= 8);
 
-            Debug.Assert(argv[1].type == CSType.INT32);
-            Debug.Assert(argv[2].type == CSType.STRING);
+            UnityEngine.Debug.Assert(argv[1].type == CSType.INT32);
+            UnityEngine.Debug.Assert(argv[2].type == CSType.STRING);
 
             string msg = Marshal.PtrToStringAnsi(argv[2].ptr);
 
             if (argv[1].v32 == 1) {
-                Debug.Log(msg);
+                UnityEngine.Debug.Log(msg);
             } else if (argv[1].v32 == 2) {
-                Debug.LogWarning(msg);
+                UnityEngine.Debug.LogWarning(msg);
             } else if (argv[1].v32 == 3) {
-                Debug.LogError(msg);
+                UnityEngine.Debug.LogError(msg);
             }
             
             return 0;

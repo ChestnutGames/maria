@@ -13,7 +13,7 @@ namespace Maria.Rudp {
         public static extern IntPtr rudpaux_alloc(int send_delay, int expired_time, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject ex, [In, MarshalAs(UnmanagedType.Struct)]SharpC.CSObject send, [In, MarshalAs(UnmanagedType.Struct)] SharpC.CSObject recv);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void aux_delete(IntPtr U);
+        public static extern void rudpaux_free(IntPtr U);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rudpaux_send(IntPtr U, IntPtr buffer, int sz);

@@ -8,7 +8,7 @@ namespace Maria.Encrypt
 {
     public class Crypt_CSharp
     {
-        public const string DLL = "sharpc";
+        public const string DLL = "crypt";
 
         [StructLayout(LayoutKind.Sequential)]
         public struct PACKAGE
@@ -33,10 +33,10 @@ namespace Maria.Encrypt
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern PACKAGE hashkey(PACKAGE src);
 
-        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "tohex")]
         public static extern PACKAGE hexencode(PACKAGE src);
 
-        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "fromhex")]
         public static extern PACKAGE hexdecode(PACKAGE encrypted);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -51,10 +51,10 @@ namespace Maria.Encrypt
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern PACKAGE dhexchange(PACKAGE key);
 
-        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "b64encode")]
         public static extern PACKAGE base64encode(PACKAGE src);
 
-        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "b64decode")]
         public static extern PACKAGE base64decode(PACKAGE encrypted);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]

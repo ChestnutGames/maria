@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using Maria.Encrypt;
 using Maria.Rudp;
+using System.Text;
 
 namespace Maria.Network {
     public class PackageSocketUdp : DisposeObject {
@@ -38,6 +39,7 @@ namespace Maria.Network {
         private SyncCB _syncCb = null;
         private Rudp.Rudp _u = null;
         private int _last = 0;
+        private int _delta = 25; // 0.025s
 
 
         public PackageSocketUdp(Context ctx, byte[] secret, uint session) {
@@ -51,17 +53,22 @@ namespace Maria.Network {
             _u = new Rudp.Rudp(_ctx.SharpC, 1, 5);
             _u.OnRecv = RRecv;
             _u.OnSend = RSend;
+
+            int now = _timeSync.LocalTime();
+            _last = now;
         }
 
         protected override void Dispose(bool disposing) {
-            base.Dispose(disposing);
             if (_disposed) {
                 return;
             }
             if (disposing) {
+                // 清理托管资源，调用自己管理的对象的Dispose方法
                 _u.Dispose();
+
             }
             // 清理非托管资源
+
             _disposed = true;
         }
 
@@ -78,7 +85,6 @@ namespace Maria.Network {
 
         public void Sync() {
             int now = _timeSync.LocalTime();
-            _last = now;
 
             byte[] buffer = new byte[12];
             NetPack.PacklI(buffer, 0, (uint)now);
@@ -110,36 +116,42 @@ namespace Maria.Network {
                 Array.Copy(head, 0, buffer, 8, 12);
                 Array.Copy(data, 0, buffer, 20, data.Length);
 
-                Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", local, global[0], _session));
+                UnityEngine.Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", local, global[0], _session));
                 _u.Send(data, 0, data.Length);
             } else {
-                Debug.Assert(false);
+                UnityEngine.Debug.Assert(false);
             }
         }
 
         public void Update() {
+            int sz = 0;
             if (_so.Poll(0, SelectMode.SelectRead)) {
                 EndPoint ep = _remoteEP as EndPoint;
-                int sz = _so.ReceiveFrom(_buffer, 3072, SocketFlags.None, ref ep);
-                int now = _timeSync.LocalTime();
-                if (now - _last >= 5) {
-                    _last += 5;
-                    _u.Update(_buffer, 0, sz, 1);
-                    while (now - _last >= 5) {
-                        _u.Update(null, 0, 0, 1);
-                    }
-                } else {
-                    _u.Update(_buffer, 0, sz, 0);
-                }
+                sz = _so.ReceiveFrom(_buffer, 3072, SocketFlags.None, ref ep);
+                UnityEngine.Debug.Log(string.Format("size {0}", sz));
+            }
 
+            int tick = 0;
+            int now = _timeSync.LocalTime();
+            if (now - _last >= _delta) {
+                _last += _delta;
+                tick = 1;   
+            }
 
+            if (sz > 0) {
+                _u.Update(_buffer, 0, sz, tick);
             } else {
-                _u.Update(null, 0, 0, 1);
+                if (tick > 0) {
+                    _u.Update(null, 0, 0, tick);
+                }
             }
         }
 
         private void RSend(byte[] buffer, int start, int len) {
-            if (len > 0) {
+            if (len == 1) {
+                if (buffer[0] == 0) {
+                }
+            } else if (len > 1) {
                 _so.SendTo(buffer, start, len, SocketFlags.None, _remoteEP);
             }
         }
@@ -151,14 +163,14 @@ namespace Maria.Network {
             int remaining = len;
             int head = 0;
             do {
-                Debug.Assert(len >= 12);
-                uint globaltime = NetUnpack.UnpacklI(_buffer, head);
-                uint localtime = NetUnpack.UnpacklI(_buffer, head + 4);
-                uint eventtime = NetUnpack.UnpacklI(_buffer, head + 8);
-                uint session = NetUnpack.UnpacklI(_buffer, head + 12);
-                head += 12;
-                remaining -= 12;
-                Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", localtime, eventtime, session));
+                UnityEngine.Debug.Assert(len >= 16);
+                uint globaltime = NetUnpack.UnpacklI(buffer, head);
+                uint localtime = NetUnpack.UnpacklI(buffer, head + 4);
+                uint eventtime = NetUnpack.UnpacklI(buffer, head + 8);
+                uint session = NetUnpack.UnpacklI(buffer, head + 12);
+                head += 16;
+                remaining -= 16;
+                UnityEngine.Debug.Log(string.Format("localtime:{0}, eventtime:{1}, session:{2}", localtime, eventtime, session));
                 if (eventtime == 0xffffffff) {
                     if (session == _session) {
                         _timeSync.Sync((int)localtime, (int)globaltime);
@@ -166,6 +178,8 @@ namespace Maria.Network {
                             _connected = true;
                             _syncCb();
                         }
+                        UnityEngine.Debug.Assert(remaining == 0);
+                        return;
                     }
                 } else {
                     if (session == _session) {
@@ -188,7 +202,7 @@ namespace Maria.Network {
                     }
                 }
             } while (remaining > 0);
-            Debug.Assert(remaining == 0);
+            UnityEngine.Debug.Assert(remaining == 0);
         }
     }
 }
