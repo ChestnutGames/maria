@@ -1,7 +1,7 @@
 .package {
-	type 0 : integer
+	type    0 : integer
 	session 1 : integer
-    index 2 : integer
+    index   2 : integer
     version 3 : integer
 }
 
@@ -16,6 +16,9 @@ handshake 1 {
 }
 
 match 2 {
+    request {
+        mode 0 : integer
+    }
 	response {
 		errorcode 0 : integer
 	}

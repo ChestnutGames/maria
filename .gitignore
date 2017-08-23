@@ -76,5 +76,7 @@ Debug
 x64
 
 !mksproto/lua.exe
-!mksproto/lpeg.so
+!mksproto/lua53.dll
+!mksproto/lpeg.dll
+!mksproto/pthreadVC2.dll
 
