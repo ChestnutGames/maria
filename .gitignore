@@ -79,4 +79,5 @@ x64
 !mksproto/lua53.dll
 !mksproto/lpeg.dll
 !mksproto/pthreadVC2.dll
-
+!mksproto/lua
+!mksproto/lpeg.so
