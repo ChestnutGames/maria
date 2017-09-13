@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Map.h"
-#include "Scene.h"
+#include "play/Map.h"
+#include "play/Scene.h"
 
 #include <PxRigidStatic.h>
 #include <foundation/PxPlane.h>

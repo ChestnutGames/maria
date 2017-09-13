@@ -1,8 +1,8 @@
-#include "stdafx.h"
-#include "Context.h"
-#include "PlayerMgr.h"
-#include "Player.h"
-#include "Scene.h"
+
+#include "play/Context.h"
+#include "play/PlayerMgr.h"
+#include "play/Player.h"
+#include "play/Scene.h"
 
 #include <PxScene.h>
 #include <PxRigidDynamic.h>

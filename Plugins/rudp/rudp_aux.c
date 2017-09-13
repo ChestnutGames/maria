@@ -1,6 +1,6 @@
-#include "rudp_aux.h"
+#include "config.h"
 #include "rudp.h"
-#include "../sharpc/sharpc.h"
+#include "sharpc/sharpc.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,7 +43,7 @@ RUDP_API void
 rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 	struct rudp_package *res = rudp_update(aux->u, buffer, sz, tick);
 	while (res) {
-		struct sharpc *sc = sharpc_alloc(NULL);
+		struct sharpc *sc = sharpc_create(NULL);
 		struct CSObject args[4];
 		args[0] = aux->send;
 		args[1] = aux->ex;
@@ -51,14 +51,15 @@ rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 		args[2].ptr = res->buffer;
 		args[3].type = INT32;
 		args[3].v32 = res->sz;
-		sharpc_call(sc, 4, args, 3, 0);
+		sharpc_callsharp(sc, 4, args, 0);
 
 		res = res->next;
+		sharpc_release(sc);
 	}
 	int size = rudp_recv(aux->u, aux->buffer);
 	while (size > 0) {
 
-		struct sharpc *sc = sharpc_alloc(NULL);
+		struct sharpc *sc = sharpc_create(NULL);
 		struct CSObject args[4];
 		args[0] = aux->recv;
 		args[1] = aux->ex;
@@ -66,8 +67,10 @@ rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 		args[2].ptr = aux->buffer;
 		args[3].type = INT32;
 		args[3].v32 = size;
-		sharpc_call(sc, 4, args, 3, 0);
+
+		sharpc_callsharp(aux->u, 4, args, 0);
 
 		size = rudp_recv(aux->u, aux->buffer);
+		sharpc_release(sc);
 	}
 }

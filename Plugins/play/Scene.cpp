@@ -1,8 +1,7 @@
-#include "stdafx.h"
-#include "Scene.h"
-#include "Player.h"
-#include "PlayerMgr.h"
-#include "Map.h"
+#include "play/Scene.h"
+#include "play/Player.h"
+#include "play/PlayerMgr.h"
+#include "play/Map.h"
 
 #include <foundation/Px.h>
 #include <extensions/PxExtensionsAPI.h>

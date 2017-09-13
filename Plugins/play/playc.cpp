@@ -1,6 +1,5 @@
-#include "stdafx.h"
-#include "playc.h"
-#include "App.h"
+#include "play/playc.h"
+#include "play/App.h"
 
 #include <stdlib.h>
 

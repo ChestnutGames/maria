@@ -60,6 +60,7 @@
     <Compile Include="EventListener.cs" />
     <Compile Include="EventListenerCmd.cs" />
     <Compile Include="EventListenerCustom.cs" />
+    <Compile Include="HexMap\HexMap.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Network\ClientLogin.cs" />
     <Compile Include="Network\ClientSocket.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Rudp\Rudp_CSharp.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="SharpC.cs" />
+    <Compile Include="SharpCCmd.cs" />
     <Compile Include="sharpobject.cs" />
     <Compile Include="Sproto\Package.cs" />
     <Compile Include="Sproto\ProtocolBase.cs" />

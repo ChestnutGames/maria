@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "pack.h"
+
+#include "play/pack.h"
 
 #include <stdlib.h>
 

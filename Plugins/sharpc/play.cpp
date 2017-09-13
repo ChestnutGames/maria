@@ -1,7 +1,9 @@
-#include "play.h"
-#include "log.h"
+#include "sharpc/play.h"
+#include "sharpc/log.h"
 
-#include "../play/App.h"
+#include "play/playc.h"
+#include "play/App.h"
+#include "play/Player.h"
 
 #include <assert.h>
 #include <string.h>

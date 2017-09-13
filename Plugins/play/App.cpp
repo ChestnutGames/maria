@@ -1,9 +1,8 @@
-#include "stdafx.h"
-#include "App.h"
-#include "Context.h"
-#include "Player.h"
-#include "PlayerMgr.h"
-#include "pack.h"
+#include "play/App.h"
+#include "play/Context.h"
+#include "play/Player.h"
+#include "play/PlayerMgr.h"
+#include "play/pack.h"
 
 #include <iostream>
 #include <string>

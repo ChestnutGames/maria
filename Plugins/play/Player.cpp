@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Player.h"
-#include "Context.h"
+#include "play/Player.h"
+#include "play/Context.h"
 
 #include <foundation/PxVec2.h>
 #include <foundation/PxPlane.h>

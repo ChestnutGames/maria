@@ -1,5 +1,6 @@
-#include "log.h"
-#include "sharpc.h"
+
+#include "sharpc/log.h"
+#include "sharpc/sharpc.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -14,7 +15,7 @@ void log_info(char *fmt, ...) {
 	vsnprintf(buffer, 256, fmt, ap);
 	va_end(ap);
 
-	struct sharpc* sc = sharpc_alloc(NULL);
+	struct sharpc* sc = sharpc_create(NULL);
 
 	struct CSObject args[2];
 	args[0].type = INT32;
@@ -23,6 +24,8 @@ void log_info(char *fmt, ...) {
 	args[1].ptr = buffer;
 
 	sharpc_log(sc, args);
+
+	sharpc_release(sc);
 #endif // 
 }
 
@@ -34,7 +37,7 @@ void log_warning(char *fmt, ...) {
 	vsnprintf(buffer, 256, fmt, ap);
 	va_end(ap);
 
-	struct sharpc* sc = sharpc_alloc(NULL);
+	struct sharpc* sc = sharpc_create(NULL);
 
 	struct CSObject args[2];
 	args[0].type = INT32;
@@ -43,6 +46,7 @@ void log_warning(char *fmt, ...) {
 	args[1].ptr = buffer;
 
 	sharpc_log(sc, args);
+	sharpc_release(sc);
 #endif // 
 }
 
@@ -54,7 +58,7 @@ void log_error(char *fmt, ...) {
 	vsnprintf(buffer, 256, fmt, ap);
 	va_end(ap);
 
-	struct sharpc* sc = sharpc_alloc(NULL);
+	struct sharpc* sc = sharpc_create(NULL);
 
 	struct CSObject args[2];
 	args[0].type = INT32;
@@ -63,6 +67,7 @@ void log_error(char *fmt, ...) {
 	args[1].ptr = buffer;
 
 	sharpc_log(sc, args);
+	sharpc_release(sc);
 
 #endif // 
 }

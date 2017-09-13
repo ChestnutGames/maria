@@ -33,7 +33,7 @@ sysinfo.txt
 *.suo
 *.tmp
 *.meta
-*.exp
+#*.exp
 *.ilk
 *.pdb
 *.user
@@ -50,26 +50,10 @@ sysinfo.txt
 Maria/bin
 Maria/obj
 
-Plugins/crypt/Debug
-Plugins/crypt/x64
-
-Plugins/rudp/Debug
-Plugins/rudp/x64
-
-Plugins/play/Debug
-Plugins/play/x64
-
-Plugins/cpptest/Debug
-Plugins/cpptest/x64
-
-Plugins/ctest/Debug
-Plugins/ctest/x64
-
-Plugins/sharpc/Debug
-Plugins/sharpc/x64
-
-Plugins/sharpcc
-Plugins/test
+Plugins/.vs
+Plugins/msvc/bin
+Plugins/msvc/Debug
+Plugins/msvc/x64
 
 ipch
 Debug
