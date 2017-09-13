@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="crypt">
+      <UniqueIdentifier>{18104494-800c-4a18-8b52-a8454963bdf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{9551f7f3-267f-4dee-b6fd-ba974871c126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="play">
+      <UniqueIdentifier>{2d419200-e63c-4d40-9afa-9e2dbb655326}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rudp">
+      <UniqueIdentifier>{e846f3ff-bb82-4fdd-bf52-f2a3bf8fb435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sharpc">
+      <UniqueIdentifier>{7713d884-3e87-43ee-bb00-98e605401b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinyxml2">
+      <UniqueIdentifier>{8af746e3-9781-482a-9aea-f61f3a055bc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\play">
+      <UniqueIdentifier>{de776279-41a1-40d9-a650-b52d28eea0bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\sharpc">
+      <UniqueIdentifier>{5a8f6979-87fe-4922-9fe3-638f2a8c3588}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\crypt\lsha1.c">
+      <Filter>crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\crypt\lua-crypt.c">
+      <Filter>crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tinyxml2\tinyxml2.cpp">
+      <Filter>tinyxml2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharpc\log.c">
+      <Filter>sharpc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharpc\play.cpp">
+      <Filter>sharpc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharpc\sharpc.c">
+      <Filter>sharpc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\App.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Context.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Map.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\pack.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\playc.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Player.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\PlayerMgr.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\Scene.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rudp\rudp.c">
+      <Filter>rudp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rudp\rudp_aux.c">
+      <Filter>rudp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\App.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\Context.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\Map.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\pack.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\playc.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\Player.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\PlayerMgr.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\Scene.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rudp\rudp.h">
+      <Filter>rudp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\PLAY_MSG.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sharpc\log.h">
+      <Filter>include\sharpc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sharpc\play.h">
+      <Filter>include\sharpc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\sharpc\sharpc.h">
+      <Filter>include\sharpc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\crypt_aux.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

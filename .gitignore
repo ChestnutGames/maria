@@ -42,22 +42,15 @@ sysinfo.txt
 *.d
 *.so
 
-# 忽略指定文件
-/Plugins/crypt/crypt.sdf
-
 
 # 忽略指定文件夹
 Maria/bin
 Maria/obj
 
-Plugins/.vs
+.vs
 Plugins/msvc/bin
 Plugins/msvc/Debug
 Plugins/msvc/x64
-
-ipch
-Debug
-x64
 
 !mksproto/lua.exe
 !mksproto/lua53.dll
