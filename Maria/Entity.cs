@@ -19,6 +19,13 @@ namespace Maria {
         {
         }
 
+        sealed public override void Update(float delta)
+        {
+            // not ime
+        }
+
+        public int Idx { get { return _idx; } }
+
         public T GetComponent<T>() where T : Component {
             Type t = typeof(T);
             return _components[t.FullName] as T;
@@ -35,6 +42,8 @@ namespace Maria {
             string name = t.FullName;
             _components.Remove(name);
         }
+
+        public virtual void OnFrameUpdate(float delata) { }
 
     }
 }

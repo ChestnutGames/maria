@@ -5,106 +5,53 @@ using System.Text;
 using UnityEngine;
 
 namespace Maria {
-    public class Debug {
+    public sealed class Debug {
 
-        private enum Type {
-            Log,
-            Log1,
-            LogError,
-            LogError1,
-            LogException,
-            LogException1,
+        private static bool _enabled = true;
+
+        public static void Assert(bool condition, string message, UnityEngine.Object context)
+        {
+            UnityEngine.Debug.Assert(condition, message, context);
         }
 
-        private struct Info {
-            public Type type;
-            public object message;
-            public UnityEngine.Object context;
+        public static void Assert(bool condition)
+        {
+            UnityEngine.Debug.Assert(condition);
         }
 
-        private Context _ctx = null;
-        private Queue<Info> _queue = new Queue<Info>();
-
-        public Debug(Context ctx) {
-            _ctx = ctx;
-        }
-
-        public void Log(object message) {
-            Info i = new Info();
-            i.type = Type.Log;
-            i.message = message;
-            i.context = null;
-            lock (_queue) {
-                _queue.Enqueue(i);
+        public static void Log(object message) {
+            if (_enabled)
+            {
+                UnityEngine.Debug.Log(message);
             }
-            _ctx.EnqueueRenderQueue(RenderLog);
         }
 
         public void Log(object message, UnityEngine.Object context) {
-            Info i = new Info();
-            i.type = Type.Log;
-            i.message = message;
-            i.context = context;
-            lock (_queue) {
-                _queue.Enqueue(i);
-            }
-            _ctx.EnqueueRenderQueue(RenderLog);
-        }
-
-        public void Assert(bool condition) {
-            if (condition) {
-            } else {
-                throw new Exception("assert failtur.");
+            if (_enabled)
+            {
+                UnityEngine.Debug.Log(message, context);
             }
         }
 
-        public void LogError(object message) {
-            Info i = new Info();
-            i.type = Type.Log;
-            i.message = message;
-            i.context = null;
-            lock (_queue) {
-                _queue.Enqueue(i);
+        public static void LogAssertion(object message)
+        {
+            if (_enabled)
+            {
+                UnityEngine.Debug.LogAssertion(message);
             }
-            _ctx.EnqueueRenderQueue(RenderLog);
+        }
+
+        public static void LogError(object message) {
+            if (_enabled)
+            {
+                UnityEngine.Debug.LogError(message);
+            }
         }
 
         public void LogError(object message, UnityEngine.Object context) {
-            Info i = new Info();
-            i.type = Type.Log;
-            i.message = message;
-            i.context = context;
-            lock (_queue) {
-                _queue.Enqueue(i);
-            }
-            _ctx.EnqueueRenderQueue(RenderLog);
-        }
-
-        protected void RenderLog() {
-            lock (_queue) {
-                while (_queue.Count > 0) {
-                    Info i = _queue.Dequeue();
-                    switch (i.type) {
-                        case Type.Log:
-                            UnityEngine.Debug.Log(i.message);
-                            break;
-                        case Type.Log1:
-                            UnityEngine.Debug.Log(i.message, i.context);
-                            break;
-                        case Type.LogError:
-                            UnityEngine.Debug.LogError(i.message);
-                            break;
-                        case Type.LogError1:
-                            UnityEngine.Debug.LogError(i.message, i.context);
-                            break;
-                        case Type.LogException:
-                            break;
-                        case Type.LogException1:
-                            break;
-                        default:
-                            break;
-                    }
-                }
+            if (_enabled)
+            {
+                UnityEngine.Debug.LogError(message, context);
             }
         }
     }
