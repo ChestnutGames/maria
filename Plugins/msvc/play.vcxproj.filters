@@ -19,14 +19,20 @@
     <Filter Include="sharpc">
       <UniqueIdentifier>{7713d884-3e87-43ee-bb00-98e605401b8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="tinyxml2">
-      <UniqueIdentifier>{8af746e3-9781-482a-9aea-f61f3a055bc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\play">
       <UniqueIdentifier>{de776279-41a1-40d9-a650-b52d28eea0bd}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\sharpc">
       <UniqueIdentifier>{5a8f6979-87fe-4922-9fe3-638f2a8c3588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hexmap">
+      <UniqueIdentifier>{9ad1c1b4-de99-4393-82a7-11178bbab89f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{b3f0eead-3333-4f44-84bf-525d3eb057d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\tinyxml2">
+      <UniqueIdentifier>{5c0c2848-30ef-4316-b51b-502c35a135a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,13 +42,7 @@
     <ClCompile Include="..\crypt\lua-crypt.c">
       <Filter>crypt</Filter>
     </ClCompile>
-    <ClCompile Include="..\tinyxml2\tinyxml2.cpp">
-      <Filter>tinyxml2</Filter>
-    </ClCompile>
     <ClCompile Include="..\sharpc\log.c">
-      <Filter>sharpc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\sharpc\play.cpp">
       <Filter>sharpc</Filter>
     </ClCompile>
     <ClCompile Include="..\sharpc\sharpc.c">
@@ -55,9 +55,6 @@
       <Filter>play</Filter>
     </ClCompile>
     <ClCompile Include="..\play\Map.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\pack.cpp">
       <Filter>play</Filter>
     </ClCompile>
     <ClCompile Include="..\play\playc.cpp">
@@ -78,6 +75,24 @@
     <ClCompile Include="..\rudp\rudp_aux.c">
       <Filter>rudp</Filter>
     </ClCompile>
+    <ClCompile Include="..\base\tinyxml2.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\play\play.cpp">
+      <Filter>play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\stdafx.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\binaryheap.c">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\base\pack.c">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hexmap\hexmap.c">
+      <Filter>hexmap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\config.h">
@@ -90,9 +105,6 @@
       <Filter>include\play</Filter>
     </ClInclude>
     <ClInclude Include="..\include\play\Map.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\pack.h">
       <Filter>include\play</Filter>
     </ClInclude>
     <ClInclude Include="..\include\play\playc.h">
@@ -116,13 +128,46 @@
     <ClInclude Include="..\include\sharpc\log.h">
       <Filter>include\sharpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\sharpc\play.h">
-      <Filter>include\sharpc</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\sharpc\sharpc.h">
       <Filter>include\sharpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\crypt_aux.h">
+    <ClInclude Include="..\hexmap\hexmap.h">
+      <Filter>hexmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\math3d.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\binaryheap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utarray.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\uthash.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utlist.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utringbuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utstring.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\cstdafx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\play\play.h">
+      <Filter>include\play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\tinyxml2\tinyxml2.h">
+      <Filter>include\tinyxml2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\stdafx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\pack.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

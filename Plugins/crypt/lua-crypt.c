@@ -3,7 +3,7 @@
 
 
 #include "config.h"
-#include "crypt_aux.h"
+#include "cstdafx.h"
 #include <time.h>
 #include <stdint.h>
 #include <string.h>

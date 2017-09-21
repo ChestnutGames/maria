@@ -8,16 +8,16 @@ extern "C" {
 #include <stdint.h>
 
 typedef enum CSType {
-	NIL = 0,
-	INT32 = 1,
-	INT64 = 2,
-	REAL = 3,
-	BOOLEAN = 4,
-	STRING = 5,
-	INTPTR = 6,
-	SHARPOBJECT = 7,
-	SHARPFUNCTION = 8,
-	SHARPSTRING = 9,
+	C_NIL = 0,
+	C_INT32 = 1,
+	C_INT64 = 2,
+	C_REAL = 3,
+	C_BOOLEAN = 4,
+	C_STRING = 5,
+	C_INTPTR = 6,
+	CS_OBJECT = 7,
+	CS_FUNCTION = 8,
+	CS_STRING = 9,
 } CSType;
 
 typedef struct CSObject {

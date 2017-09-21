@@ -1,9 +1,4 @@
-#include "sharpc/sharpc.h"
-
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <assert.h>
+#include "cstdafx.h"
 
 static struct sharpc *inst = NULL;
 
@@ -46,13 +41,13 @@ sharpc_callsharp(struct sharpc *self, int argc, struct CSObject *argv, int res) 
 int
 sharpc_callc(struct sharpc *self, int argc, struct CSObject *argv, int res) {
 	assert(argc >= 1);
-	assert(argv[0].type == STRING);
+	assert(argv[0].type == C_STRING);
 }
 
 void
 sharpc_log(struct sharpc *self, struct CSObject xx[2]) {
 	CSObject args[3];
-	args[0].type = STRING;
+	args[0].type = C_STRING;
 	args[0].ptr = "log";
 	args[0].v32 = 3;
 

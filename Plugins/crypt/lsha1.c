@@ -83,7 +83,7 @@ A million repetitions of "a"
 */
 
 #include "config.h"
-#include "crypt_aux.h"
+#include "cstdafx.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>

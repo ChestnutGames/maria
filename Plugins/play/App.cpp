@@ -1,8 +1,8 @@
+#include "cstdafx.h"
 #include "play/App.h"
 #include "play/Context.h"
 #include "play/Player.h"
 #include "play/PlayerMgr.h"
-#include "play/pack.h"
 
 #include <iostream>
 #include <string>

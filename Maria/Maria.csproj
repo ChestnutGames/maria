@@ -60,7 +60,7 @@
     <Compile Include="EventListener.cs" />
     <Compile Include="EventListenerCmd.cs" />
     <Compile Include="EventListenerCustom.cs" />
-    <Compile Include="HexMap\HexMap.cs" />
+    <Compile Include="HexMap\HexMap_CSharp.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Network\ClientLogin.cs" />
     <Compile Include="Network\ClientSocket.cs" />
@@ -71,7 +71,8 @@
     <Compile Include="Network\PackageSocketUdp.cs" />
     <Compile Include="Network\TimeSync.cs" />
     <Compile Include="OBB.cs" />
-    <Compile Include="Package.cs" />
+    <Compile Include="PlistCS\Plist.cs" />
+    <Compile Include="SharpC\Package.cs" />
     <Compile Include="Play\Play.cs" />
     <Compile Include="Play\Play_CSharp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,9 +80,9 @@
     <Compile Include="Rudp\Rudp.cs" />
     <Compile Include="Rudp\Rudp_CSharp.cs" />
     <Compile Include="Service.cs" />
-    <Compile Include="SharpC.cs" />
-    <Compile Include="SharpCCmd.cs" />
-    <Compile Include="sharpobject.cs" />
+    <Compile Include="SharpC\SharpC.cs" />
+    <Compile Include="SharpC\SharpCCmd.cs" />
+    <Compile Include="SharpC\sharpobject.cs" />
     <Compile Include="Sproto\Package.cs" />
     <Compile Include="Sproto\ProtocolBase.cs" />
     <Compile Include="Sproto\ProtocolFunctionDictionary.cs" />
@@ -94,6 +95,8 @@
     <Compile Include="Sproto\SprotoTypeReader.cs" />
     <Compile Include="Sproto\SprotoTypeSerialize.cs" />
     <Compile Include="Sproto\SprotoTypeSize.cs" />
+    <Compile Include="TinyJson\JSONParser.cs" />
+    <Compile Include="TinyJson\JSONWriter.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WorkerParam.cs" />
   </ItemGroup>

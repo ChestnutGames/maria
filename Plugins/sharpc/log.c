@@ -1,11 +1,14 @@
+#include <sharpc/log.h>
+#include <sharpc/sharpc.h>
 
-#include "sharpc/log.h"
-#include "sharpc/sharpc.h"
-
-#include <string.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <math.h>
+#include <assert.h>
 #include <stdlib.h>
-#include <stdarg.h>
 #include <stdio.h>
+#include <memory.h>
+#include <stdarg.h>
 
 void log_info(char *fmt, ...) {
 #if defined(_DEBUG)
@@ -18,9 +21,9 @@ void log_info(char *fmt, ...) {
 	struct sharpc* sc = sharpc_create(NULL);
 
 	struct CSObject args[2];
-	args[0].type = INT32;
+	args[0].type = C_INT32;
 	args[0].v32 = info;
-	args[1].type = STRING;
+	args[1].type = C_STRING;
 	args[1].ptr = buffer;
 
 	sharpc_log(sc, args);
@@ -40,9 +43,9 @@ void log_warning(char *fmt, ...) {
 	struct sharpc* sc = sharpc_create(NULL);
 
 	struct CSObject args[2];
-	args[0].type = INT32;
+	args[0].type = C_INT32;
 	args[0].v32 = warning;
-	args[1].type = STRING;
+	args[1].type = C_STRING;
 	args[1].ptr = buffer;
 
 	sharpc_log(sc, args);
@@ -61,9 +64,9 @@ void log_error(char *fmt, ...) {
 	struct sharpc* sc = sharpc_create(NULL);
 
 	struct CSObject args[2];
-	args[0].type = INT32;
+	args[0].type = C_INT32;
 	args[0].v32 = error;
-	args[1].type = STRING;
+	args[1].type = C_STRING;
 	args[1].ptr = buffer;
 
 	sharpc_log(sc, args);

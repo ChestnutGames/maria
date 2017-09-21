@@ -104,14 +104,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PLAY_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\PhysX\Include;$(SolutionDir)..\include;$(SolutionDir)..\PxShared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\PhysX\Include;$(SolutionDir)..\include;$(SolutionDir)..\PxShared\include;$(SolutionDir)..\plist\include;$(SolutionDir)..\libcnary\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\PhysX\Lib\vc14win64;$(SolutionDir)..\PxShared\Lib\vc14win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3DEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PxTaskDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\PhysX\Lib\vc14win64;$(SolutionDir)..\PxShared\Lib\vc14win64;$(SolutionDir)..\plist\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PhysX3CommonDEBUG_x64.lib;PhysX3CookingDEBUG_x64.lib;PhysX3DEBUG_x64.lib;PhysX3ExtensionsDEBUG.lib;PxTaskDEBUG_x64.lib;PxFoundationDEBUG_x64.lib;PxPvdSDKDEBUG_x64.lib;libplist.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,12 +152,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\base\binaryheap.c" />
+    <ClCompile Include="..\base\pack.c" />
+    <ClCompile Include="..\base\stdafx.cpp" />
+    <ClCompile Include="..\base\tinyxml2.cpp" />
     <ClCompile Include="..\crypt\lsha1.c" />
     <ClCompile Include="..\crypt\lua-crypt.c" />
+    <ClCompile Include="..\hexmap\hexmap.c" />
     <ClCompile Include="..\play\App.cpp" />
     <ClCompile Include="..\play\Context.cpp" />
     <ClCompile Include="..\play\Map.cpp" />
-    <ClCompile Include="..\play\pack.cpp" />
+    <ClCompile Include="..\play\play.cpp" />
     <ClCompile Include="..\play\playc.cpp" />
     <ClCompile Include="..\play\Player.cpp" />
     <ClCompile Include="..\play\PlayerMgr.cpp" />
@@ -165,25 +170,33 @@
     <ClCompile Include="..\rudp\rudp.c" />
     <ClCompile Include="..\rudp\rudp_aux.c" />
     <ClCompile Include="..\sharpc\log.c" />
-    <ClCompile Include="..\sharpc\play.cpp" />
     <ClCompile Include="..\sharpc\sharpc.c" />
-    <ClCompile Include="..\tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\hexmap\hexmap.h" />
+    <ClInclude Include="..\include\binaryheap.h" />
     <ClInclude Include="..\include\config.h" />
-    <ClInclude Include="..\include\crypt_aux.h" />
+    <ClInclude Include="..\include\math3d.h" />
+    <ClInclude Include="..\include\pack.h" />
     <ClInclude Include="..\include\play\App.h" />
     <ClInclude Include="..\include\play\Context.h" />
     <ClInclude Include="..\include\play\Map.h" />
-    <ClInclude Include="..\include\play\pack.h" />
+    <ClInclude Include="..\include\play\play.h" />
     <ClInclude Include="..\include\play\playc.h" />
     <ClInclude Include="..\include\play\Player.h" />
     <ClInclude Include="..\include\play\PlayerMgr.h" />
     <ClInclude Include="..\include\play\PLAY_MSG.h" />
     <ClInclude Include="..\include\play\Scene.h" />
     <ClInclude Include="..\include\sharpc\log.h" />
-    <ClInclude Include="..\include\sharpc\play.h" />
     <ClInclude Include="..\include\sharpc\sharpc.h" />
+    <ClInclude Include="..\include\cstdafx.h" />
+    <ClInclude Include="..\include\stdafx.h" />
+    <ClInclude Include="..\include\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="..\include\utarray.h" />
+    <ClInclude Include="..\include\uthash.h" />
+    <ClInclude Include="..\include\utlist.h" />
+    <ClInclude Include="..\include\utringbuffer.h" />
+    <ClInclude Include="..\include\utstring.h" />
     <ClInclude Include="..\rudp\rudp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

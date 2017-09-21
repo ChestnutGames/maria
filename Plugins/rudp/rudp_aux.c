@@ -1,11 +1,5 @@
-#include "config.h"
+#include "cstdafx.h"
 #include "rudp.h"
-#include "sharpc/sharpc.h"
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <memory.h>
-#include <assert.h>
 
 struct rudp_aux {
 	struct rudp *u;
@@ -47,9 +41,9 @@ rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 		struct CSObject args[4];
 		args[0] = aux->send;
 		args[1] = aux->ex;
-		args[2].type = INTPTR;
+		args[2].type = C_INTPTR;
 		args[2].ptr = res->buffer;
-		args[3].type = INT32;
+		args[3].type = C_INT32;
 		args[3].v32 = res->sz;
 		sharpc_callsharp(sc, 4, args, 0);
 
@@ -63,12 +57,12 @@ rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 		struct CSObject args[4];
 		args[0] = aux->recv;
 		args[1] = aux->ex;
-		args[2].type = INTPTR;
+		args[2].type = C_INTPTR;
 		args[2].ptr = aux->buffer;
-		args[3].type = INT32;
+		args[3].type = C_INT32;
 		args[3].v32 = size;
 
-		sharpc_callsharp(aux->u, 4, args, 0);
+		sharpc_callsharp(sc, aux->u, 4, args, 0);
 
 		size = rudp_recv(aux->u, aux->buffer);
 		sharpc_release(sc);
