@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using XLua;
-using Maria.Util;
 using Maria.Network;
+using Maria.Util;
 using Maria.Res;
 
 namespace Maria {
@@ -20,7 +20,6 @@ namespace Maria {
             CO = 2,
         }
 
-        protected Maria.Util.App _app;
         protected CommandQueue _queue = new CommandQueue();
         protected Queue<Actor.RenderHandler> _renderQueue = new Queue<Actor.RenderHandler>();
         protected Semaphore _semaphore = null;
@@ -32,8 +31,7 @@ namespace Maria {
         protected CoType _cotype = CoType.THREAD;
         protected XLua.LuaEnv _luaenv = null;
 
-        public Application(Maria.Util.App app) {
-            _app = app;
+        public Application() {
             _tiSync = new TimeSync();
             _tiSync.LocalTime();
             _lastTi = _tiSync.LocalTime();
@@ -124,7 +122,7 @@ namespace Maria {
                 if (_dispatcher != null) {
                     while (_queue.Count > 0) {
                         Command command = _queue.Dequeue();
-                        _app.StartCoroutine(Co(command));
+                        NotificationCenter.current.StartCoroutine(Co(command));
                     }
                 }
 
@@ -172,7 +170,7 @@ namespace Maria {
                 CoWorker();
                 while (_renderQueue.Count > 0) {
                     Actor.RenderHandler handler = _renderQueue.Dequeue();
-                    _app.StartCoroutine(CoHandler(handler));
+                    NotificationCenter.current.StartCoroutine(CoHandler(handler));
                     //handler();
                 }
             } else {
@@ -207,9 +205,9 @@ namespace Maria {
         // second step
         public virtual void StartScript() {
             _luaenv = new XLua.LuaEnv();
-            _luaenv.AddBuildin("cjson", XLua.LuaDLL.Lua.LoadCJson);
-            _luaenv.AddBuildin("lpeg", XLua.LuaDLL.Lua.LoadLpeg);
-            _luaenv.AddBuildin("sproto.core", XLua.LuaDLL.Lua.LoadSprotoCore);
+            _luaenv.AddBuildin("cjson", Maria.Lua.BuildInInit.LoadCJson);
+            _luaenv.AddBuildin("lpeg", Maria.Lua.BuildInInit.LoadLpeg);
+            _luaenv.AddBuildin("sproto.core", Maria.Lua.BuildInInit.LoadSprotoCore);
             _luaenv.AddLoader((ref string filepath) => {
                 UnityEngine.Debug.LogFormat("LUA custom loader {0}", filepath);
 

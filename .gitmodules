@@ -1,3 +1,6 @@
 [submodule "3rd/sproto-Csharp"]
 	path = 3rd/sproto-Csharp
 	url = https://github.com/lvzixun/sproto-Csharp
+[submodule "3rd/xLua"]
+	path = 3rd/xLua
+	url = https://github.com/Tencent/xLua

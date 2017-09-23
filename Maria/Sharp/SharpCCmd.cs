@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
-
-namespace Maria.Res {
-    class ABConfig {
+namespace Maria.Sharp {
+    public enum SharpcCCmd {
+           CMD_LOG = 1,
     }
 }

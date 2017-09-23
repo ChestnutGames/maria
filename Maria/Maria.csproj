@@ -45,14 +45,18 @@
     <Compile Include="AABB.cs" />
     <Compile Include="Actor.cs" />
     <Compile Include="Application.cs" />
+    <Compile Include="Json\JSONObject.cs" />
+    <Compile Include="Lua\BuildInInit.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandQueue.cs" />
+    <Compile Include="Component.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="DisposeObject.cs" />
     <Compile Include="Encrypt\Crypt.cs" />
     <Compile Include="Encrypt\Crypt_CSharp.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventCmd.cs" />
     <Compile Include="EventCustom.cs" />
@@ -61,7 +65,10 @@
     <Compile Include="EventListenerCmd.cs" />
     <Compile Include="EventListenerCustom.cs" />
     <Compile Include="HexMap\HexMap_CSharp.cs" />
+    <Compile Include="Lua\ClientSock.cs" />
+    <Compile Include="Lua\Env.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="Module.cs" />
     <Compile Include="Network\ClientLogin.cs" />
     <Compile Include="Network\ClientSocket.cs" />
     <Compile Include="Network\INetwork.cs" />
@@ -71,8 +78,11 @@
     <Compile Include="Network\PackageSocketUdp.cs" />
     <Compile Include="Network\TimeSync.cs" />
     <Compile Include="OBB.cs" />
+    <Compile Include="ObjectPool.cs" />
     <Compile Include="PlistCS\Plist.cs" />
-    <Compile Include="SharpC\Package.cs" />
+    <Compile Include="Res\ABConfig.cs" />
+    <Compile Include="Res\ABLoader.cs" />
+    <Compile Include="Sharp\Package.cs" />
     <Compile Include="Play\Play.cs" />
     <Compile Include="Play\Play_CSharp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,9 +90,10 @@
     <Compile Include="Rudp\Rudp.cs" />
     <Compile Include="Rudp\Rudp_CSharp.cs" />
     <Compile Include="Service.cs" />
-    <Compile Include="SharpC\SharpC.cs" />
-    <Compile Include="SharpC\SharpCCmd.cs" />
-    <Compile Include="SharpC\sharpobject.cs" />
+    <Compile Include="Sharp\SharpC.cs" />
+    <Compile Include="Sharp\SharpCCmd.cs" />
+    <Compile Include="Sharp\sharpobject.cs" />
+    <Compile Include="Singleton.cs" />
     <Compile Include="Sproto\Package.cs" />
     <Compile Include="Sproto\ProtocolBase.cs" />
     <Compile Include="Sproto\ProtocolFunctionDictionary.cs" />
@@ -95,10 +106,20 @@
     <Compile Include="Sproto\SprotoTypeReader.cs" />
     <Compile Include="Sproto\SprotoTypeSerialize.cs" />
     <Compile Include="Sproto\SprotoTypeSize.cs" />
-    <Compile Include="TinyJson\JSONParser.cs" />
-    <Compile Include="TinyJson\JSONWriter.cs" />
+    <Compile Include="Timer.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="Util\NotificationCenter.cs" />
+    <Compile Include="Util\DontDestroy.cs" />
+    <Compile Include="Util\SetMeshRendererSortingLayer.cs" />
+    <Compile Include="Util\SoundMgr.cs" />
     <Compile Include="WorkerParam.cs" />
+    <Compile Include="World.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\3rd\xLua\General\vs2013\XLua.Mini.csproj">
+      <Project>{9a2c7d34-0697-31ab-4fd5-e250bb7e0f00}</Project>
+      <Name>XLua.Mini</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

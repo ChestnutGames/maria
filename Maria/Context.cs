@@ -6,6 +6,7 @@ using System;
 using Sproto;
 using System.Text;
 using XLua;
+using Maria.Sharp;
 
 namespace Maria {
 
@@ -37,15 +38,12 @@ namespace Maria {
         
         protected Lua.Env _envScript = null;
         protected System.Random _rand = new System.Random();
-        protected ModelMgr _modelmgr = null;
-        protected DataSetMgr _datasetmgr = null;
-
-
+        
         public Context(Application application, Config config, TimeSync ts) {
             _application = application;
             _config = config;
             _ts = ts;
-            _sharpc = new SharpC();
+            _sharpc = new Maria.Sharp.SharpC();
             _dispatcher = new EventDispatcher(this);
 
             _login = new ClientLogin(this);
@@ -128,9 +126,7 @@ namespace Maria {
         public bool Logined { get { return _logined; } }
         
         public Lua.Env EnvScript { get { return _envScript; } set { _envScript = value; } }
-        public ModelMgr ModelMgr { get { return _modelmgr; } }
-        public DataSetMgr DataSetMgr { get { return _datasetmgr; } }
-
+        
         public int Range(int min, int max) {
             return _rand.Next(min, max);
         }

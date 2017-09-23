@@ -4,9 +4,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
+using Maria.Json;
 
-namespace Maria.Util
-{
+/*
+ *  资源最开始全部打包进res
+ *  资源放到服务器上，客户端判断自己平台去访问
+ *  加载的时候之判断路劲类型
+ */
+
+namespace Maria.Res {
     [XLua.LuaCallCSharp]
     public class ABLoader : MonoBehaviour {
 
@@ -18,9 +24,9 @@ namespace Maria.Util
 
         public static ABLoader current = null;
 
-        private AssetBundleManifest _manifest = null;
-        private Dictionary<string, UnityEngine.Object> _res = new Dictionary<string, UnityEngine.Object>();
-        private Dictionary<string, AssetBundle> _dic = new Dictionary<string, AssetBundle>();
+        private AssetBundleManifest _manifest = null;    // 整个manifest
+        private Dictionary<string, UnityEngine.Object> _res = new Dictionary<string, UnityEngine.Object>();  // 加载的资源
+        private Dictionary<string, AssetBundle> _dic = new Dictionary<string, AssetBundle>();                // 加载的ab
         private Dictionary<string, PathType> _path = new Dictionary<string, PathType>();
         private string _abversion = ".normal";
 
@@ -52,13 +58,15 @@ namespace Maria.Util
             StartCoroutine(FetchVersionFile(cb));
         }
 
-        private string GetWWWPersistentDataPath() {
+        private string GetWWWPersistentDataPath(string target) {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-            string url = "file:///" + UnityEngine.Application.persistentDataPath;
+            string url = "file:///" + UnityEngine.Application.persistentDataPath + target;
 #elif UNITY_IOS
         url = "http://127.0.0.1:80/mahjong/iOS";
 #elif UNITY_ANDROID
         url = "jar:file:///" + Application.persistentDataPath;
+#else
+            string url = string.Empty;
 #endif
             return url;
         }
@@ -70,13 +78,15 @@ namespace Maria.Util
         string url = "http://127.0.0.1:80/mahjong/iOS";
 #elif UNITY_ANDROID
         string url = "http://127.0.0.1:80/mahjong/Android";
+#else
+            string url = string.Empty;
 #endif
             return url;
         }
 
         IEnumerator FetchVersionFile(Action cb) {
             _step = 1;
-            WWW lrequest = new WWW(GetWWWPersistentDataPath() + "/version.mf");
+            WWW lrequest = new WWW(GetWWWPersistentDataPath("/version.mf"));
             _request = lrequest;
             yield return lrequest;
             if (lrequest.text == null || lrequest.text.Length == 0) {
@@ -103,7 +113,7 @@ namespace Maria.Util
             // double check
             if (lrequest.text == null || lrequest.text.Length == 0) {
                 _step = 2;
-                lrequest = new WWW(GetWWWPersistentDataPath() + "/version.mf");
+                lrequest = new WWW(GetWWWPersistentDataPath("/version.mf"));
                 _request = lrequest;
                 yield return lrequest;
                 if (lrequest.text == null || lrequest.text.Length == 0) {
@@ -118,7 +128,7 @@ namespace Maria.Util
 
             // check path
             _step = 3;
-            WWW lpathrequest = new WWW(GetWWWPersistentDataPath() + "/path.mf");
+            WWW lpathrequest = new WWW(GetWWWPersistentDataPath("/path.mf"));
             _request = lpathrequest;
             yield return lpathrequest;
             if (lpathrequest.text == null || lpathrequest.text.Length == 0) {
@@ -140,7 +150,7 @@ namespace Maria.Util
             }
 
             _step = 4;
-            string url = SayDataSet.Instance.GetDataItem(1).value;
+            string url = GetHttpUrl();
             url = GetHttpUrl();
             WWW srequest = new WWW(url + "/version.json");
             _request = srequest;
@@ -234,19 +244,16 @@ namespace Maria.Util
         }
 
         public T LoadAsset<T>(string path, string name) where T : UnityEngine.Object {
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-            string res_path = "WIN64/" + path.ToLower();
-#elif UNITY_IOS
-        string res_path = "iOS/" + path.ToLower();
-#elif UNITY_ANDROID
-        string res_path = "Android/" + path.ToLower();
-#endif
-            T res = LoadAB<T>(res_path, name);
-            if (res == null) {
+            if (_path[path] == PathType.PER) {
+                T res = LoadAB<T>(path, name);
+                UnityEngine.Debug.Assert(res != null);
+                return res;
+            } else {
                 string xpath = path + "/" + name;
-                res = LoadRes<T>(xpath);
+                T res = LoadRes<T>(xpath);
+                UnityEngine.Debug.Assert(res != null);
+                return res;
             }
-            return res;
         }
 
         public TextAsset LoadTextAsset(string path, string name) {
@@ -254,54 +261,37 @@ namespace Maria.Util
         }
 
         public void LoadAssetAsync<T>(string path, string name, Action<T> cb) where T : UnityEngine.Object {
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-            string res_path = "WIN64/" + path.ToLower();
-#elif UNITY_IOS
-        string res_path = "iOS/" + path.ToLower();
-#elif UNITY_ANDROID
-        string res_path = "Android/" + path.ToLower();
-#endif
-            LoadABAsync<T>(res_path, name, (T asset) => {
-                if (asset == null) {
-                    LoadResAsync<T>(Path.Combine(path, name), cb);
-                } else {
+            if (_path[path] == PathType.PER) {
+                LoadABAsync<T>(path, name, (T asset) => {
+                    UnityEngine.Debug.Assert(asset != null);
                     cb(asset);
-                }
-            });
+                });
+            } else {
+                LoadResAsync<T>(Path.Combine(path, name), (T asset) => {
+                    UnityEngine.Debug.Assert(asset != null);
+                    cb(asset);
+                });
+            }
         }
 
-        private T LoadAB<T>(string xpath, string name) where T : UnityEngine.Object {
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-            string per_prefix = UnityEngine.Application.persistentDataPath + "/Win64/";
-            string str_prefix = UnityEngine.Application.streamingAssetsPath + "/Win64/";
-#elif UNITY_IOS
-        string per_prefix = Application.persistentDataPath + "/iOS/";
-        string str_prefix = Application.streamingAssetsPath + "/iOS/";
-#elif UNITY_ANDROID
-        string per_prefix = Application.persistentDataPath + "/Android/";
-        string str_prefix = Application.streamingAssetsPath + "/Android/";
-#endif
-
-            string path = xpath + _abversion;
-            if (_dic.ContainsKey(path)) {
-                AssetBundle ab = _dic[path];
+        private T LoadAB<T>(string path, string name) where T : UnityEngine.Object {
+            string xpath = GetWWWPersistentDataPath(path);
+            if (_dic.ContainsKey(xpath)) {
+                AssetBundle ab = _dic[xpath];
                 return ab.LoadAsset<T>(name);
             } else {
                 if (_manifest == null) {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-                    string manifest = "Win64";
+                    string manifest = "\Win64";
 #elif UNITY_IOS
-                string manifest = "iOS";
+                    string manifest = "\iOS";
 #elif UNITY_ANDROID
-                string manifest = "Android";
+                    string manifest = "\Android";
+#else
+                    string manifest = string.Empty;
 #endif
-                    if (_path.ContainsKey(manifest) && _path[manifest] == PathType.PER) {
-                        AssetBundle manifestab = AssetBundle.LoadFromFile(per_prefix + manifest);
-                        _manifest = manifestab.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                    } else {
-                        AssetBundle manifestab = AssetBundle.LoadFromFile(str_prefix + manifest);
-                        _manifest = manifestab.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                    }
+                    AssetBundle manifestab = AssetBundle.LoadFromFile(GetWWWPersistentDataPath(manifest));
+                    _manifest = manifestab.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
                 }
                 if (_manifest != null) {
                     string[] depends = _manifest.GetAllDependencies(path);
@@ -309,33 +299,33 @@ namespace Maria.Util
                         LoadAB<UnityEngine.Object>(path, depends[i]);
                     }
                 }
-                if (_path.ContainsKey(path)) {
-                    if (_path[path] == PathType.PER) {
-                        AssetBundle ab = AssetBundle.LoadFromFile(per_prefix + path);
-                        if (ab.Contains(name)) {
-                            return ab.LoadAsset<T>(name);
-                        } else {
-                            UnityEngine.Debug.LogError("no exits");
-                            return null;
-                        }
-                    } else {
-                        AssetBundle ab = AssetBundle.LoadFromFile(str_prefix + path);
-                        if (ab != null && ab.Contains(name)) {
-                            return ab.LoadAsset<T>(name);
-                        } else {
-                            UnityEngine.Debug.LogError("no exits");
-                            return null;
-                        }
-                    }
+                AssetBundle ab = AssetBundle.LoadFromFile(GetWWWPersistentDataPath(path));
+                if (ab != null && ab.Contains(name)) {
+                    _dic[path] = ab;
+                    return ab.LoadAsset<T>(name);
                 } else {
+                    UnityEngine.Debug.LogError("no exits");
                     return null;
                 }
             }
-            return null;
         }
 
-        private void LoadABAsync<T>(string xpath, string name, Action<T> cb) where T : UnityEngine.Object {
-            string path = xpath + _abversion;
+        private void LoadManifest() {
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+                string manifest = "/Win64";
+#elif UNITY_IOS
+                string manifest = "/iOS";
+#elif UNITY_ANDROID
+                string manifest = "/Android";
+#else
+            string manifest = string.Empty;
+#endif
+            AssetBundle manifestab = AssetBundle.LoadFromFile(GetWWWPersistentDataPath(manifest));
+            _manifest = manifestab.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+        }
+
+        private void LoadABAsync<T>(string path, string name, Action<T> cb) where T : UnityEngine.Object {
+            string xpath = path + _abversion;
             if (_dic.ContainsKey(path)) {
                 AssetBundle ab = _dic[path];
                 if (ab.Contains(name)) {
@@ -348,64 +338,27 @@ namespace Maria.Util
         }
 
         IEnumerator LoadABAsyncImp<T>(string path, string name, Action<T> cb) where T : UnityEngine.Object {
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-            string per_prefix = UnityEngine.Application.persistentDataPath + "/Win64/";
-            string str_prefix = UnityEngine.Application.streamingAssetsPath + "/Win64/";
-#elif UNITY_IOS
-        string per_prefix = Application.persistentDataPath + "/iOS/";
-        string str_prefix = Application.streamingAssetsPath + "/iOS/";
-#elif UNITY_ANDROID
-        string per_prefix = Application.persistentDataPath + "/Android/";
-        string str_prefix = Application.streamingAssetsPath + "/Android/";
-#endif
-
             if (_manifest == null) {
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-                string manifest = "Win64";
-#elif UNITY_IOS
-                string manifest = "iOS";
-#elif UNITY_ANDROID
-                string manifest = "Android";
-#endif
-                if (_path.ContainsKey(manifest) && _path[manifest] == PathType.PER) {
-                    AssetBundle manifestab = AssetBundle.LoadFromFile(per_prefix + manifest);
-                    _manifest = manifestab.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                } else {
-                    AssetBundle manifestab = AssetBundle.LoadFromFile(str_prefix + manifest);
-                    _manifest = manifestab.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
-                }
+                LoadManifest();
             }
             if (_manifest != null) {
                 string[] depends = _manifest.GetAllDependencies(path);
                 for (int i = 0; i < depends.Length; i++) {
-                    if (_path.ContainsKey(depends[i]) && _path[depends[i]] == PathType.PER) {
-                        AssetBundleCreateRequest depend_request = AssetBundle.LoadFromFileAsync(per_prefix + depends[i]);
-                        yield return depend_request;
-                        _dic[depends[i]] = depend_request.assetBundle;
-                    } else {
-                        AssetBundleCreateRequest depend_request = AssetBundle.LoadFromFileAsync(str_prefix + depends[i]);
-                        yield return depend_request;
-                        _dic[depends[i]] = depend_request.assetBundle;
-                    }
+                    AssetBundleCreateRequest depend_request = AssetBundle.LoadFromFileAsync(GetWWWPersistentDataPath(depends[i]));
+                    yield return depend_request;
+                    _dic[depends[i]] = depend_request.assetBundle;
                 }
                 if (_path.ContainsKey(path)) {
-                    if (_path[path] == PathType.PER) {
-                        AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(UnityEngine.Application.persistentDataPath + "/" + path);
-                        yield return request;
-                        _dic[path] = request.assetBundle;
-                        AssetBundle ab = request.assetBundle;
-                        T asset = ab.LoadAsset<T>(name);
-                        cb(asset);
-                    } else {
-                        AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(UnityEngine.Application.streamingAssetsPath + "/" + path);
-                        yield return request;
-                        _dic[path] = request.assetBundle;
-                        AssetBundle ab = request.assetBundle;
-                        T asset = ab.LoadAsset<T>(name);
-                        cb(asset);
-                    }
+                    AssetBundle ab = _dic[path];
+                    T asset = ab.LoadAsset<T>(name);
+                    cb(asset);
                 } else {
-                    cb(null);
+                    AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(UnityEngine.Application.persistentDataPath + "/" + path);
+                    yield return request;
+                    _dic[path] = request.assetBundle;
+                    AssetBundle ab = request.assetBundle;
+                    T asset = ab.LoadAsset<T>(name);
+                    cb(asset);
                 }
             }
         }
@@ -442,11 +395,8 @@ namespace Maria.Util
             } else {
                 UnityEngine.Debug.LogFormat("load res path: {0}", path);
                 T res = Resources.Load(path) as T;
-                if (res != null) {
-                    _res[path] = res;
-                    return res;
-                }
-                return null;
+                _res[path] = res;
+                return res;
             }
         }
 
