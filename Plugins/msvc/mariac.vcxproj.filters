@@ -10,23 +10,14 @@
     <Filter Include="include">
       <UniqueIdentifier>{9551f7f3-267f-4dee-b6fd-ba974871c126}</UniqueIdentifier>
     </Filter>
-    <Filter Include="play">
-      <UniqueIdentifier>{2d419200-e63c-4d40-9afa-9e2dbb655326}</UniqueIdentifier>
-    </Filter>
     <Filter Include="rudp">
       <UniqueIdentifier>{e846f3ff-bb82-4fdd-bf52-f2a3bf8fb435}</UniqueIdentifier>
     </Filter>
     <Filter Include="sharpc">
       <UniqueIdentifier>{7713d884-3e87-43ee-bb00-98e605401b8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\play">
-      <UniqueIdentifier>{de776279-41a1-40d9-a650-b52d28eea0bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\sharpc">
       <UniqueIdentifier>{5a8f6979-87fe-4922-9fe3-638f2a8c3588}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hexmap">
-      <UniqueIdentifier>{9ad1c1b4-de99-4393-82a7-11178bbab89f}</UniqueIdentifier>
     </Filter>
     <Filter Include="base">
       <UniqueIdentifier>{b3f0eead-3333-4f44-84bf-525d3eb057d6}</UniqueIdentifier>
@@ -48,27 +39,6 @@
     <ClCompile Include="..\sharpc\sharpc.c">
       <Filter>sharpc</Filter>
     </ClCompile>
-    <ClCompile Include="..\play\App.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\Context.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\Map.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\playc.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\Player.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\PlayerMgr.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\Scene.cpp">
-      <Filter>play</Filter>
-    </ClCompile>
     <ClCompile Include="..\rudp\rudp.c">
       <Filter>rudp</Filter>
     </ClCompile>
@@ -77,9 +47,6 @@
     </ClCompile>
     <ClCompile Include="..\base\tinyxml2.cpp">
       <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\play\play.cpp">
-      <Filter>play</Filter>
     </ClCompile>
     <ClCompile Include="..\base\stdafx.cpp">
       <Filter>base</Filter>
@@ -90,49 +57,19 @@
     <ClCompile Include="..\base\pack.c">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="..\hexmap\hexmap.c">
-      <Filter>hexmap</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\config.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\play\App.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\Context.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\Map.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\playc.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\Player.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\PlayerMgr.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\Scene.h">
-      <Filter>include\play</Filter>
-    </ClInclude>
     <ClInclude Include="..\rudp\rudp.h">
       <Filter>rudp</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\PLAY_MSG.h">
-      <Filter>include\play</Filter>
     </ClInclude>
     <ClInclude Include="..\include\sharpc\log.h">
       <Filter>include\sharpc</Filter>
     </ClInclude>
     <ClInclude Include="..\include\sharpc\sharpc.h">
       <Filter>include\sharpc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\hexmap\hexmap.h">
-      <Filter>hexmap</Filter>
     </ClInclude>
     <ClInclude Include="..\include\math3d.h">
       <Filter>include</Filter>
@@ -157,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="..\include\cstdafx.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\play\play.h">
-      <Filter>include\play</Filter>
     </ClInclude>
     <ClInclude Include="..\include\tinyxml2\tinyxml2.h">
       <Filter>include\tinyxml2</Filter>

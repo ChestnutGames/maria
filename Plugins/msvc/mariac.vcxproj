@@ -158,35 +158,16 @@
     <ClCompile Include="..\base\tinyxml2.cpp" />
     <ClCompile Include="..\crypt\lsha1.c" />
     <ClCompile Include="..\crypt\lua-crypt.c" />
-    <ClCompile Include="..\hexmap\hexmap.c" />
-    <ClCompile Include="..\play\App.cpp" />
-    <ClCompile Include="..\play\Context.cpp" />
-    <ClCompile Include="..\play\Map.cpp" />
-    <ClCompile Include="..\play\play.cpp" />
-    <ClCompile Include="..\play\playc.cpp" />
-    <ClCompile Include="..\play\Player.cpp" />
-    <ClCompile Include="..\play\PlayerMgr.cpp" />
-    <ClCompile Include="..\play\Scene.cpp" />
     <ClCompile Include="..\rudp\rudp.c" />
     <ClCompile Include="..\rudp\rudp_aux.c" />
     <ClCompile Include="..\sharpc\log.c" />
     <ClCompile Include="..\sharpc\sharpc.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\hexmap\hexmap.h" />
     <ClInclude Include="..\include\binaryheap.h" />
     <ClInclude Include="..\include\config.h" />
     <ClInclude Include="..\include\math3d.h" />
     <ClInclude Include="..\include\pack.h" />
-    <ClInclude Include="..\include\play\App.h" />
-    <ClInclude Include="..\include\play\Context.h" />
-    <ClInclude Include="..\include\play\Map.h" />
-    <ClInclude Include="..\include\play\play.h" />
-    <ClInclude Include="..\include\play\playc.h" />
-    <ClInclude Include="..\include\play\Player.h" />
-    <ClInclude Include="..\include\play\PlayerMgr.h" />
-    <ClInclude Include="..\include\play\PLAY_MSG.h" />
-    <ClInclude Include="..\include\play\Scene.h" />
     <ClInclude Include="..\include\sharpc\log.h" />
     <ClInclude Include="..\include\sharpc\sharpc.h" />
     <ClInclude Include="..\include\cstdafx.h" />

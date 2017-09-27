@@ -42,6 +42,7 @@ int
 sharpc_callc(struct sharpc *self, int argc, struct CSObject *argv, int res) {
 	assert(argc >= 1);
 	assert(argv[0].type == C_STRING);
+	return 0;
 }
 
 void

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "play", "play.vcxproj", "{2FA25ABE-4497-4711-921D-FE749D049B99}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cpptest", "cpptest.vcxproj", "{46302BD2-9692-48AA-A55F-6E03B3674535}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maria", "..\..\Maria\Maria.csproj", "{CE533DD2-14C3-4A5A-A922-52B4EC314846}"
@@ -12,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLua.Mini", "..\..\3rd\xLua\General\vs2013\XLua.Mini.csproj", "{9A2C7D34-0697-31AB-4FD5-E250BB7E0F00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bacon", "..\..\Bacon\Bacon.csproj", "{3C75438E-8DBA-40D7-AE74-FFCFFF6B9D4F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mariac", "mariac.vcxproj", "{2FA25ABE-4497-4711-921D-FE749D049B99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,16 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x64.ActiveCfg = Debug|x64
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x64.Build.0 = Debug|x64
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x86.ActiveCfg = Debug|Win32
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x86.Build.0 = Debug|Win32
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|Any CPU.ActiveCfg = Release|Win32
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x64.ActiveCfg = Release|x64
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x64.Build.0 = Release|x64
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x86.ActiveCfg = Release|Win32
-		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x86.Build.0 = Release|Win32
 		{46302BD2-9692-48AA-A55F-6E03B3674535}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{46302BD2-9692-48AA-A55F-6E03B3674535}.Debug|x64.ActiveCfg = Debug|x64
 		{46302BD2-9692-48AA-A55F-6E03B3674535}.Debug|x64.Build.0 = Debug|x64
@@ -79,6 +69,16 @@ Global
 		{3C75438E-8DBA-40D7-AE74-FFCFFF6B9D4F}.Release|x64.Build.0 = Release|Any CPU
 		{3C75438E-8DBA-40D7-AE74-FFCFFF6B9D4F}.Release|x86.ActiveCfg = Release|Any CPU
 		{3C75438E-8DBA-40D7-AE74-FFCFFF6B9D4F}.Release|x86.Build.0 = Release|Any CPU
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x64.ActiveCfg = Debug|x64
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x64.Build.0 = Debug|x64
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x86.ActiveCfg = Debug|Win32
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Debug|x86.Build.0 = Debug|Win32
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|Any CPU.ActiveCfg = Release|Win32
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x64.ActiveCfg = Release|x64
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x64.Build.0 = Release|x64
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x86.ActiveCfg = Release|Win32
+		{2FA25ABE-4497-4711-921D-FE749D049B99}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

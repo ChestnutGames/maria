@@ -37,25 +37,25 @@ namespace Maria.Sharp {
 
         public static SharpObject cache = new SharpObject();
         public const int maxArgs = 8;
-        public const string DLL = "sharpc";
+        public const string DLL = "mariac";
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr sharpc_alloc(pfunc func);
+        public static extern IntPtr sharpc_create(pfunc func);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void sharpc_free(IntPtr self);
+        public static extern void sharpc_retain(pfunc func);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void sharpc_log(IntPtr self, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 2)] CSObject[] xx);
+        public static extern void sharpc_release(IntPtr self);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void test();
+        public static extern void sharpc_callc(IntPtr self, int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = 2)] CSObject[] argv, int res);
 
         private IntPtr _sharpc = IntPtr.Zero;
 
         public SharpC() {
             try {
-                _sharpc = sharpc_alloc(SharpC.CallCSharp);
+                _sharpc = sharpc_create(SharpC.CallCSharp);
                 CacheLog();
             } catch (DllNotFoundException ex) {
                 UnityEngine.Debug.LogException(ex);
@@ -70,7 +70,7 @@ namespace Maria.Sharp {
                 // 清理托管资源，调用自己管理的对象的Dispose方法
             }
             // 清理非托管资源
-            sharpc_free(_sharpc);
+            sharpc_release(_sharpc);
 
             _disposed = true;
         }
@@ -126,7 +126,7 @@ namespace Maria.Sharp {
             args[1] = new CSObject();
             args[1].type = CSType.NIL;
 
-            sharpc_log(_sharpc, args);
+            //sharpc_log(_sharpc, args);
         }
 
     }

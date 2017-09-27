@@ -6,16 +6,9 @@ using System;
 namespace Maria.Util {
     public class NotificationCenter : MonoBehaviour {
 
-        [CSharpCallLua]
-        public static List<Type> CSCallLuaModule {
-            get {
-                return new List<Type>() {
-                    typeof(Action<Maria.Context>)
-                };
-            }
-        }
-
         public class Notification {
+
+            public static readonly string NOTIFICATION_APP_START = "NOTIFICATION_APP_START";
 
             public Notification(string name, UnityEngine.Component sender) {
                 this.name = name;
