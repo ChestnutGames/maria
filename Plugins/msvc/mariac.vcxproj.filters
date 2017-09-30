@@ -19,11 +19,11 @@
     <Filter Include="include\sharpc">
       <UniqueIdentifier>{5a8f6979-87fe-4922-9fe3-638f2a8c3588}</UniqueIdentifier>
     </Filter>
-    <Filter Include="base">
-      <UniqueIdentifier>{b3f0eead-3333-4f44-84bf-525d3eb057d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\tinyxml2">
       <UniqueIdentifier>{5c0c2848-30ef-4316-b51b-502c35a135a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{b3f0eead-3333-4f44-84bf-525d3eb057d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,63 +45,63 @@
     <ClCompile Include="..\rudp\rudp_aux.c">
       <Filter>rudp</Filter>
     </ClCompile>
-    <ClCompile Include="..\base\tinyxml2.cpp">
-      <Filter>base</Filter>
+    <ClCompile Include="..\foundation\src\binaryheap.c">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\base\stdafx.cpp">
-      <Filter>base</Filter>
+    <ClCompile Include="..\foundation\src\pack.c">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\base\binaryheap.c">
-      <Filter>base</Filter>
+    <ClCompile Include="..\foundation\src\stdafx.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\base\pack.c">
-      <Filter>base</Filter>
+    <ClCompile Include="..\foundation\src\tinyxml2.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\config.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\rudp\rudp.h">
       <Filter>rudp</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\sharpc\log.h">
+    <ClInclude Include="..\foundation\include\sharpc\log.h">
       <Filter>include\sharpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\sharpc\sharpc.h">
+    <ClInclude Include="..\foundation\include\sharpc\sharpc.h">
       <Filter>include\sharpc</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\math3d.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\binaryheap.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\utarray.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\uthash.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\utlist.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\utringbuffer.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\utstring.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\cstdafx.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\tinyxml2\tinyxml2.h">
+    <ClInclude Include="..\foundation\include\tinyxml2\tinyxml2.h">
       <Filter>include\tinyxml2</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\stdafx.h">
+    <ClInclude Include="..\foundation\include\binaryheap.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\pack.h">
+    <ClInclude Include="..\foundation\include\config.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\cstdafx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\math3d.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\pack.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\stdafx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\utarray.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\uthash.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\utlist.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\utringbuffer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\foundation\include\utstring.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
