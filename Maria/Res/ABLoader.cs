@@ -282,7 +282,7 @@ namespace Maria.Res {
             } else {
                 if (_manifest == null) {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-                    string manifest = "\Win64";
+                    string manifest = "//Win64";
 #elif UNITY_IOS
                     string manifest = "\iOS";
 #elif UNITY_ANDROID

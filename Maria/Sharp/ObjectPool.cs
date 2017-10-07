@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Maria {
+namespace Maria.Sharp {
     class ObjectPool {
         public enum CSType {
             OBJECT,

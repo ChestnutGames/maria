@@ -77,7 +77,7 @@
     <Compile Include="Network\PackageSocketUdp.cs" />
     <Compile Include="Network\TimeSync.cs" />
     <Compile Include="OBB.cs" />
-    <Compile Include="ObjectPool.cs" />
+    <Compile Include="Sharp\ObjectPool.cs" />
     <Compile Include="PlistCS\Plist.cs" />
     <Compile Include="Res\ABConfig.cs" />
     <Compile Include="Res\ABLoader.cs" />

@@ -1,0 +1,17 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(373,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  sharpc.c
+d:\ember\documents\github\maria\plugins\sharpc\sharpc.c(1): fatal error C1083: Cannot open include file: 'cstdafx.h': No such file or directory
+  log.c
+d:\ember\documents\github\maria\plugins\sharpc\log.c(1): fatal error C1083: Cannot open include file: 'sharpc/log.h': No such file or directory
+  rudp_aux.c
+d:\ember\documents\github\maria\plugins\rudp\rudp_aux.c(1): fatal error C1083: Cannot open include file: 'cstdafx.h': No such file or directory
+  rudp.c
+  pack.c
+d:\ember\documents\github\maria\plugins\foundation\src\pack.c(1): fatal error C1083: Cannot open include file: 'pack.h': No such file or directory
+  binaryheap.c
+d:\ember\documents\github\maria\plugins\foundation\src\binaryheap.c(19): fatal error C1083: Cannot open include file: 'binaryheap.h': No such file or directory
+  lua-crypt.c
+d:\ember\documents\github\maria\plugins\crypt\lua-crypt.c(5): fatal error C1083: Cannot open include file: 'config.h': No such file or directory
+  lsha1.c
+d:\ember\documents\github\maria\plugins\crypt\lsha1.c(85): fatal error C1083: Cannot open include file: 'config.h': No such file or directory
+  Generating Code...
