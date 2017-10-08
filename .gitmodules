@@ -4,3 +4,6 @@
 [submodule "3rd/xLua"]
 	path = 3rd/xLua
 	url = https://github.com/Tencent/xLua
+[submodule "3rd/Entitas-CSharp"]
+	path = 3rd/Entitas-CSharp
+	url = https://github.com/sschmid/Entitas-CSharp
