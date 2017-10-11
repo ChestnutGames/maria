@@ -244,14 +244,16 @@ namespace Maria.Res {
         }
 
         public T LoadAsset<T>(string path, string name) where T : UnityEngine.Object {
-            if (_path[path] == PathType.PER) {
+            if (_path.ContainsKey(path) && _path[path] == PathType.PER) {
                 T res = LoadAB<T>(path, name);
                 UnityEngine.Debug.Assert(res != null);
                 return res;
             } else {
                 string xpath = path + "/" + name;
                 T res = LoadRes<T>(xpath);
-                UnityEngine.Debug.Assert(res != null);
+                if (res == null) {
+                    UnityEngine.Debug.LogErrorFormat("load res from {0}/{1} is wrong!", path, name);
+                }
                 return res;
             }
         }
@@ -261,7 +263,7 @@ namespace Maria.Res {
         }
 
         public void LoadAssetAsync<T>(string path, string name, Action<T> cb) where T : UnityEngine.Object {
-            if (_path[path] == PathType.PER) {
+            if (_path.ContainsKey(path) && _path[path] == PathType.PER) {
                 LoadABAsync<T>(path, name, (T asset) => {
                     UnityEngine.Debug.Assert(asset != null);
                     cb(asset);
@@ -282,11 +284,11 @@ namespace Maria.Res {
             } else {
                 if (_manifest == null) {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
-                    string manifest = "//Win64";
+                    string manifest = "\\Win64";
 #elif UNITY_IOS
-                    string manifest = "\iOS";
+                    string manifest = "/iOS";
 #elif UNITY_ANDROID
-                    string manifest = "\Android";
+                    string manifest = "/Android";
 #else
                     string manifest = string.Empty;
 #endif

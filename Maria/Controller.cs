@@ -6,7 +6,10 @@ using System;
 /// Controller 主要作用就是调度Actor,分发事件
 /// </summary>
 namespace Maria {
-    public class Controller : INetwork {
+
+    [XLua.Hotfix]
+    [XLua.LuaCallCSharp]
+    public class Controller : INetwork, Lua.ILuaController, Lua.ILua {
         protected Context _ctx = null;
         protected bool _login = false;
         protected bool _authtcp = false;
@@ -85,11 +88,15 @@ namespace Maria {
 
         }
 
-        public virtual void OnUdpSync() {
-            _authudp = true;
+        public virtual void OnUdpRecv(byte[] data, int start, int size) {
+            throw new NotImplementedException();
         }
 
-        public virtual void OnUdpRecv(PackageSocketUdp.R r) {
+        public virtual void OnCreateLua() {
+            throw new NotImplementedException();
+        }
+
+        public virtual void OnDestroyLua() {
             throw new NotImplementedException();
         }
     }
