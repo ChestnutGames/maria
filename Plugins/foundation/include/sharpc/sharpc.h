@@ -31,9 +31,7 @@ typedef struct CSObject {
 } CSObject;
 
 
-
-
-typedef int(*sharp_callback)(int argc, struct CSObject *argv, int res);
+typedef int(*sharp_callback)(int argc, struct CSObject *argv);
 
 struct sharpc {
 	int reference;
@@ -60,19 +58,8 @@ sharpc_release(struct sharpc *self);
 ** @return 0 正确， 1 以后错误，代码
  */
 int
-sharpc_callsharp(struct sharpc *self, int argc, struct CSObject *argv, int res);
+sharpc_callsharp(struct sharpc *self, int argc, struct CSObject *argv);
 
-/*
-** @breif 调用c代码
-** @param argc CSObject 几个
-** @param
-** @return 0 正确， 1 以后错误，代码
-*/
-SHARPC_API int
-sharpc_callc(struct sharpc *self, int argc, struct CSObject *argv, int res);
-
-void
-sharpc_log(struct sharpc *self, struct CSObject xx[2]);
 
 #ifdef __cplusplus
 }

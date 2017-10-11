@@ -3,6 +3,7 @@
 
 struct rudp_aux {
 	struct rudp *u;
+	struct CSObject sc;
 	struct CSObject ex;
 	struct CSObject send;
 	struct CSObject recv;
@@ -10,10 +11,11 @@ struct rudp_aux {
 };
 
 RUDP_API struct rudp_aux *
-rudpaux_alloc(int send_delay, int expired_time, struct CSObject ex, struct CSObject send, struct CSObject recv) {
+rudpaux_alloc(int send_delay, int expired_time, struct CSObject sc, struct CSObject ex, struct CSObject send, struct CSObject recv) {
 	struct rudp_aux *aux = (struct rudp_aux *)malloc(sizeof(*aux));
 	memset(aux, 0, sizeof(aux));
 	aux->u = NULL;
+	aux->sc = sc;
 	aux->ex = ex;
 	aux->send = send;
 	aux->recv = recv;
@@ -37,7 +39,7 @@ RUDP_API void
 rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 	struct rudp_package *res = rudp_update(aux->u, buffer, sz, tick);
 	while (res) {
-		struct sharpc *sc = sharpc_create(NULL);
+		
 		struct CSObject args[4];
 		args[0] = aux->send;
 		args[1] = aux->ex;
@@ -45,15 +47,13 @@ rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 		args[2].ptr = res->buffer;
 		args[3].type = C_INT32;
 		args[3].v32 = res->sz;
-		sharpc_callsharp(sc, 4, args, 0);
+		sharpc_callsharp(aux->sc.ptr, 4, args, 0);
 
 		res = res->next;
-		sharpc_release(sc);
 	}
 	int size = rudp_recv(aux->u, aux->buffer);
 	while (size > 0) {
 
-		struct sharpc *sc = sharpc_create(NULL);
 		struct CSObject args[4];
 		args[0] = aux->recv;
 		args[1] = aux->ex;
@@ -62,9 +62,8 @@ rudpaux_update(struct rudp_aux *aux, char *buffer, int sz, int tick) {
 		args[3].type = C_INT32;
 		args[3].v32 = size;
 
-		sharpc_callsharp(sc, aux->u, 4, args, 0);
+		sharpc_callsharp(aux->sc.ptr, aux->u, 4, args, 0);
 
 		size = rudp_recv(aux->u, aux->buffer);
-		sharpc_release(sc);
 	}
 }
