@@ -21,12 +21,15 @@ rudpaux_alloc(int send_delay, int expired_time, struct CSObject sc, struct CSObj
 	aux->recv = recv;
 	struct rudp *u = rudp_new(send_delay, expired_time);
 	aux->u = u;
+
+	sharpc_retain(aux->sc.ptr);
 	return aux;
 }
 
 RUDP_API void
 rudpaux_free(struct rudp_aux *aux) {
 	rudp_delete(aux->u);
+	sharpc_release(aux->sc.ptr);
 	free(aux);
 }
 

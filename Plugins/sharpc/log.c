@@ -11,10 +11,6 @@
 #include <stdarg.h>
 
 
-
-
-
-
 struct logger *
 log_create(struct sharpc *sc, struct CSObject cb) {
 	assert(sc != NULL);
