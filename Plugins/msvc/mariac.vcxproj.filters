@@ -25,12 +25,12 @@
     <Filter Include="src">
       <UniqueIdentifier>{b3f0eead-3333-4f44-84bf-525d3eb057d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hexmap">
+      <UniqueIdentifier>{cee5437b-a7d1-49a1-b174-d1c4af001d45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\crypt\lsha1.c">
-      <Filter>crypt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\crypt\lua-crypt.c">
       <Filter>crypt</Filter>
     </ClCompile>
     <ClCompile Include="..\sharpc\log.c">
@@ -45,9 +45,6 @@
     <ClCompile Include="..\rudp\rudp_aux.c">
       <Filter>rudp</Filter>
     </ClCompile>
-    <ClCompile Include="..\foundation\src\binaryheap.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\foundation\src\pack.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -56,6 +53,15 @@
     </ClCompile>
     <ClCompile Include="..\foundation\src\tinyxml2.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hexmap\hexmap.cpp">
+      <Filter>hexmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hexmap\hexmapaux.cpp">
+      <Filter>hexmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\crypt\crypt.c">
+      <Filter>crypt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="..\foundation\include\tinyxml2\tinyxml2.h">
       <Filter>include\tinyxml2</Filter>
-    </ClInclude>
-    <ClInclude Include="..\foundation\include\binaryheap.h">
-      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\foundation\include\config.h">
       <Filter>include</Filter>
@@ -103,6 +106,15 @@
     </ClInclude>
     <ClInclude Include="..\foundation\include\utstring.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hexmap\hexmap.h">
+      <Filter>hexmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hexmap\hexmapaux.h">
+      <Filter>hexmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hexmap\bh_wp.h">
+      <Filter>hexmap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

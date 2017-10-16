@@ -111,7 +111,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\foundation\PhysX\Lib\vc14win64;$(SolutionDir)..\foundation\PxShared\Lib\vc14win64;$(SolutionDir)..\foundation\plist\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libplist.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -153,18 +153,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\crypt\lsha1.c" />
-    <ClCompile Include="..\crypt\lua-crypt.c" />
-    <ClCompile Include="..\foundation\src\binaryheap.c" />
+    <ClCompile Include="..\crypt\crypt.c" />
     <ClCompile Include="..\foundation\src\pack.c" />
     <ClCompile Include="..\foundation\src\stdafx.cpp" />
     <ClCompile Include="..\foundation\src\tinyxml2.cpp" />
+    <ClCompile Include="..\hexmap\hexmap.cpp" />
+    <ClCompile Include="..\hexmap\hexmapaux.cpp" />
     <ClCompile Include="..\rudp\rudp.c" />
     <ClCompile Include="..\rudp\rudp_aux.c" />
     <ClCompile Include="..\sharpc\log.c" />
     <ClCompile Include="..\sharpc\sharpc.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\foundation\include\binaryheap.h" />
     <ClInclude Include="..\foundation\include\config.h" />
     <ClInclude Include="..\foundation\include\cstdafx.h" />
     <ClInclude Include="..\foundation\include\math3d.h" />
@@ -178,6 +178,9 @@
     <ClInclude Include="..\foundation\include\utlist.h" />
     <ClInclude Include="..\foundation\include\utringbuffer.h" />
     <ClInclude Include="..\foundation\include\utstring.h" />
+    <ClInclude Include="..\hexmap\bh_wp.h" />
+    <ClInclude Include="..\hexmap\hexmap.h" />
+    <ClInclude Include="..\hexmap\hexmapaux.h" />
     <ClInclude Include="..\rudp\rudp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

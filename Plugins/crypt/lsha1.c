@@ -243,22 +243,17 @@ static void sat_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
 	memset(finalcount, 0, 8);	/* SWR */
 }
 
-CRYPT_API PACKAGE __stdcall
-sha1(PACKAGE data) {
-	size_t sz = data.len;
-	const uint8_t * buffer = data.src;
+CRYPT_API package_t *
+sha1(package_t * data) {
+	size_t sz = data->size;
+	const uint8_t * buffer = data->src;
 	uint8_t digest[SHA1_DIGEST_SIZE];
 	SHA1_CTX ctx;
 	sat_SHA1_Init(&ctx);
 	sat_SHA1_Update(&ctx, buffer, sz);
 	sat_SHA1_Final(&ctx, digest);
 
-	char *buf = malloc(SHA1_DIGEST_SIZE);
-	memcpy(buf, digest, SHA1_DIGEST_SIZE);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = SHA1_DIGEST_SIZE;
-	return rt;
+	return package_alloc(digest, SHA1_DIGEST_SIZE);
 }
 
 #define BLOCKSIZE 64
@@ -272,12 +267,12 @@ xor_key(uint8_t key[BLOCKSIZE], uint32_t xor) {
 	}
 }
 
-CRYPT_API PACKAGE __stdcall
-hmac_sha1(PACKAGE key1, PACKAGE data) {
-	size_t key_sz = key1.len;
-	const uint8_t * key = key1.src;
-	size_t text_sz = data.len;
-	const uint8_t * text = data.src;
+CRYPT_API package_t *
+hmac_sha1(package_t *key1, package_t *data) {
+	size_t key_sz = key1->size;
+	const uint8_t * key = key1->src;
+	size_t text_sz = data->size;
+	const uint8_t * text = data->src;
 	SHA1_CTX ctx1, ctx2;
 	uint8_t digest1[SHA1_DIGEST_SIZE];
 	uint8_t digest2[SHA1_DIGEST_SIZE];
@@ -307,12 +302,6 @@ hmac_sha1(PACKAGE key1, PACKAGE data) {
 	sat_SHA1_Update(&ctx1, digest2, SHA1_DIGEST_SIZE);
 	sat_SHA1_Final(&ctx1, digest1);
 
-	char *buf = malloc(SHA1_DIGEST_SIZE);
-	memcpy(buf, digest1, SHA1_DIGEST_SIZE);
-
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = SHA1_DIGEST_SIZE;
-	return rt;
+	return package_alloc(digest1, SHA1_DIGEST_SIZE);
 }
 

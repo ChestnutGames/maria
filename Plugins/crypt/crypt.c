@@ -1,6 +1,3 @@
-//#include <lua.h>
-//#include <lauxlib.h>
-
 
 #include "config.h"
 #include "cstdafx.h"
@@ -338,7 +335,7 @@ des_crypt(const uint32_t SK[32], const uint8_t input[8], uint8_t output[8]) {
 	PUT_UINT32(X, output, 4);
 }
 
-CRYPT_API PACKAGE
+CRYPT_API package_t *
 randomkey() {
 	char tmp[8];
 	int i;
@@ -350,19 +347,14 @@ randomkey() {
 	if (x == 0) {
 		tmp[0] |= 1;	// avoid 0
 	}
-	char *buf = malloc(8);
-	memcpy(buf, tmp, 8);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = 8;
-	return rt;
+	return package_alloc(tmp, 8);
 }
 
 static void
-des_key(uint32_t SK[32], PACKAGE key1) {
-	size_t keysz = key1.len;
+des_key(uint32_t SK[32], package_t *key1) {
+	size_t keysz = key1->size;
 	//const void * key = luaL_checklstring(L, 1, &keysz);
-	const void * key = key1.src;
+	const void * key = key1->src;
 	if (keysz != 8) {
 		assert(0);
 		// return "Invalid key size %d, need 8 bytes";
@@ -371,13 +363,13 @@ des_key(uint32_t SK[32], PACKAGE key1) {
 	des_main_ks(SK, key);
 }
 
-CRYPT_API PACKAGE
-desencode(PACKAGE key, PACKAGE data) {
+CRYPT_API package_t *
+desencode(package_t *key, package_t *data) {
 	uint32_t SK[32];
 	des_key(SK, key);
 
-	size_t textsz = data.len;
-	const uint8_t * text = data.src;
+	size_t textsz = data->size;
+	const uint8_t * text = data->src;
 	size_t chunksz = (textsz + 8) & ~7;
 	uint8_t tmp[SMALL_CHUNK];
 	uint8_t *buffer = tmp;
@@ -403,16 +395,11 @@ desencode(PACKAGE key, PACKAGE data) {
 		}
 	}
 	des_crypt(SK, tail, buffer + i);
-	char *buf = malloc(chunksz);
-	memcpy(buf, buffer, chunksz);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = chunksz;
-	return rt;
+	return package_alloc(buffer, chunksz);
 }
 
-CRYPT_API PACKAGE
-desdecode(PACKAGE key, PACKAGE data) {
+CRYPT_API package_t *
+desdecode(package_t *key, package_t *data) {
 	uint32_t ESK[32];
 	des_key(ESK, key);
 	uint32_t SK[32];
@@ -421,15 +408,13 @@ desdecode(PACKAGE key, PACKAGE data) {
 		SK[i] = ESK[30 - i];
 		SK[i + 1] = ESK[31 - i];
 	}
-	size_t textsz = data.len;
-	const uint8_t *text = data.src;
+	size_t textsz = data->size;
+	const uint8_t *text = data->src;
 
 	if ((textsz & 7) || textsz == 0) {
 		assert(0);
-		PACKAGE rt;
-		rt.src = "Invalid des crypt text length";
-		rt.len = strlen(rt.src);
-		return rt;
+		char *text = "Invalid des crypt text length";
+		return package_alloc(text, strlen(text));
 	}
 	uint8_t tmp[SMALL_CHUNK];
 	uint8_t *buffer = tmp;
@@ -449,26 +434,17 @@ desdecode(PACKAGE key, PACKAGE data) {
 		}
 		else {
 			assert(0);
-			PACKAGE rt;
-			rt.src = "Invalid des crypt text length";
-			rt.len = strlen(rt.src);
-			return rt;
+			char *text = "Invalid des crypt text length";
+			return package_alloc(text, strlen(text));
 		}
 	}
 
 	if (padding > 8) {
 		assert(0);
-		PACKAGE rt;
-		rt.src = "Invalid des crypt text length";
-		rt.len = strlen(rt.src);
-		return rt;
+		char *text = "Invalid des crypt text length";
+		return package_alloc(text, strlen(text));
 	}
-	char *buf = malloc(textsz - padding);
-	memcpy(buf, buffer, textsz - padding);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = textsz - padding;
-	return rt;
+	return package_alloc(buffer, textsz - padding);
 }
 
 
@@ -495,25 +471,20 @@ Hash(const char * str, int sz, uint8_t key[8]) {
 	key[7] = (js_hash >> 24) & 0xff;
 }
 
-CRYPT_API PACKAGE
-hashkey(PACKAGE data) {
-	size_t sz = data.len;
-	const char * key = data.src;
+CRYPT_API package_t *
+hashkey(package_t * data) {
+	size_t sz = data->size;
+	const char * key = data->src;
 	uint8_t realkey[8];
 	Hash(key, (int)sz, realkey);
-	char *buf = malloc(8);
-	memcpy(buf, realkey, 8);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = 8;
-	return rt;
+	return package_alloc(realkey, 8);
 }
 
-CRYPT_API PACKAGE
-tohex(PACKAGE data) {
+CRYPT_API package_t *
+tohex(package_t * data) {
 	static char hex[] = "0123456789abcdef";
-	size_t sz = data.len;
-	const uint8_t * text = data.src;
+	size_t sz = data->size;
+	const uint8_t * text = data->src;
 	char tmp[SMALL_CHUNK];
 	char *buffer = tmp;
 	if (sz > SMALL_CHUNK / 2) {
@@ -524,25 +495,19 @@ tohex(PACKAGE data) {
 		buffer[i * 2] = hex[text[i] >> 4];
 		buffer[i * 2 + 1] = hex[text[i] & 0xf];
 	}
-	char *buf = malloc(sz * 2);
-	memcpy(buf, buffer, sz * 2);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = sz * 2;
-	return rt;
+	return package_alloc(buffer, sz * 2);
 }
 
 #define HEX(v,c) { char tmp = (char) c; if (tmp >= '0' && tmp <= '9') { v = tmp-'0'; } else { v = tmp - 'a' + 10; } }
 
-CRYPT_API PACKAGE
-fromhex(PACKAGE data) {
-	size_t sz = data.len;
-	const char * text = data.src;
+CRYPT_API package_t *
+fromhex(package_t * data) {
+	size_t sz = data->size;
+	const char * text = data->src;
 	if (sz & 2) {
 		assert(0);
-		PACKAGE rt;
-		rt.src = "Invalid hex text size";
-		rt.len = strlen(rt.src);
+		char *text = "Invalid hex text size";
+		return package_alloc(text, strlen(text));
 	}
 	char tmp[SMALL_CHUNK];
 	char *buffer = tmp;
@@ -556,19 +521,12 @@ fromhex(PACKAGE data) {
 		HEX(low, text[i + 1]);
 		if (hi > 16 || low > 16) {
 			assert(0);
-			PACKAGE rt;
-			rt.src = "invalide hex text";
-			rt.len = strlen(rt.src);
-			return rt;
+			char *text = "Invalid hex text size";
+			return package_alloc(text, strlen(text));
 		}
 		buffer[i / 2] = hi << 4 | low;
 	}
-	char *buf = malloc(i / 2);
-	memcpy(buf, buffer, i / 2);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = i / 2;
-	return rt;
+	return package_alloc(buffer, i / 2);
 }
 
 // Constants are the integer part of the sines of integers (in radians) * 2^32.
@@ -648,15 +606,15 @@ hmac(uint32_t x[2], uint32_t y[2], uint32_t result[2]) {
 }
 
 static void
-read64(PACKAGE key1, PACKAGE key2, uint32_t xx[2], uint32_t yy[2]) {
-	size_t sz = key1.len;
-	const uint8_t *x = key1.src;
+read64(package_t * key1, package_t * key2, uint32_t xx[2], uint32_t yy[2]) {
+	size_t sz = key1->size;
+	const uint8_t *x = key1->src;
 	if (sz != 8) {
 		assert(0);
 		return;
 	}
-	sz = key2.len;
-	const uint8_t *y = key2.src;
+	sz = key2->size;
+	const uint8_t *y = key2->src;
 	if (sz != 8) {
 		assert(0);
 		return;
@@ -667,7 +625,7 @@ read64(PACKAGE key1, PACKAGE key2, uint32_t xx[2], uint32_t yy[2]) {
 	yy[1] = y[4] | y[5] << 8 | y[6] << 16 | y[7] << 24;
 }
 
-static PACKAGE
+static package_t *
 pushqword(uint32_t result[2]) {
 	uint8_t tmp[8];
 	tmp[0] = result[0] & 0xff;
@@ -679,16 +637,11 @@ pushqword(uint32_t result[2]) {
 	tmp[6] = (result[1] >> 16) & 0xff;
 	tmp[7] = (result[1] >> 24) & 0xff;
 
-	char *buf = malloc(8);
-	memcpy(buf, tmp, 8);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = 8;
-	return rt;
+	return package_alloc(tmp, 8);
 }
 
-CRYPT_API PACKAGE
-hmac64(PACKAGE key1, PACKAGE key2) {
+CRYPT_API package_t *
+hmac64(package_t * key1, package_t * key2) {
 	uint32_t x[2], y[2];
 	read64(key1, key2, x, y);
 	uint32_t result[2];
@@ -700,22 +653,20 @@ hmac64(PACKAGE key1, PACKAGE key2) {
 	8bytes key
 	string text
 	*/
-CRYPT_API PACKAGE
-hmac_hash(PACKAGE key1, PACKAGE data) {
+CRYPT_API package_t *
+hmac_hash(package_t * key1, package_t * data) {
 	uint32_t key[2];
-	size_t sz = key1.len;
-	const uint8_t *x = key1.src;
+	size_t sz = key1->size;
+	const uint8_t *x = key1->src;
 	if (sz != 8) {
 		assert(0);
-		PACKAGE rt;
-		rt.src = "Invalid uint64 key";
-		rt.len = strlen(rt.src);
-		return rt;
+		const char *text = "Invalid uint64 key";
+		return package_alloc(text, strlen(text));
 	}
 	key[0] = x[0] | x[1] << 8 | x[2] << 16 | x[3] << 24;
 	key[1] = x[4] | x[5] << 8 | x[6] << 16 | x[7] << 24;
-	sz = data.len;
-	const char * text = data.src;
+	sz = data->size;
+	const char * text = data->src;
 
 	uint8_t h[8];
 	Hash(text, (int)sz, h);
@@ -777,7 +728,7 @@ powmodp(uint64_t a, uint64_t b) {
 	return pow_mod_p(a, b);
 }
 
-static PACKAGE
+static package_t *
 push64(uint64_t r) {
 	uint8_t tmp[8];
 	tmp[0] = r & 0xff;
@@ -789,16 +740,11 @@ push64(uint64_t r) {
 	tmp[6] = (r >> 48) & 0xff;
 	tmp[7] = (r >> 56) & 0xff;
 
-	char *buf = malloc(8);
-	memcpy(buf, tmp, 8);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = 8;
-	return rt;
+	return package_alloc(tmp, 8);
 }
 
-CRYPT_API PACKAGE
-dhsecret(PACKAGE key, PACKAGE data) {
+CRYPT_API package_t *
+dhsecret(package_t * key, package_t * data) {
 	uint32_t x[2], y[2];
 	read64(key, data, x, y);
 	uint64_t xx = (uint64_t)x[0] | (uint64_t)x[1] << 32;
@@ -806,10 +752,8 @@ dhsecret(PACKAGE key, PACKAGE data) {
 	if (xx == 0 || yy == 0)
 	{
 		assert(0);
-		PACKAGE rt;
-		rt.src = "Can't be 0";
-		rt.len = strlen(rt.src);
-		return rt;
+		const char *text = "Can't be 0";
+		return package_alloc(text, strlen(text));
 	}
 
 	uint64_t r = powmodp(xx, yy);
@@ -818,17 +762,15 @@ dhsecret(PACKAGE key, PACKAGE data) {
 
 #define G 5
 
-CRYPT_API  PACKAGE
-dhexchange(PACKAGE data) {
-	size_t sz = data.len;
-	const uint8_t *x = data.src;
+CRYPT_API  package_t *
+dhexchange(package_t * data) {
+	size_t sz = data->size;
+	const uint8_t *x = data->src;
 	if (sz != 8)
 	{
 		assert(0);
-		PACKAGE rt;
-		rt.src = "Invalid dh uint64 key";
-		rt.len = strlen(rt.src);
-		return rt;
+		const char *text = "Invalid dh uint64 key";
+		return package_alloc(text, strlen(text));
 	}
 	uint32_t xx[2];
 	xx[0] = x[0] | x[1] << 8 | x[2] << 16 | x[3] << 24;
@@ -838,10 +780,8 @@ dhexchange(PACKAGE data) {
 	if (x64 == 0)
 	{
 		assert(0);
-		PACKAGE rt;
-		rt.src = "Can't be 0";
-		rt.len = strlen(rt.src);
-		return rt;
+		const char *text = "Can't be 0";
+		return package_alloc(text, strlen(text));
 	}
 
 	uint64_t r = powmodp(5, x64);
@@ -850,11 +790,11 @@ dhexchange(PACKAGE data) {
 
 // base64
 
-CRYPT_API PACKAGE
-b64encode(PACKAGE data) {
+CRYPT_API package_t *
+b64encode(package_t * data) {
 	static const char* encoding = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	size_t sz = data.len;
-	const uint8_t * text = data.src;
+	size_t sz = data->size;
+	const uint8_t * text = data->src;
 	int encode_sz = (sz + 2) / 3 * 4;
 	char tmp[SMALL_CHUNK];
 	char *buffer = tmp;
@@ -889,12 +829,7 @@ b64encode(PACKAGE data) {
 		buffer[j + 3] = '=';
 		break;
 	}
-	char *buf = malloc(encode_sz);
-	memcpy(buf, buffer, encode_sz);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = encode_sz;
-	return rt;
+	return package_alloc(buffer, encode_sz);
 }
 
 static int
@@ -911,11 +846,11 @@ b64index(uint8_t c) {
 }
 
 
-CRYPT_API PACKAGE
-b64decode(PACKAGE data) {
-	size_t sz = data.len;
+CRYPT_API package_t *
+b64decode(package_t * data) {
+	size_t sz = data->size;
 	assert(sz > 0);
-	const uint8_t * text = data.src;
+	const uint8_t * text = data->src;
 	int decode_sz = (sz + 3) / 4 * 3;
 	char tmp[SMALL_CHUNK] = { 0 };
 	char *buffer = tmp;
@@ -931,10 +866,8 @@ b64decode(PACKAGE data) {
 		for (j = 0; j < 4;) {
 			if (i >= sz) {
 				assert(0);
-				PACKAGE rt;
-				rt.src = "Invalid base64 text";
-				rt.len = strlen(rt.src);
-				return rt;
+				const char *text = "Invalid base64 text";
+				return package_alloc(text, strlen(text));
 			}
 			c[j] = b64index(text[i]);
 			if (c[j] == -1) {
@@ -959,10 +892,8 @@ b64decode(PACKAGE data) {
 		case 1:
 			if (c[3] != -2 || (c[2] & 3) != 0) {
 				assert(0);
-				PACKAGE rt;
-				rt.src = "Invalid base64 text";
-				rt.len = strlen(rt.src);
-				return rt;
+				const char *text = "Invalid base64 text";
+				return package_alloc(text, strlen(text));
 			}
 			v = (unsigned)c[0] << 10 | c[1] << 4 | c[2] >> 2;
 			buffer[output] = v >> 8;
@@ -972,10 +903,8 @@ b64decode(PACKAGE data) {
 		case 2:
 			if (c[3] != -2 || c[2] != -2 || (c[1] & 0xf) != 0)  {
 				assert(0);
-				PACKAGE rt;
-				rt.src = "Invalid base64 text";
-				rt.len = strlen(rt.src);
-				return rt;
+				const char *text = "Invalid base64 text";
+				return package_alloc(text, strlen(text));
 			}
 			v = (unsigned)c[0] << 2 | c[1] >> 4;
 			buffer[output] = v;
@@ -983,52 +912,9 @@ b64decode(PACKAGE data) {
 			break;
 		default:
 			assert(0);
-			PACKAGE rt;
-			rt.src = "Invalid base64 text";
-			rt.len = strlen(rt.src);
-			return rt;
+			const char *text = "Invalid base64 text";
+			return package_alloc(text, strlen(text));
 		}
 	}
-	char *buf = malloc(output);
-	memcpy(buf, buffer, output);
-	PACKAGE rt;
-	rt.src = buf;
-	rt.len = output;
-	return rt;
+	return package_alloc(buffer, output);
 }
-
-CRYPT_API void
-pfree(PACKAGE data) {
-	if (data.src != NULL && data.len > 0) {
-		free(data.src);
-	}
-}
-
-// defined in lsha1.c
-//int lsha1(lua_State *L);
-//int lhmac_sha1(lua_State *L);
-
-/*int
-	luaopen_crypt(lua_State *L) {
-	luaL_checkversion(L);
-	srandom(time(NULL));
-	luaL_Reg l[] = {
-	{ "hashkey", lhashkey },
-	{ "randomkey", lrandomkey },
-	{ "desencode", ldesencode },
-	{ "desdecode", ldesdecode },
-	{ "hexencode", ltohex },
-	{ "hexdecode", lfromhex },
-	{ "hmac64", lhmac64 },
-	{ "dhexchange", ldhexchange },
-	{ "dhsecret", ldhsecret },
-	{ "base64encode", lb64encode },
-	{ "base64decode", lb64decode },
-	{ "sha1", lsha1 },
-	{ "hmac_sha1", lhmac_sha1 },
-	{ "hmac_hash", lhmac_hash },
-	{ NULL, NULL },
-	};
-	luaL_newlib(L, l);
-	return 1;
-	}*/

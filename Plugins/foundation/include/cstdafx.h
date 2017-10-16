@@ -10,7 +10,6 @@ extern "C" {
 #include <config.h>
 #include <pack.h>
 
-#include <binaryheap.h>
 #include <math3d.h>
 #include <utarray.h>
 #include <uthash.h>

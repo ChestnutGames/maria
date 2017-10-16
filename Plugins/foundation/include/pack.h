@@ -5,6 +5,7 @@
 extern "C" {
 #endif // __cplusplus
 
+#include <config.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <math.h>
@@ -14,17 +15,40 @@ extern "C" {
 #include <memory.h>
 
 typedef struct PACKAGE {
-	char   *src;
-	int32_t len;
-} PACKAGE;
+	int     size;
+	char    src[0];
+} package_t;
 
-void WriteUInt8(char *ptr, int ofs, uint8_t val);
-void WriteInt16(char *ptr, int ofs, int16_t val);
-void WriteInt32(char *ptr, int ofs, int32_t val);
-void WriteInt64(char *ptr, int ofs, int64_t val);
+package_t *
+package_alloc(char *src, int size);
 
-void WriteFnt32(char *ptr, int ofs, float val);
-void WriteFnt64(char *ptr, int ofs, double val);
+int
+package_size(package_t *self);
+
+void
+package_memcpy(package_t *self, char *dst, int len);
+
+void
+package_free(package_t *self);
+
+int
+WriteUInt8(char *ptr, int ofs, uint8_t val);
+
+int
+WriteInt16(char *ptr, int ofs, int16_t val);
+
+int
+WriteInt32(char *ptr, int ofs, int32_t val);
+
+int
+WriteInt64(char *ptr, int ofs, int64_t val);
+
+int
+WriteFnt32(char *ptr, int ofs, float val);
+
+int
+WriteFnt64(char *ptr, int ofs, double val);
+
 
 #ifdef __cplusplus
 }
