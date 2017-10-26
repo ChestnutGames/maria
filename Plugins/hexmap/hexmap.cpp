@@ -15,7 +15,6 @@ extern "C" {
 }
 #endif
 
-
 static int
 bh_wp_compare(bh_wp_iterator_t l, bh_wp_iterator_t r) {
 	return ((*l)->f > (*r)->f);
@@ -28,7 +27,7 @@ bh_wp_equal(bh_wp_iterator_t l, bh_wp_iterator_t r) {
 
 static void
 bh_wp_free(bh_wp_iterator_t i) {
-	hexmap_release_hexastar((*i)->hex->map, *i);
+	hexmap_release_waypoint((*i)->hex->map, *i);
 }
 
 
@@ -47,10 +46,8 @@ static float M_SQR3 = 1.7320508076;
 #define min(a, b) ((a) > (b) ? (b) : (a))
 #endif // !min
 
-
-
-static struct CubeCoord hex_directions[6] = { {1, 0, -1}, {1, -1, 0}, {0, -1, 1}, {-1, 0, 1}, {-1, 1, 0}, {0, 1, -1} };
-static struct CubeCoord hex_diagonals[6] = { {2, -1, -1}, {1, -2, 1}, {-1, -1, 2}, {-2, 1, 1}, {-1, 2, -1}, {1, 1, -2} };
+static struct CubeCoord hex_directions[NEIGHBOR_NUM] = { {1, 0, -1}, {1, -1, 0}, {0, -1, 1}, {-1, 0, 1}, {-1, 1, 0}, {0, 1, -1} };
+static struct CubeCoord hex_diagonals[DIAGONAL_NUM] = { {2, -1, -1}, {1, -2, 1}, {-1, -1, 2}, {-2, 1, 1}, {-1, 2, -1}, {1, 1, -2} };
 
 static inline struct Orientation layout_pointy() {
 #ifdef FIXEDPT
@@ -130,6 +127,17 @@ static inline struct CubeCoord cubecoord_neighbor(struct CubeCoord hex, int dire
 	return cubecoord_add(hex, cubecoord_direction(direction));
 }
 
+static inline int cubecoord_neighbor_direction(struct CubeCoord hex) {
+	for (size_t i = 0; i < NEIGHBOR_NUM; i++) {
+		if (hex_directions[i].q == hex.q &&
+			hex_directions[i].r == hex.r &&
+			hex_directions[i].s == hex.s) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 static inline struct CubeCoord cubecoord_diagonal_neighbor(struct CubeCoord hex, int direction) {
 	return cubecoord_add(hex, hex_diagonals[direction]);
 }
@@ -142,6 +150,10 @@ static inline int cubecoord_distance(struct CubeCoord a, struct CubeCoord b) {
 	return cubecoord_length(cubecoord_subtract(a, b));
 }
 
+static inline int cube_to_index(struct CubeCoord h, char *src, int len) {
+	snprintf(src, len, "Hex[%d, %d, %d]", h.q, h.r, h.s);
+	return 1;
+}
 
 static const int EVEN = 1;
 static const int ODD = -1;
@@ -188,13 +200,6 @@ static inline struct AxialCoord cube_to_axial(struct CubeCoord h) {
 	coord.q = h.q;
 	coord.r = h.r;
 	return coord;
-}
-
-static inline int64_t axial_to_index(struct AxialCoord h) {
-	int64_t index = 0;
-	index |= h.q << 32;
-	index |= h.r;
-	return index;
 }
 
 static inline struct CubeCoord hex_round(struct FractionalCubeCoord h) {
@@ -257,8 +262,22 @@ static inline struct CubeCoord hex_round(struct FractionalCubeCoord h) {
 //	return results;
 //}
 
+static void 
+hexmap_build_neighbor(struct HexMap *self) {
+	struct Hex *h, *tmp;
+	HASH_ITER(hh, self->hexhash, h, tmp) {
+		for (size_t i = 0; i < NEIGHBOR_NUM; i++) {
+			struct CubeCoord neighbor_coord = cubecoord_neighbor(h->main, i);
+			struct Hex *neighbor = hexmap_find_hex_by_cube(self, neighbor_coord);
+			if (neighbor != NULL) {
+				h->neighbor[i] = neighbor;
+			}
+		}
+	}
+}
+
 struct HexMap *
-	hexmap_create_from_plist(const char *src, int len) {
+hexmap_create_from_plist(const char *src, int len) {
 
 	plist_t root = NULL;
 	plist_from_xml(src, len, &root);
@@ -269,56 +288,66 @@ struct HexMap *
 
 	struct HexMap * inst = (struct HexMap *)malloc(sizeof(*inst));
 	memset(inst, 0, sizeof(*inst));
-
 	if (PLIST_IS_DICT(root)) {
-		plist_t name_node = plist_dict_get_item(root, "name");
 		char *name = NULL;
-		plist_get_string_val(name_node, (char **)&name);
-		plist_t width_node = plist_dict_get_item(root, "width");
-		uint64_t width;
-		plist_get_uint_val(width_node, &width);
-		uint64_t height;
-		plist_t height_node = plist_dict_get_item(root, "height");
-		assert(PLIST_IS_UINT(height_node));
-		plist_get_uint_val(height_node, &height);
+		uint64_t width, height, shape, orient, innerRadis;
+		plist_get_string_val(plist_dict_get_item(root, "name"), (char **)&name);
+		plist_get_uint_val(plist_dict_get_item(root, "width"), &width);
+		plist_get_uint_val(plist_dict_get_item(root, "height"), &height);
+		plist_get_uint_val(plist_dict_get_item(root, "shape"), &shape);
+		plist_get_uint_val(plist_dict_get_item(root, "orient"), &orient);
+		plist_get_uint_val(plist_dict_get_item(root, "innerRadis"), &innerRadis);
 
-		uint64_t orientation;
-		plist_t orientation_node = plist_dict_get_item(root, "orientation");
-		plist_get_uint_val(orientation_node, &orientation);
-		if (orientation == 0) {
+		if (orient == 0) {
 			inst->layout.orientation = layout_pointy();
 		} else {
 			inst->layout.orientation = layout_flat();
 		}
+		inst->layout.width = width;
+		inst->layout.height = height;
+		inst->layout.shape = (MapShape)shape;
+		inst->layout.orient = (MapOrientation)orient;
+		inst->layout.innerRadis = innerRadis;
+		float outerRadis = innerRadis * 2.0f / sqrt(3.0f);
+		inst->layout.outerRadis = outerRadis;
 
 		plist_t grids_node = plist_dict_get_item(root, "grids");
 		uint32_t size = plist_array_get_size(grids_node);
 		for (size_t i = 0; i < size; i++) {
 			plist_t grid_node = plist_array_get_item(grids_node, i);
-			uint64_t g;
-			plist_t g_node = plist_dict_get_item(grid_node, "g");
-			plist_get_uint_val(g_node, &g);
+			uint64_t g, r, s, state;
+			plist_get_uint_val(plist_dict_get_item(grid_node, "g"), &g);
+			plist_get_uint_val(plist_dict_get_item(grid_node, "r"), &r);
+			plist_get_uint_val(plist_dict_get_item(grid_node, "s"), &s);
+			plist_get_uint_val(plist_dict_get_item(grid_node, "state"), &state);
 
-			uint64_t r;
-			plist_t r_node = plist_dict_get_item(grid_node, "r");
-			plist_get_uint_val(r_node, &r);
+#ifdef FIXEDPT
+#else
+			double height = 0.0f;
+			plist_get_real_val(plist_dict_get_item(grid_node, "height"), &height);
+#endif // FIXEDPT
 
 			struct Hex *h = hexmap_create_hex(inst);
 			h->axial = { (int)g, (int)r };
 			h->main = axial_to_cube(h->axial);
-
-			h->pos = hexmap_to_position(inst, h->axial);
-			h->key = axial_to_index(h->axial);
-
+			h->pos = hexmap_axial_to_position(inst, h->axial);
+#ifdef FIXEDPT
+			//h->height = 
+#else
+			h->height = height;
+#endif // FIXEDPT
+			h->state = (HexState)state;
+			cube_to_index(h->main, h->key, sizeof(h->key));
 			hexmap_add_hex(inst, h);
 		}
 	}
 
-	return NULL;
+	hexmap_build_neighbor(inst);
+	return inst;
 }
 
 static struct HexMap *
-hexmap_create_hex(struct HexMap *self,
+hexmap_create_hexsharp(struct HexMap *self,
 	int width,
 	int height) {
 
@@ -331,11 +360,13 @@ hexmap_create_hex(struct HexMap *self,
 			struct Hex *hex = hexmap_create_hex(self);
 			struct AxialCoord axial = { q, r };
 			struct CubeCoord cube = axial_to_cube(axial);
-			struct vector3 position = hexmap_to_position(self, axial);
+			struct vector3 position = hexmap_axial_to_position(self, axial);
 			hex->axial = axial;
 			hex->main = cube;
 			hex->pos = position;
-			hex->key = axial_to_index(axial);
+			hex->height = 0.0f;
+			hex->state = NORMAL;
+			cube_to_index(hex->main, hex->key, sizeof(hex->key));
 			hexmap_add_hex(self, hex);
 		}
 	}
@@ -343,8 +374,33 @@ hexmap_create_hex(struct HexMap *self,
 	return self;
 }
 
+static struct HexMap *
+hexmap_create_rectsharp(struct HexMap *self,
+	int width,
+	int height) {
+	for (int q = 0; q < width; q++) {
+		int qOff = q >> 1;
+		for (int r = 0; r < height - qOff; r++) {
+			struct Hex *hex = hexmap_create_hex(self);
+
+			struct OffsetCoord offset = { q, r };
+			struct CubeCoord cube = qoffset_to_cube(qOff, offset);
+			struct AxialCoord axial = { cube.q, cube.r };
+			struct vector3 position = hexmap_axial_to_position(self, axial);
+
+			hex->axial = axial;
+			hex->main = cube;
+			hex->pos = position;
+			cube_to_index(hex->main, hex->key, sizeof(hex->key));
+			hexmap_add_hex(self, hex);
+		}
+	}
+	return self;
+}
+
 struct HexMap *
-	hexmap_create(MapOrientation o, float outerRadis,
+hexmap_create(MapOrientation orient,
+		float innerRadis,
 		MapShape shape,
 		int width,
 		int height) {
@@ -354,26 +410,25 @@ struct HexMap *
 	fix16_t FIXEDPT2 = fix16_from_int(2);
 	fix16_t innerRadis = fix16_div(fix16_mul(fix16_from_float(oradis), fix16_sqrt(FIXEDPT3)), FIXEDPT2);
 #else
-#if defined(_DEBUG)
-	float innerRadis = outerRadis * sqrt(3.0f) / 2.0f;
-#else
-	float innerRadis = outerRadis * 0.8660254038f;
-#endif // 
+	float outerRadis = innerRadis * 2.0f / sqrt(3.0f);
 #endif // FIXEDPT
 
 	struct vector3 origin = { 0, 0, 0 };
 	struct Layout l;
-	if (o == FLAT) {
+	if (orient == FLAT) {
 		l.orientation = layout_flat();
-		l.origin = origin;
-		l.innerRadis = innerRadis;
-		l.outerRadis = outerRadis;
+
 	} else {
 		l.orientation = layout_pointy();
-		l.origin = origin;
-		l.innerRadis = innerRadis;
-		l.outerRadis = outerRadis;
 	}
+	l.origin = origin;
+	l.innerRadis = innerRadis;
+	l.outerRadis = outerRadis;
+	l.width = width;
+	l.height = height;
+	l.shape = shape;
+	l.orient = orient;
+
 	struct HexMap *inst = (struct HexMap *)malloc(sizeof(*inst));
 	memset(inst, 0, sizeof(*inst));
 	inst->layout = l;
@@ -381,12 +436,17 @@ struct HexMap *
 	inst->hexpool = NULL;
 	inst->hexwppool = NULL;
 	switch (shape) {
+	case RECT:
+		hexmap_create_rectsharp(inst, width, height);
+		break;
 	case HEX:
-		return hexmap_create_hex(inst, width, height);
+		hexmap_create_hexsharp(inst, width, height);
 		break;
 	default:
+		assert(false);
 		break;
 	}
+	hexmap_build_neighbor(inst);
 	return inst;
 }
 
@@ -402,6 +462,33 @@ hexmap_release(struct HexMap *self) {
 	free(self);
 }
 
+PLAY_API void
+hexmap_save_to_plist(struct HexMap *self, char **buffer, uint32_t *size, char *name) {
+	assert(buffer != NULL && size > 0 && strlen(name) > 0);
+	plist_t root = plist_new_dict();
+	plist_dict_set_item(root, "name", plist_new_string(name));
+	plist_dict_set_item(root, "width", plist_new_uint(self->layout.width));
+	plist_dict_set_item(root, "height", plist_new_uint(self->layout.height));
+	plist_dict_set_item(root, "shape", plist_new_uint((uint64_t)self->layout.shape));
+	plist_dict_set_item(root, "orient", plist_new_uint((uint64_t)self->layout.orient));
+	plist_dict_set_item(root, "innerRadis", plist_new_uint(self->layout.innerRadis));
+
+	plist_t grids = plist_new_array();
+	struct Hex *h, *tmp;
+	HASH_ITER(hh, self->hexhash, h, tmp) {
+		plist_t grid = plist_new_dict();
+		plist_dict_set_item(grid, "g", plist_new_uint(h->main.q));
+		plist_dict_set_item(grid, "r", plist_new_uint(h->main.r));
+		plist_dict_set_item(grid, "s", plist_new_uint(h->main.s));
+		plist_dict_set_item(grid, "height", plist_new_real(h->height));
+		plist_dict_set_item(grid, "state", plist_new_uint(h->state));
+
+		plist_array_append_item(grids, grid);
+	}
+	plist_dict_set_item(root, "grids", grids);
+	plist_to_xml(root, buffer, size);
+}
+
 struct Hex *
 	hexmap_create_hex(struct HexMap *self) {
 	struct Hex *elt, *res;
@@ -409,10 +496,14 @@ struct Hex *
 	LL_COUNT(self->hexpool, elt, count);
 	if (count > 0) {
 		res = self->hexpool->next;
+		memset(res, 0, sizeof(*res));
+		res->map = self;
 		LL_DELETE(self->hexpool, self->hexpool->next);
 		return res;
 	}
 	res = (struct Hex *)malloc(sizeof(*res));
+	memset(res, 0, sizeof(*res));
+	res->map = self;
 	return res;
 }
 
@@ -423,7 +514,7 @@ hexmap_release_hex(struct HexMap *self, struct Hex *h) {
 }
 
 struct HexWaypoint *
-	hexmap_create_hexastar(struct HexMap *self) {
+	hexmap_create_waypoint(struct HexMap *self) {
 	struct HexWaypoint *elt, *res;
 	int count;
 	LL_COUNT(self->hexwppool, elt, count);
@@ -437,16 +528,17 @@ struct HexWaypoint *
 }
 
 void
-hexmap_release_hexastar(struct HexMap *self, struct HexWaypoint *h) {
+hexmap_release_waypoint(struct HexMap *self, struct HexWaypoint *h) {
 	assert(self != NULL && h != NULL);
 	LL_APPEND(self->hexwppool, h);
 }
 
-struct Hex *    hexmap_find_hex_by_coord(struct HexMap *self, struct CubeCoord coord) {
-	struct AxialCoord axialcoord = cube_to_axial(coord);
-	int64_t key = axial_to_index(axialcoord);
-	return hexmap_find_hex(self, key);
+struct vector3
+	hexmap_cube_to_position(struct HexMap *self, struct CubeCoord coord) {
+	struct AxialCoord axial = cube_to_axial(coord);
+	return hexmap_axial_to_position(self, axial);
 }
+
 
 /*              ***
 **            *     *
@@ -456,7 +548,7 @@ struct Hex *    hexmap_find_hex_by_coord(struct HexMap *self, struct CubeCoord c
 			***
 */
 struct vector3
-	hexmap_to_position(struct HexMap *self, struct AxialCoord coord) {
+	hexmap_axial_to_position(struct HexMap *self, struct AxialCoord coord) {
 	struct Orientation M = self->layout.orientation;
 	struct vector3 origin = self->layout.origin;
 	struct AxialCoord h = coord;
@@ -483,7 +575,7 @@ struct vector3
 int
 hexmap_get_pathid(struct HexMap *self) {
 	int i = 0;
-	for (; i < MAX_PATH_NUM; i++) {
+	for (; i < PATH_NUM; i++) {
 		if (self->pathState[i].free == 0) {
 			return i;
 		}
@@ -501,7 +593,7 @@ hexmap_get_pathid(struct HexMap *self) {
 ** | r |   | f2, f3 |     | y |
 */
 struct FractionalCubeCoord
-	hexmap_to_cubcoord(struct HexMap *self, struct vector3 p) {
+	hexmap_position_to_fcubecoord(struct HexMap *self, struct vector3 p) {
 	struct Orientation M = self->layout.orientation;
 	struct vector3 origin = self->layout.origin;
 
@@ -562,18 +654,18 @@ hexmap_findpath(struct HexMap *self, struct vector3 startPos, struct vector3 exi
 	self->pathState[pathid].pathid = pathid;
 	self->pathState[pathid].startPos = startPos;
 	self->pathState[pathid].exitPos = exitPos;
-	struct CubeCoord coord = hex_round(hexmap_to_cubcoord(self, exitPos));
-	self->pathState[pathid].exitHex = hexmap_find_hex_by_coord(self, coord);
+	struct CubeCoord coord = hex_round(hexmap_position_to_fcubecoord(self, exitPos));
+	self->pathState[pathid].exitHex = hexmap_find_hex_by_cube(self, coord);
 	self->pathState[pathid].open = bh_wp_new(bh_wp_compare, bh_wp_free);
 	self->pathState[pathid].closed = NULL;
 
-	struct HexWaypoint *tmp = hexmap_create_hexastar(self);
+	struct HexWaypoint *tmp = hexmap_create_waypoint(self);
 	tmp->g = 0;
 	tmp->h = hexmap_h(self, startPos, exitPos);
 	tmp->f = tmp->g + tmp->h;
 
-	coord = hex_round(hexmap_to_cubcoord(self, startPos));
-	tmp->hex = hexmap_find_hex_by_coord(self, coord);
+	coord = hex_round(hexmap_position_to_fcubecoord(self, startPos));
+	tmp->hex = hexmap_find_hex_by_cube(self, coord);
 
 	LL_APPEND(self->pathState[pathid].closed, tmp);
 
@@ -583,14 +675,14 @@ hexmap_findpath(struct HexMap *self, struct vector3 startPos, struct vector3 exi
 static void hexastar_visit_free(void *h) {
 	struct HexWaypoint *ptr = (struct HexWaypoint *)(h);
 	if (ptr) {
-		hexmap_release_hexastar(ptr->hex->map, ptr);
+		hexmap_release_waypoint(ptr->hex->map, ptr);
 	}
 }
 
 int
 hexmap_findpath_update(struct HexMap *self, int pathid, struct Hex **h) {
 	int i = 0;
-	for (; i < MAX_PATH_NUM; ++i) {
+	for (; i < PATH_NUM; ++i) {
 		struct HexWaypointHead *path = &self->pathState[i];
 		if (path->free == 1) // Õ¼ÓÃ
 		{
@@ -606,7 +698,7 @@ hexmap_findpath_update(struct HexMap *self, int pathid, struct Hex **h) {
 					if ((*top)->hex->neighbor[i] == NULL) continue;
 
 					etmp.hex = (*top)->hex->neighbor[i];
-					
+
 					LL_SEARCH(path->closed, elt, &etmp, hexastar_equal);
 					if (elt) // found
 					{
@@ -620,7 +712,7 @@ hexmap_findpath_update(struct HexMap *self, int pathid, struct Hex **h) {
 						continue;
 					}
 
-					struct HexWaypoint *tmp = hexmap_create_hexastar(self);
+					struct HexWaypoint *tmp = hexmap_create_waypoint(self);
 					int cost = hexmap_h(self, (*top)->hex->pos, (*top)->hex->neighbor[i]->pos);
 					tmp->g = (*top)->g + cost;
 					tmp->h = hexmap_h(self, (*top)->hex->neighbor[i]->pos, self->pathState[pathid].exitPos);
@@ -643,33 +735,49 @@ hexmap_findpath_clean(struct HexMap *self, int pathid) {
 
 	struct HexWaypoint *elt, *tmp, etmp;
 	LL_FOREACH_SAFE(path->closed, elt, tmp) {
-		hexmap_release_hexastar(self, elt);
+		hexmap_release_waypoint(self, elt);
 	}
 
 	return 0;
 }
 
 struct Hex *
-	hexmap_find_hex(struct HexMap *self, int64_t key) {
-	struct Hex *h;
-	HASH_FIND_INT(self->hexhash, &key, h);
-	return h;
+	hexmap_find_hex(struct HexMap *self, const char *key) {
+	struct Hex *res = NULL;
+	HASH_FIND_STR(self->hexhash, key, res);
+	return res;
 }
 
 void
 hexmap_add_hex(struct HexMap *self, struct Hex *h) {
 	assert(h != NULL);
 	struct Hex *res = NULL;
-	HASH_FIND_INT(self->hexhash, &h->key, res);
+	HASH_FIND_STR(self->hexhash, h->key, res);
 	if (res == NULL) {
-		HASH_ADD_INT(self->hexhash, key, h);
+		HASH_ADD_STR(self->hexhash, key, h);
 	}
 }
 
 void
-hexmap_remove_hex(struct HexMap *self, struct Hex *h) {
-	HASH_DEL(self->hexhash, h);
-	hexmap_release_hex(self, h);
+hexmap_remove_hex(struct HexMap *self, struct Hex *hex) {
+	for (size_t i = 0; i < NEIGHBOR_NUM; i++) {
+		struct CubeCoord dst = cubecoord_neighbor(hex->main, i);
+		struct Hex *h = hexmap_find_hex_by_cube(self, dst);
+		if (h != NULL) {
+			struct CubeCoord diff = cubecoord_subtract(hex->main, h->main);
+			int direction = cubecoord_neighbor_direction(diff);
+			assert(direction != -1);
+			h->neighbor[direction] = NULL;
+		}
+	}
+
+	HASH_DEL(self->hexhash, hex);
+	hexmap_release_hex(self, hex);
+}
+
+int
+hexmap_hex_count(struct HexMap *self) {
+	return HASH_COUNT(self->hexhash);
 }
 
 void
@@ -678,4 +786,36 @@ hexmap_foreach(struct HexMap *self, hexmap_foreach_cb cb) {
 	HASH_ITER(hh, self->hexhash, h, tmp) {
 		cb(h);
 	}
+}
+
+struct Hex *
+hexmap_find_hex_by_position(struct HexMap *self, struct vector3 position) {
+	struct FractionalCubeCoord cube = hexmap_position_to_fcubecoord(self, position);
+	struct CubeCoord coord = hex_round(cube);
+	char key[KEY_LEN] = { 0 };
+	cube_to_index(coord, key, KEY_LEN);
+	return hexmap_find_hex(self, key);
+}
+
+struct Hex *
+hexmap_find_hex_by_cube(struct HexMap *self, struct CubeCoord coord) {
+	char key[KEY_LEN] = { 0 };
+	cube_to_index(coord, key, KEY_LEN);
+	return hexmap_find_hex(self, key);
+}
+
+struct Hex *
+hexmap_find_hex_by_axial(struct HexMap *self, struct AxialCoord coord) {
+	struct CubeCoord cube = axial_to_cube(coord);
+	char key[KEY_LEN] = { 0 };
+	cube_to_index(cube, key, KEY_LEN);
+	return hexmap_find_hex(self, key);
+}
+
+struct Hex *
+hexmap_find_hex_by_offset(struct HexMap *self, struct OffsetCoord coord) {
+	struct CubeCoord cube = qoffset_to_cube(EVEN, coord);
+	char key[KEY_LEN] = { 0 };
+	cube_to_index(cube, key, KEY_LEN);
+	return hexmap_find_hex(self, key);
 }

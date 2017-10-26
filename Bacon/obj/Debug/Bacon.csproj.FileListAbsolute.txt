@@ -1,0 +1,2 @@
+D:\github\fork\maria\Bacon\obj\Debug\Bacon.csprojResolveAssemblyReference.cache
+D:\github\fork\maria\Bacon\obj\Debug\Bacon.csproj.CoreCompileInputs.cache

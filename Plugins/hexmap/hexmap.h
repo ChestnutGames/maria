@@ -8,7 +8,10 @@ extern "C" {
 #include "bh_wp.h"
 #include <cstdafx.h>
 
-#define MAX_PATH_NUM 20
+#define NEIGHBOR_NUM (6)
+#define DIAGONAL_NUM (6)
+#define PATH_NUM     (128)
+#define KEY_LEN      (32)
 
 typedef enum {
 	RECT,
@@ -53,7 +56,9 @@ struct AxialCoord {
 };
 
 typedef enum {
-	NONE,
+	NORMAL = 0,
+	BLOCK,
+	TREE,
 } HexState;
 
 /*
@@ -79,15 +84,15 @@ struct Hex {
 	void              *ud;
 
 	// hash
-	int64_t            key;
+	char               key[KEY_LEN];
 	UT_hash_handle     hh;
 
 	// 双向链表构建格子，避免内存浪费，对于有很多空格的时候
-	struct Hex        *neighbor[6];
+	struct Hex        *neighbor[NEIGHBOR_NUM];
 	struct Hex *next, *prev;    // 内存
 };
 
-#ifdef fix16_t
+#ifdef FIXEDPT
 struct Orientation {
 	fix16_t f0;
 	fix16_t f1;
@@ -124,6 +129,10 @@ struct Layout {
 	struct vector3     origin;
 	float              innerRadis;
 	float              outerRadis;
+	int                width;
+	int                height;
+	MapShape           shape;
+	MapOrientation     orient;
 };
 #endif // fix16_t
 
@@ -149,7 +158,7 @@ struct HexWaypointHead {
 
 struct HexMap {
 	struct Layout layout;
-	struct HexWaypointHead   pathState[MAX_PATH_NUM];
+	struct HexWaypointHead   pathState[PATH_NUM];
 
 	struct Hex *hexhash;     // hash head
 	struct Hex *hexpool;     // pool
@@ -157,61 +166,80 @@ struct HexMap {
 	void  *ud;
 };
 
-struct HexMap *
-	hexmap_create_from_plist(const char *src, int len);
+PLAY_API struct HexMap *
+hexmap_create_from_plist(const char *src, int len);
 
-struct HexMap *
+PLAY_API struct HexMap *
 hexmap_create(MapOrientation o, 
-		float oradis,
+		float innerRadis,
 		MapShape shape,
 		int width, 
 		int height);
 
-void
-	hexmap_release(struct HexMap *self);
+PLAY_API void
+hexmap_release(struct HexMap *self);
 
-struct Hex *
-	hexmap_create_hex(struct HexMap *self);
+PLAY_API void
+hexmap_save_to_plist(struct HexMap *self, char **buffer, uint32_t *size, char *name);
 
-void
-	hexmap_release_hex(struct HexMap *self, struct Hex *h);
+PLAY_API struct Hex *
+hexmap_create_hex(struct HexMap *self);
 
-struct HexWaypoint *
-	hexmap_create_hexastar(struct HexMap *self);
+PLAY_API void
+hexmap_release_hex(struct HexMap *self, struct Hex *hex);
 
-void
-	hexmap_release_hexastar(struct HexMap *self, struct HexWaypoint *h);
+PLAY_API struct HexWaypoint *
+hexmap_create_waypoint(struct HexMap *self);
 
-struct Hex *
-	hexmap_find_hex_by_coord(struct HexMap *self, struct CubeCoord coord);
+PLAY_API void
+hexmap_release_waypoint(struct HexMap *self, struct HexWaypoint *waypoint);
 
-struct vector3
-	hexmap_to_position(struct HexMap *self, struct AxialCoord coord);
+PLAY_API struct vector3
+hexmap_cube_to_position(struct HexMap *self, struct CubeCoord coord);
 
-struct FractionalCubeCoord
-	hexmap_to_cubcoord(struct HexMap *self, struct vector3 p);
+PLAY_API struct vector3
+hexmap_axial_to_position(struct HexMap *self, struct AxialCoord coord);
 
-int
-	hexmap_findpath(struct HexMap *self, struct vector3 startPos, struct vector3 exitPos);
+PLAY_API struct FractionalCubeCoord
+hexmap_position_to_fcubecoord(struct HexMap *self, struct vector3 position);
 
-int
-	hexmap_findpath_update(struct HexMap *self, int pathid, struct Hex **h);
+PLAY_API int
+hexmap_findpath(struct HexMap *self, struct vector3 startPos, struct vector3 exitPos);
 
-int
-	hexmap_findpath_clean(struct HexMap *self, int pathid);
+PLAY_API int
+hexmap_findpath_update(struct HexMap *self, int pathid, struct Hex **out);
 
-struct Hex *
-	hexmap_find_hex(struct HexMap *self, int64_t key);
+PLAY_API int
+hexmap_findpath_clean(struct HexMap *self, int pathid);
 
-void
-	hexmap_add_hex(struct HexMap *self, struct Hex *h);
+PLAY_API struct Hex *
+hexmap_find_hex(struct HexMap *self, const char *key);
 
-void
-	hexmap_remove_hex(struct HexMap *self, struct Hex *h);
+PLAY_API void
+hexmap_add_hex(struct HexMap *self, struct Hex *h);
+
+PLAY_API void
+hexmap_remove_hex(struct HexMap *self, struct Hex *h);
+
+PLAY_API int
+hexmap_hex_count(struct HexMap *self);
 
 typedef void(*hexmap_foreach_cb)(struct Hex *);
-void
-	hexmap_foreach(struct HexMap *self, hexmap_foreach_cb cb);
+
+PLAY_API void
+hexmap_foreach(struct HexMap *self, hexmap_foreach_cb cb);
+
+PLAY_API struct Hex *
+hexmap_find_hex_by_position(struct HexMap *self, struct vector3 position);
+
+PLAY_API struct Hex *
+hexmap_find_hex_by_cube(struct HexMap *self, struct CubeCoord coord);
+
+PLAY_API struct Hex *
+hexmap_find_hex_by_axial(struct HexMap *self, struct AxialCoord coord);
+
+PLAY_API struct Hex *
+hexmap_find_hex_by_offset(struct HexMap *self, struct OffsetCoord coord);
 
 #ifdef __cplusplus
 }

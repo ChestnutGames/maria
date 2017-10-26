@@ -51,6 +51,7 @@ Maria/obj
 Plugins/msvc/bin
 Plugins/msvc/Debug
 Plugins/msvc/x64
+Plugins/msvc/inter
 
 !mksproto/lua.exe
 !mksproto/lua53.dll

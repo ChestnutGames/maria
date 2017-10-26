@@ -7,6 +7,5 @@ namespace Bacon.Game
 {
     class Component
     {
-        public Com
     }
 }
