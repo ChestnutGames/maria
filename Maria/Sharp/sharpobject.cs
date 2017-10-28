@@ -34,6 +34,7 @@ namespace Maria.Sharp {
             }
             return AddKey(obj);
         }
+
         public void Remove(int id) {
             object obj = cache[id - 1];
             int mapid;

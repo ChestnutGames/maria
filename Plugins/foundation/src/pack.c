@@ -34,7 +34,9 @@ package_memcpy(package_t *self, char *dst, int len) {
 
 void
 package_free(package_t *self) {
-	free(self);
+	if (self != NULL) {
+		free(self);
+	}
 }
 
 union if32 {

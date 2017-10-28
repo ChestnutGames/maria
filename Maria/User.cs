@@ -12,6 +12,8 @@ namespace Maria {
         public int Uid { get; set; }
         public int Subid { set; get; }
         public byte[] Secret { set; get; }
+        public Context Context { get; set; }
+        public Dictionary<string, Module> Modules { get { return _modules; } }
 
         public T GetModule<T>() where T : Module
         {
@@ -33,22 +35,5 @@ namespace Maria {
             _modules.Remove(name);
         }
 
-        public virtual void OnGateConnected(bool connected) {
-            foreach (var m in _modules) {
-                m.Value.OnGateConnected(connected);
-            }
-        }
-
-        public virtual void OnGateAuthed(int code) {
-            foreach (var m in _modules) {
-                m.Value.OnGateAuthed(code);
-            }
-        }
-
-        public virtual void OnGateDisconnected() {
-            foreach (var m in _modules) {
-                m.Value.OnGateDisconnected();
-            }
-        }
     }
 }

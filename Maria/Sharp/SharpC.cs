@@ -35,41 +35,10 @@ namespace Maria.Sharp {
 
         public delegate int pfunc(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = maxArgs)] CSObject[] argv);
 
+        public static CSObject cszero = new CSObject() { type = CSType.NIL };
         public static SharpObject cache = new SharpObject();
         public const int maxArgs = 8;
         public const string DLL = "mariac";
-
-        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr sharpc_create(pfunc func);
-
-        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void sharpc_retain(pfunc func);
-
-        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void sharpc_release(IntPtr self);
-
-        private IntPtr _sharpc = IntPtr.Zero;
-
-        public SharpC() {
-            try {
-                _sharpc = sharpc_create(SharpC.CallCSharp);
-            } catch (DllNotFoundException ex) {
-                UnityEngine.Debug.LogException(ex);
-            }
-        }
-
-        protected override void Dispose(bool disposing) {
-            if (_disposed) {
-                return;
-            }
-            if (disposing) {
-                // 清理托管资源，调用自己管理的对象的Dispose方法
-            }
-            // 清理非托管资源
-            sharpc_release(_sharpc);
-
-            _disposed = true;
-        }
 
         [MonoPInvokeCallback(typeof(pfunc))]
         public static int CallCSharp(int argc, [In, Out, MarshalAs(UnmanagedType.LPArray, SizeConst = maxArgs)] CSObject[] argv) {
@@ -82,21 +51,64 @@ namespace Maria.Sharp {
             return 0;
         }
 
-        public CSObject CacheFunc(pfunc func) {
+        public static CSObject CacheFunc(pfunc func) {
             CSObject o = new CSObject();
             o.type = CSType.SHARPFUNCTION;
-            o.v32 = cache.AddKey(func);
+            o.v32 = cache.Query(func);
             return o;
         }
 
-        public CSObject CacheObj(object obj) {
+        public static CSObject CacheObj(object obj) {
             CSObject o = new CSObject();
             o.type = CSType.SHARPOBJECT;
-            o.v32 = cache.AddKey(obj);
+            o.v32 = cache.Query(obj);
             return o;
         }
-        
+
+        public static void ReleaseCSObject(CSObject o) {
+            UnityEngine.Debug.Assert(o.type == CSType.SHARPFUNCTION);
+            cache.Remove(o.v32);
+        }
+
+        public static T Prototype<T>(CSObject o) {
+            UnityEngine.Debug.Assert(o.type == CSType.SHARPFUNCTION ||
+                o.type == CSType.SHARPOBJECT);
+            return (T)cache.Get(o.v32);
+        }
+
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr sharpc_create(pfunc func);
+
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void sharpc_release(IntPtr self);
+
+        private IntPtr _sharpc = IntPtr.Zero;
+        private Logger _logger = null;
+
+        public SharpC() {
+            try {
+                _sharpc = sharpc_create(SharpC.CallCSharp);
+                _logger = new Logger(this);
+            } catch (DllNotFoundException ex) {
+                UnityEngine.Debug.LogException(ex);
+            }
+        }
+
+        protected override void Dispose(bool disposing) {
+            if (_disposed) {
+                return;
+            }
+            if (disposing) {
+                // 清理托管资源，调用自己管理的对象的Dispose方法
+                _logger.Dispose();
+            }
+            // 清理非托管资源
+            sharpc_release(_sharpc);
+
+            _disposed = true;
+        }
+
         public IntPtr CPtr { get { return _sharpc; } }
-       
+
     }
 }
